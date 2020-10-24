@@ -30,7 +30,7 @@ const fetch = () => {
         }        
     }
 
-    IEX = new IEX(token)
+    IEX = new IEX(window.iex_token)
     IEX.getQuotes(symbols, done)
 
     setTimeout(fetch, 20000)

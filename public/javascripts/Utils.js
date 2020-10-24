@@ -1,6 +1,8 @@
 class Utils {
     constructor() { }
 
+    // Array Utils
+
     static chunk(array, size) {
         const chunked_arr = []
         let copied = [...array]

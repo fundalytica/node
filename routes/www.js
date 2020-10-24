@@ -1,6 +1,8 @@
 var express = require('express')
 var router = express.Router()
 
+const iex_token = require('/secret/iex.js').live
+
 const description = 'Searching for the best performing assets and building investment and trading tools.'
 
 const topics = [
@@ -38,7 +40,7 @@ const topics = [
     },
 ]
 
-router.get('/', (req, res) => res.render('index', { topics, description }))
+router.get('/', (req, res) => res.render('index', { topics, description, iex_token }))
 
 router.get('/subscription-pending', (req, res) => res.render('index', { topics: topics, subscribe: 'pending' })) // subscription pending
 router.get('/subscription-success', (req, res) => res.render('index', { topics: topics, subscribe: 'success' })) // subscription success
