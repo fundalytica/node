@@ -16,12 +16,7 @@ block style
 block scripts
     script(src='https://cdnjs.cloudflare.com/ajax/libs/numeral.js/2.0.6/numeral.min.js')
     
-    script.
-        window.iex_token = "#{iex_token}"
-
-    script(src='/javascripts/quotes.js' type='module')
-    script(src='/javascripts/IEX.js')
-    script(src='/javascripts/Utils.js')
+    script( id='quotes.js' data-iex-token=iex_token src='/javascripts/quotes.js' type='module')
 
 block content
     section

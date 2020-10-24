@@ -1,4 +1,4 @@
-class Utils {
+export default class Utils {
     constructor() { }
 
     // Array Utils

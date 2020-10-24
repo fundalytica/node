@@ -1,4 +1,6 @@
-class IEX {
+import Utils from './Utils.js'
+
+export default class IEX {
     constructor(token) {
         this.token = token
         this.batchURI = 'https://cloud.iexapis.com/stable/stock/market/batch'

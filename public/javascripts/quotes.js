@@ -1,3 +1,7 @@
+const iex_token = document.getElementById('quotes.js').getAttribute('data-iex-token')
+
+import IEX from './modules/IEX.js'
+
 const fetch = () => {
     const symbols = ['SPY','QQQ','AAPL','TSLA']
     const urls = {
@@ -30,8 +34,8 @@ const fetch = () => {
         }        
     }
 
-    IEX = new IEX(window.iex_token)
-    IEX.getQuotes(symbols, done)
+    const iex = new IEX(iex_token)
+    iex.getQuotes(symbols, done)
 
     setTimeout(fetch, 20000)
 }
