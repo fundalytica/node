@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="990px" height="990px" viewBox="0 0 990 990" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 43.2 (39069) - http://www.bohemiancoding.com/sketch -->
+    <title>benchmark</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="benchmark" fill-rule="nonzero" fill="#000000">
+            <g id="Group">
+                <path d="M797,691 C808,678 828,676 841,687 C854,698 855,718 844,731 C705,894 634,749 591,613 C395,930 126,764 139,479 C151,213 461,-6 606,454 C643,376 675,296 708,216 C714,201 732,193 748,200 C764,206 771,224 765,240 C723,341 683,443 632,540 C661,634 689,817 797,691 Z M566,533 C439,107 212,232 200,482 C188,741 404,834 566,533 Z" id="Shape"></path>
+                <path d="M28,0 L962,0 L990,0 L990,28 L990,962 L990,990 L962,990 L28,990 L0,990 L0,962 L0,28 L0,0 L28,0 Z M933,57 L57,57 L57,933 L933,933 L933,57 Z" id="Shape"></path>
+            </g>
+        </g>
+    </g>
+</svg>

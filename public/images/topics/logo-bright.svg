@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="192px" height="220px" viewBox="0 0 192 220" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 43.2 (39069) - http://www.bohemiancoding.com/sketch -->
+    <title>Logo</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Standard" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g transform="translate(-104.000000, -90.000000)" id="Logo" fill="#EEEEEE">
+            <g transform="translate(104.000000, 90.000000)">
+                <g id="Box" transform="translate(96.000000, 86.000000)">
+                    <rect id="Rectangle" x="0" y="0" width="48" height="48" rx="10"></rect>
+                </g>
+                <rect id="Rectangle" x="0" y="24" width="48" height="172"></rect>
+                <rect id="Rectangle" x="24" y="0" width="144" height="48"></rect>
+                <g id="Box" transform="translate(144.000000, 0.000000)">
+                    <rect id="Rectangle" x="0" y="0" width="48" height="48" rx="10"></rect>
+                </g>
+                <g id="Box">
+                    <rect id="Rectangle" x="0" y="0" width="48" height="48" rx="10"></rect>
+                </g>
+                <g id="Box" transform="translate(0.000000, 172.000000)">
+                    <rect id="Rectangle" x="0" y="0" width="48" height="48" rx="10"></rect>
+                </g>
+                <path d="M59.5010931,72 L60.9978137,72 L60.9980273,72 L34.0039454,72 C28.4789189,72 24,67.5273801 24,61.9960546 L24,34.0039454 C24,28.4789189 28.4726199,24 34.0039454,24 L61.9960546,24 C67.5210811,24 72,28.4726199 72,34.0039454 L72,54.9980273 L72,48 L60.9978137,48 L58.0043725,48 C52.4860624,48 48,52.4791101 48,58.0043725 L48,60.9978137 L48,72 L59.5010931,72 Z" id="Combined-Shape"></path>
+            </g>
+        </g>
+    </g>
+</svg>
