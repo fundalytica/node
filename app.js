@@ -36,4 +36,8 @@ app.use(function (err, req, res, next) {
     res.render('error');
 });
 
+// IEX token global constant
+const iex_token = require('/secret/iex.js')
+global.iex_token = iex_token
+
 module.exports = app;
