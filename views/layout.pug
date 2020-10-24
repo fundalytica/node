@@ -1,0 +1,45 @@
+doctype html
+html
+    head
+        meta(charset='utf-8')
+        meta(name='viewport' content='width=device-width, initial-scale=1, shrink-to-fit=no')
+
+        <meta name="og:url" content="https://www.fundalytica.com//">
+        <meta name="og:title" content="Fundalytica 📈">
+        <meta name="og:image" content="https://fundalytica.com/images/social/twitter_card.jpg">
+        meta(name="og:description" content= description)
+
+        //- https://cards-dev.twitter.com/validator
+        //- <meta name="twitter:card" content="summary">
+        <meta name="twitter:card" content="summary_large_image">
+        <meta name="twitter:site" content="@fundalytica">
+        //- <meta name="twitter:image" content="https://fundalytica.com/images/social/twitter_card.jpg">
+
+        title Fundalytica
+
+        include includes/favicon.pug
+
+        //- Bootstrap
+        link(rel='stylesheet' href='https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css')
+        //- Font Awesome
+        link(rel='stylesheet' href='https://use.fontawesome.com/releases/v5.6.3/css/all.css')
+        //- https://htmlcolorcodes.com/
+        link(href='/stylesheets/flat_design_colors_full.css' rel='stylesheet')
+        
+        link(href='/stylesheets/style.css' rel='stylesheet')
+
+        block links
+
+        block style
+
+    body.orange-50
+        include includes/header.pug
+        block content
+        include includes/footer.pug
+
+        //- jQuery
+        script(src='https://code.jquery.com/jquery-3.1.1.min.js')
+        //- Bootstrap
+        script(src='https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js')
+
+        block scripts
