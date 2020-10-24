@@ -36,8 +36,9 @@ app.use(function (err, req, res, next) {
     res.render('error');
 });
 
-// IEX token global constant
+// Load IEX live token and set globally
 const iex_token = require('/secret/iex.js')
-global.iex_token = iex_token
+global.iex_token = iex_token.live
+console.log(`IEX Token (live): ${global.iex_token}`)
 
 module.exports = app;
