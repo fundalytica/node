@@ -1,10 +1,4 @@
-/* #quotes { background: #666; } */
-
 .quote { font-weight: bold; padding: 2px; }
 .quote a { color:inherit; text-decoration: none }
-
-/* .quote-red { color: #ff4d4d; } */
-/* .quote-green { color: #00b300; } */
-/* .quote-white { color: white; } */
 
 .quote .name, .quote .symbol, .quote .price, .quote .change { padding: 6px; }
