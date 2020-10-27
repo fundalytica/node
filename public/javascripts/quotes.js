@@ -19,7 +19,7 @@ const fetch = () => {
         for(const symbol of symbols) {
             const latestPrice = result[symbol].quote.latestPrice
             const changePercent = result[symbol].quote.changePercent
-            const colorClass = changePercent < 0 ? 'pomegranate-200' : (changePercent > 0 ? 'nephritis-200' : 'silver-100')
+            const colorClass = changePercent < 0 ? 'red-400' : (changePercent > 0 ? 'green-400' : 'grey-100')
             
             let HTML = ''
             HTML += '<li class="quote ' + colorClass + '">'
