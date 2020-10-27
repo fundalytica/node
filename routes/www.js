@@ -9,7 +9,7 @@ const topics = [
     {
         id: 'dip',
         hashtag: 'tool',
-        color: 'alizarin-500',
+        color: 'bg-alizarin-400',
         image: 'dip.svg',
         title: 'S&P 500 Dip',
         description: 'We are looking out for the next S&P 500 dip because we love investing at low prices. Do not miss it!',
@@ -21,7 +21,7 @@ const topics = [
         id: 'ipodata',
         hashtag: 'data',
         image: 'options.svg',
-        color: 'belize-hole-300',
+        color: 'bg-belize-hole-300',
         title: 'IPO Datastore',
         description: 'We collected and enriched all IPO data of the last 10 years so you can use it too.',
         button: 'Preview Data 👾'
@@ -30,7 +30,7 @@ const topics = [
     {
         id: 'qqq',
         hashtag: 'etf',
-        color: 'amethyst-400 ',
+        color: 'bg-amethyst-300 ',
         image: 'invesco.svg',
         title: 'QQQ ETF Holdings',
         description: 'All the great companies included in the Invesco QQQ ETF (NASDAQ 100).',
