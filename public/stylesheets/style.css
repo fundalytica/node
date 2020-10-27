@@ -15,16 +15,6 @@ footer a:hover  { color: rgb(230, 72, 106); }
 .footer-icon, .footer-icon img { width: auto; height: 20px; }
 
 /*
-* Custom translucent site header
-*/
-
-header {
-    background-color:       rgba(0, 0, 0, .75);
-    -webkit-backdrop-filter:  saturate(180%) blur(20px);
-    backdrop-filter:          saturate(180%) blur(20px);
-}
-
-/*
 * Extra utilities
 */
 
