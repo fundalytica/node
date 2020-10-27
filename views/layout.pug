@@ -4,16 +4,7 @@ html
         meta(charset='utf-8')
         meta(name='viewport' content='width=device-width, initial-scale=1, shrink-to-fit=no')
 
-        <meta name="og:url" content="https://www.fundalytica.com//">
-        <meta name="og:title" content="Fundalytica 📈">
-        <meta name="og:image" content="https://fundalytica.com/images/social/twitter_card.jpg">
-        meta(name="og:description" content= description)
-
-        //- https://cards-dev.twitter.com/validator
-        //- <meta name="twitter:card" content="summary">
-        <meta name="twitter:card" content="summary_large_image">
-        <meta name="twitter:site" content="@fundalytica">
-        //- <meta name="twitter:image" content="https://fundalytica.com/images/social/twitter_card.jpg">
+        include includes/social.pug
 
         title Fundalytica
 
@@ -25,14 +16,18 @@ html
         link(rel='stylesheet' href='https://use.fontawesome.com/releases/v5.6.3/css/all.css')
         //- https://htmlcolorcodes.com/
         link(href='/stylesheets/flat_design_colors_full.css' rel='stylesheet')
+        //- bg custom
+        link(href='/stylesheets/flat_design_bg_colors_full.css' rel='stylesheet')
         
         link(href='/stylesheets/style.css' rel='stylesheet')
+        link(href='/stylesheets/quotes.css' rel='stylesheet')
+        link(href='/stylesheets/topics.css' rel='stylesheet')
 
-        block links
+        //- block links
 
-        block style
+        //- block style
 
-    body.orange-50
+    body.bg-orange-100
         include includes/header.pug
         block content
         include includes/footer.pug
