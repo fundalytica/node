@@ -1,42 +1,22 @@
-/*
-* Header
-*/
+/* header */
 
 header a        { color: #999; transition: ease-in-out color .15s; }
 header a:hover  { color: #fff; }
 header img      { width: auto; height: 40px; }
 
-/*
-* Footer
-*/
+/* footer */
 
 footer a        { color: #000; transition: ease-in-out color .15s; }
 footer a:hover  { color: rgb(230, 72, 106); }
-.footer-icon, .footer-icon img { width: auto; height: 20px; }
+footer img      { width: auto; height: 20px; }
 
-/*
-* Extra utilities
-*/
+/* links */
+
+a:hover { text-decoration: none; }
+
+/* .flex-equal */
 
 .flex-equal > * {
     -ms-flex: 1;
     flex:     1;
 }
-@media (min-width: 768px) {
-    .flex-md-equal > * {
-        -ms-flex: 1;
-        flex:     1;
-    }
-}
-
-.container { max-width: 960px; }
-
-.overflow-hidden { overflow: hidden; }
-
-/*
-* Other
-*/
-
-a:hover { text-decoration: none; }
-
-button:focus { box-shadow: none !important; outline: none !important; }
