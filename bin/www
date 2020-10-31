@@ -15,6 +15,16 @@ var port = normalizePort(process.env.PORT || '3000');
 app.set('port', port);
 
 /**
+ * Global variables scoped to the application
+ */
+
+const iex_token = require(process.env.IEX_PATH).live
+app.locals.iex_token = iex_token
+
+const description = 'Searching for the best performing assets and building investment tools.'
+app.locals.description = description
+
+/**
  * Create HTTP server.
  */
 
