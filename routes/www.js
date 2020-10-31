@@ -58,9 +58,10 @@ const topics = [
     },
 ]
 
-router.get('/', (req, res) => res.render('index', { topics, description, iex_token }))
-
+router.get('/', (req, res) => res.render('index', { topics }))
 router.get('/subscription-pending', (req, res) => res.render('index', { topics: topics, subscribe: 'pending' })) // subscription pending
 router.get('/subscription-success', (req, res) => res.render('index', { topics: topics, subscribe: 'success' })) // subscription success
+
+router.get('/wip', (req, res) => res.render('wip'))
 
 module.exports = router
