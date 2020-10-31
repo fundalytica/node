@@ -3,8 +3,8 @@ const iex_token = document.getElementById('quotes.js').getAttribute('data-iex-to
 import IEX from './modules/IEX.js'
 
 const fetch = () => {
-    // const symbols = ['SPY','QQQ','AAPL','TSLA']
-    const symbols = ['SPY','TSLA']
+    const symbols = ['SPY','QQQ','AAPL','TSLA']
+    const responsive_md = ['QQQ','AAPL'] // show only on medium+ screen
     const urls = {
         SPY: 'https://www.ssga.com/us/en/individual/etfs/funds/spdr-sp-500-etf-trust-spy',
         QQQ: 'https://www.invesco.com/us/qqq-etf/',
@@ -17,13 +17,18 @@ const fetch = () => {
 
         const symbols = Object.keys(result)
 
-        for(const symbol of symbols) {
+        for(let i = 0; i < symbols.length; i++) {
+            const symbol = symbols[i]
+
             const latestPrice = result[symbol].quote.latestPrice
             const changePercent = result[symbol].quote.changePercent
-            const colorClass = changePercent < 0 ? 'red-400' : (changePercent > 0 ? 'green-400' : 'grey-100')
-            
+
+            const colorClass = changePercent < 0 ? 'red-300' : (changePercent > 0 ? 'green-300' : 'grey-100')
+            let CSSClasses = `quote ${colorClass}`
+            if(responsive_md.includes(symbol)) CSSClasses = `${CSSClasses} d-none d-md-block`
+
             let HTML = ''
-            HTML += '<li class="quote ' + colorClass + '">'
+            HTML += '<li class="' + CSSClasses + '">'
             HTML += '<a href="' + urls[symbol] + '" target="_blank">'
             HTML += '<span class="symbol">' + symbol + '</span>'
             HTML += '<span class="price">' + numeral(latestPrice).format('$0,0.0') + '</span>'
