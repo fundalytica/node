@@ -3,7 +3,8 @@ const iex_token = document.getElementById('quotes.js').getAttribute('data-iex-to
 import IEX from './modules/IEX.js'
 
 const fetch = () => {
-    const symbols = ['SPY','QQQ','AAPL','TSLA']
+    // const symbols = ['SPY','QQQ','AAPL','TSLA']
+    const symbols = ['SPY','TSLA']
     const urls = {
         SPY: 'https://www.ssga.com/us/en/individual/etfs/funds/spdr-sp-500-etf-trust-spy',
         QQQ: 'https://www.invesco.com/us/qqq-etf/',
