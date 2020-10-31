@@ -21,6 +21,16 @@ const topics = [
         title: 'IPO Datastore',
         description: 'We collected and enriched all IPO data of the last 10 years so you can use it too.',
         button: 'Preview Data 👾'
+
+    {
+        id: 'reports',
+        hashtag: 'tool',
+        color: 'bg-brown-300',
+        image: 'benchmark.svg',
+        title: 'Brokerage Reports',
+        description: 'Brokerage reports are not always easy to read, try out a richer experience.', 
+        button: 'Upload Report 📋',
+        action: 'wip'
     },
 
     {
