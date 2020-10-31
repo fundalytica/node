@@ -21,6 +21,8 @@ const topics = [
         title: 'IPO Datastore',
         description: 'We collected and enriched all IPO data of the last 10 years so you can use it too.',
         button: 'Preview Data 👾'
+        description: 'We collected and enriched all the IPO data of the last 10 years so you can use it too.',
+        button: 'Preview Data 👾',
 
     {
         id: 'reports',
