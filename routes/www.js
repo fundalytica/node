@@ -1,15 +1,15 @@
 var express = require('express')
 var router = express.Router()
 
-const iex_token = require('/secret/iex.js').live
+const iex_token = require(process.env.IEX_PATH).live
 
-const description = 'Searching for the best performing assets and building investment and trading tools.'
+const description = 'Searching for the best performing assets and building investment tools.'
 
 const topics = [
     {
         id: 'dip',
         hashtag: 'tool',
-        color: 'bg-green-300',
+        color: 'bg-red-300',
         image: 'dip.svg',
         title: 'S&P 500 Dip',
         description: 'We are looking out for the next S&P 500 dip because we love investing at low prices. Do not miss it!',
@@ -25,6 +25,17 @@ const topics = [
         title: 'IPO Datastore',
         description: 'We collected and enriched all IPO data of the last 10 years so you can use it too.',
         button: 'Preview Data 👾'
+    },
+
+    {
+        id: 'benchmark',
+        hashtag: 'tool',
+        color: 'bg-green-300',
+        image: 'benchmark.svg',
+        title: 'The Benchmark',
+        description: 'Every investment should be compared to the broader market. Do you know what your alpha is?',
+        button: 'Find Out 🔬',
+        action: 'route'
     },
 
     {
