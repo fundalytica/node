@@ -10,7 +10,7 @@ const topics = [
         title: 'S&P 500 Dip',
         description: 'We are looking out for the next S&P 500 dip because we love investing at low prices. Do not miss it!',
         button: 'Buy The Dip 📉',
-        action: 'route'
+        action: 'wip'
     },
 
     {
@@ -21,6 +21,8 @@ const topics = [
         title: 'IPO Datastore',
         description: 'We collected and enriched all the IPO data of the last 10 years so you can use it too.',
         button: 'Preview Data 👾',
+        action: 'wip'
+    },
 
     {
         id: 'reports',
@@ -41,7 +43,7 @@ const topics = [
         title: 'The Benchmark',
         description: 'Every investment should be compared to the broader market. Do you know what your alpha is?',
         button: 'Find Out 🔬',
-        action: 'route'
+        action: 'wip'
     },
 
     {
@@ -51,9 +53,8 @@ const topics = [
         image: 'invesco.svg',
         title: 'QQQ ETF Holdings',
         description: 'All the great companies included in the Invesco QQQ ETF (NASDAQ 100).',
-        button: 'Coming Soon',
-        // button: 'View Stocks 🔍',
-        // action: 'route'
+        button: 'View Stocks 🔍',
+        action: 'wip'
     },
 ]
 
