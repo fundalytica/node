@@ -11,7 +11,7 @@ block scripts
 
 block content
     section
-        ul.list-unstyled.d-flex.flex-row.flex-wrap.flex-equal.p-1.text-center.text-nowrap.small.bg-grey-800#quotes
+        ul.list-unstyled.d-flex.flex-row.flex-wrap.flex-equal.p-1.text-center.text-nowrap.small.bg-grey-700#quotes
 
     section
         .flex-equal.d-md-flex.flex-md-row.flex-md-wrap.m-md-3
@@ -19,7 +19,7 @@ block content
             .topic.m-3.bg-blue-grey-200
                 .p-4
                     h2 Fundalytica
-                    p.lead= description
+                    p.font-weight-light= description
                     #subscribe
                         if(subscribe)
                             .mb-3
@@ -28,8 +28,9 @@ block content
                             p.font-weight-light.mb-2
                                 span.fas.fa-envelope.pr-1
                                 | Do not miss any updates. Join us!
-                            .mb-3
+                            div
                                 form(action='https://sendy.fundalytica.com/subscribe' method='POST' accept-charset='utf-8')
+                                    //- .d-flex.flex-row
                                     input.form-control(type='text' name='email' placeholder='Enter your email address')
                                     input(type='hidden' name='list' value='YeHtmGHSnDiXFSxu24X9dA')
                                     input(type='hidden' name='api_key' value='wCVlWNlmf3YBshY4ek8y')
