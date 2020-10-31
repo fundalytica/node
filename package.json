@@ -3,7 +3,7 @@
     "version": "0.0.0",
     "private": true,
     "scripts": {
-        "start": "nodemon -e js,pug ./bin/www"
+        "start": "IEX_PATH=/secret/iex.js nodemon -e js,pug ./bin/www"
     },
     "dependencies": {
         "browserify": "^16.5.2",
