@@ -48,7 +48,7 @@ const topics = [
 
     {
         id: 'qqq',
-        hashtag: 'etf',
+        hashtag: 'data',
         color: 'bg-purple-200 ',
         image: 'invesco.svg',
         title: 'QQQ ETF Holdings',
