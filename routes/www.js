@@ -1,10 +1,6 @@
 var express = require('express')
 var router = express.Router()
 
-const iex_token = require(process.env.IEX_PATH).live
-
-const description = 'Searching for the best performing assets and building investment tools.'
-
 const topics = [
     {
         id: 'dip',
