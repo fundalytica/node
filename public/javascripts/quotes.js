@@ -1,4 +1,4 @@
-const iex_token = document.getElementById('quotes.js').getAttribute('data-iex-token')
+const iex_token = document.getElementById('quotesjs').getAttribute('data-iex-token')
 
 import IEX from './modules/IEX.js'
 
