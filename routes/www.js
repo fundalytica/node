@@ -16,7 +16,7 @@ const topics = [
     {
         id: 'ipodata',
         hashtag: 'data',
-        image: 'options.svg',
+        image: 'ipodata.svg',
         color: 'bg-blue-300',
         title: 'IPO Datastore',
         description: 'We collected and enriched all the IPO data of the last 10 years so you can use it too.',
@@ -28,7 +28,7 @@ const topics = [
         id: 'reports',
         hashtag: 'tool',
         color: 'bg-brown-300',
-        image: 'benchmark.svg',
+        image: 'reports.svg',
         title: 'Brokerage Reports',
         description: 'Brokerage reports are not always easy to read, try out a richer experience.', 
         button: 'Upload Report 📋',
