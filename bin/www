@@ -24,6 +24,9 @@ app.locals.iex_token = iex_token
 const description = 'Searching for the best performing assets and building investment tools.'
 app.locals.description = description
 
+const subscribed_key = 'subscribed'
+app.locals.subscribed_key = subscribed_key
+
 /**
  * Create HTTP server.
  */
