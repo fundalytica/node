@@ -58,9 +58,22 @@ const topics = [
     },
 ]
 
-router.get('/', (req, res) => res.render('index', { topics }))
-router.get('/subscription-pending', (req, res) => res.render('index', { topics: topics, subscribe: 'pending' })) // subscription pending
-router.get('/subscription-success', (req, res) => res.render('index', { topics: topics, subscribe: 'success' })) // subscription success
+const is_subscribed = req => {
+    const cookieParser = require('cookie-parser')
+    return (req.app.locals.subscribed_key in req.cookies)
+}
+
+router.get('/', (req, res) => {
+    res.render('index', { topics: topics, subscribed: is_subscribed(req) })
+})
+
+router.get('/subscription-pending', (req, res) => {
+    res.render('index', { topics: topics, subscribed: is_subscribed(req), subscription_url: 'pending' })
+})
+
+router.get('/subscription-success', (req, res) => {
+    res.render('index', { topics: topics, subscribed: is_subscribed(req), subscription_url: 'success' })
+})
 
 router.get('/wip', (req, res) => res.render('wip'))
 
