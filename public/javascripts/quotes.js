@@ -2,9 +2,15 @@ const iex_token = document.getElementById('quotesjs').getAttribute('data-iex-tok
 
 import IEX from './modules/IEX.js'
 
+const run = () => {
+    fetch()
+}
+
 const fetch = () => {
     const symbols = ['SPY','QQQ','AAPL','TSLA']
+
     const responsive_md = ['QQQ','AAPL'] // show only on medium+ screen
+
     const urls = {
         SPY: 'https://www.ssga.com/us/en/individual/etfs/funds/spdr-sp-500-etf-trust-spy',
         QQQ: 'https://www.invesco.com/us/qqq-etf/',
@@ -37,7 +43,7 @@ const fetch = () => {
             HTML += '</li>'
 
             $("#quotes").append(HTML)
-        }        
+        }
     }
 
     const iex = new IEX(iex_token)
@@ -46,4 +52,4 @@ const fetch = () => {
     setTimeout(fetch, 20000)
 }
 
-$(fetch())
+$(run())
