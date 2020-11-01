@@ -49,7 +49,7 @@ const fetch = () => {
     const iex = new IEX(iex_token)
     iex.getQuotes(symbols, done)
 
-    setTimeout(fetch, 20000)
+    setTimeout(fetch, 1000 * 20)
 }
 
 $(run())
