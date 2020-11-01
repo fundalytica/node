@@ -15,24 +15,28 @@ block content
     section.container-xl.p-0
         .flex-equal.d-md-flex.flex-md-row.flex-md-wrap.m-md-3
 
-            .topic.m-3.bg-blue-grey-200
-                .p-4
-                    h2 Fundalytica
-                    p.font-weight-light= description
-                    #subscribe
-                        if(subscribe)
+            if(! subscribed)
+                .topic.m-3.bg-blue-grey-200#welcome
+                    .p-4
+                        h2 Fundalytica
+                        p.font-weight-light= description
+
+                        if(subscription_url)
                             .mb-3
-                                p.lead.text-white= (subscribe == 'success') ? 'Thank you for subscribing to Fundalytica 🤝' : 'Please check your mail and confirm the subscription 👀'
+                                if(subscription_url == 'success')
+                                    p.lead.text-white= 'Thank you for subscribing to Fundalytica 🤝'
+                                if(subscription_url == 'pending')
+                                    p.lead.text-white#pending= 'Please check your mail and confirm the subscription 👀'
                         else
                             p.font-weight-light.mb-2
                                 span.fas.fa-envelope.pr-1
                                 | Do not miss any updates. Join us!
                             div
                                 form(action='https://sendy.fundalytica.com/subscribe' method='POST' accept-charset='utf-8')
-                                    //- .d-flex.flex-row
                                     input.form-control(type='text' name='email' placeholder='Enter your email address')
                                     input(type='hidden' name='list' value='YeHtmGHSnDiXFSxu24X9dA')
                                     input(type='hidden' name='api_key' value='wCVlWNlmf3YBshY4ek8y')
+                                    input(type='text' name='hp').d-none
                                     button.btn.btn-outline-light.mt-3.p-3(name='submit' type='submit') Subscribe Now
 
             each topic, index in topics
