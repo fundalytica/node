@@ -6,7 +6,7 @@ import Cookie from './modules/Cookie.js'
 const run = () => {
     if(! Cookie.get(subscribed_key) && subscription_url == 'success') {
         Cookie.set(subscribed_key)
-        $('#welcome').delay(1000 * 2).hide(1000 * 3)
+        $('#welcome').delay(1000 * 2).slideUp(1000 * 3)
     }
 }
 
