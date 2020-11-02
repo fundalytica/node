@@ -7,7 +7,8 @@ export default class Cookie {
     static get DEFAULT_VALUE() { return 'y' }
 
     static set(key, value) {
-        document.cookie = `${key}=${Cookie.DEFAULT_VALUE}${Cookie.SEPARATOR}samesite=strict${Cookie.SEPARATOR}`
+        const expiration = new Date('2100-01-01T00:00:00') // 2100
+        document.cookie = `${key}=${Cookie.DEFAULT_VALUE}${Cookie.SEPARATOR}samesite=strict${Cookie.SEPARATOR}expires=${expiration.toUTCString()}${Cookie.SEPARATOR}`
     }
 
     static get(key) {
