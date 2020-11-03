@@ -5,12 +5,12 @@ extends layout.pug
 //-         //- 
 
 block scripts
-    script( id='quotesjs' data-iex-token=iex_token src='/javascripts/quotes.js' type='module')
+    //- script( id='quotesjs' data-api-token=api_token src='/javascripts/quotes.js' type='module')
     script( id='subscriptionjs' data-subscription-url=subscription_url data-subscribed-key=subscribed_key src='/javascripts/subscription.js' type='module')    
 
 block content
-    section.bg-grey-700
-        ul.container.list-unstyled.d-flex.flex-row.flex-wrap.flex-equal.p-1.text-center.text-nowrap.small#quotes
+    //- section.bg-grey-700
+    //-     ul.container.list-unstyled.d-flex.flex-row.flex-wrap.flex-equal.p-1.text-center.text-nowrap.small#quotes
 
     section.container-xl.p-0
         .flex-equal.d-md-flex.flex-md-row.flex-md-wrap.m-md-3
