@@ -59,7 +59,6 @@ const topics = [
 ]
 
 const is_subscribed = req => {
-    const cookieParser = require('cookie-parser')
     return (req.app.locals.subscribed_key in req.cookies)
 }
 
@@ -74,6 +73,8 @@ router.get('/subscription-pending', (req, res) => {
 router.get('/subscription-success', (req, res) => {
     res.render('index', { topics: topics, subscribed: is_subscribed(req), subscription_url: 'success' })
 })
+
+router.get('/dip', (req, res) => res.render('dip'))
 
 router.get('/wip', (req, res) => res.render('wip'))
 
