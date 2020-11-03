@@ -3,11 +3,12 @@
     "version": "0.0.0",
     "private": true,
     "scripts": {
-        "start": "IEX_PATH=/secret/iex.js nodemon -e js,pug ./bin/www"
+        "start": "nodemon -e js,pug ./bin/www"
     },
     "dependencies": {
         "browserify": "^16.5.2",
         "cookie-parser": "~1.4.4",
+        "cors": "^2.8.5",
         "express": "~4.16.1",
         "http-errors": "~1.6.3",
         "pug": "2.0.0-beta11",
