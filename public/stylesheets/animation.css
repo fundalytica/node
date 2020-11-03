@@ -1,18 +1,8 @@
-@-webkit-keyframes fade {
-    0%   { opacity: .1; }
-    100% { opacity: 1; }
-}
-@-moz-keyframes fade  {
-    0%   { opacity: .1; }
-    100% { opacity: 1; }
-}
-@-ms-keyframes fade  {
+@keyframes fade {
     0%   { opacity: .1; }
     100% { opacity: 1; }
 }
 
 #pending {
-    -webkit-animation: fade 2s alternate infinite;
-    -moz-animation: fade 2s alternate infinite;
-    -ms-animation: fade 2s alternate infinite;
+    animation: fade 2s alternate infinite;
 }
