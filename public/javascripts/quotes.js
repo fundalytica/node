@@ -1,6 +1,6 @@
-const iex_token = document.getElementById('quotesjs').getAttribute('data-iex-token')
+const api_token = document.getElementById('quotesjs').getAttribute('data-api-token')
 
-import IEX from './modules/IEX.js'
+import API from './modules/API.js'
 
 const run = () => {
     fetch()
@@ -22,12 +22,11 @@ const fetch = () => {
         $("#quotes").empty()
 
         const symbols = Object.keys(result)
-
         for(let i = 0; i < symbols.length; i++) {
             const symbol = symbols[i]
 
-            const latestPrice = result[symbol].quote.latestPrice
-            const changePercent = result[symbol].quote.changePercent
+            const latestPrice = result[symbol].price
+            const changePercent = result[symbol].change
 
             const colorClass = changePercent < 0 ? 'red-300' : (changePercent > 0 ? 'green-300' : 'grey-100')
             let CSSClasses = `quote ${colorClass}`
@@ -46,8 +45,8 @@ const fetch = () => {
         }
     }
 
-    const iex = new IEX(iex_token)
-    iex.getQuotes(symbols, done)
+    const api = new API(api_token)
+    api.getPrices(symbols, done)
 
     setTimeout(fetch, 1000 * 20)
 }
