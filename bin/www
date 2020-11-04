@@ -21,7 +21,7 @@ app.set('port', port);
 const api_token = 'XXXXX'
 app.locals.api_token = api_token
 
-const description = 'Searching for the best performing assets and building investment tools.'
+const description = 'Searching for the best performing assets and building great investing tools.'
 app.locals.description = description
 
 const subscribed_key = 'subscribed'
