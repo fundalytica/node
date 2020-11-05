@@ -2,7 +2,7 @@
 
 header a        { color: #999; transition: ease-in-out color .15s; }
 header a:hover  { color: #fff; }
-header img      { width: auto; height: 40px; }
+header img      { width: auto; height: 30px; }
 
 /* quotes */
 .quote { font-weight: bold; padding: 2px; }
