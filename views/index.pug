@@ -19,7 +19,7 @@ block content
                 .topic.m-3.bg-blue-grey-200#welcome
                     .p-4
                         h2 Fundalytica
-                        p.font-weight-light= description
+                        p.lead= description
 
                         if(subscription_url)
                             .mb-3
@@ -28,7 +28,7 @@ block content
                                 if(subscription_url == 'pending')
                                     p.lead.text-white#pending= 'Please check your mail and confirm the subscription 👀'
                         else
-                            p.font-weight-light.mb-2
+                            p.mb-2
                                 span.fas.fa-envelope.pr-1
                                 | Do not miss any updates. Join us!
                             div
