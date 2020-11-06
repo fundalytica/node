@@ -27,7 +27,7 @@ const topics = [
     {
         id: 'reports',
         hashtag: 'tool',
-        color: 'bg-brown-300',
+        color: 'bg-green-300',
         image: 'reports.svg',
         title: 'Brokerage Reports',
         description: 'Brokerage reports are not always easy to read, try out a richer experience.', 
@@ -47,9 +47,20 @@ const topics = [
     },
 
     {
+        id: 'norway',
+        hashtag: 'fund',
+        color: 'bg-purple-200',
+        image: 'norges.png',
+        title: 'Norway Pension Fund',
+        description: 'We dive into annual reports to find out how one of the largest pension funds invests.',
+        button: 'View Results 🕵️‍♂️',
+        action: 'wip'
+    },
+
+    {
         id: 'qqq',
-        hashtag: 'data',
-        color: 'bg-purple-200 ',
+        hashtag: 'fund',
+        color: 'bg-purple-200',
         image: 'invesco.svg',
         title: 'QQQ ETF Holdings',
         description: 'All the great companies included in the Invesco QQQ ETF (NASDAQ 100).',
