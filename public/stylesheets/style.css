@@ -1,3 +1,5 @@
+* { font-family: avenir, sans-serif; }
+
 /* header */
 
 header a        { color: #999; transition: ease-in-out color .15s; }
