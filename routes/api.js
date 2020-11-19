@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router()
 
-const { spawn } = require('child_process')
+const { execFile } = require('child_process')
 
 const pythonScriptBufferToJSON = data => {
     // convert buffer to string
@@ -38,10 +38,19 @@ router.get('/v1/quote/:symbol', async (req, res) => {
 
     console.log('/v1/quote/' + symbol)
 
-    const command = spawn('python3', ['/scripts/iex/iex-quote.py', symbol])
+    const args = ['/scripts/iex/iex-quote.py', '-s', symbol]
+    // const command = execFile('python3', args)
+    const options = { shell: true } // requires root user in systemd service configuration
+    const command = execFile('/usr/bin/pipenv run /usr/bin/python3', args, options)
+
+    command.once('error', error => {
+        console.log(`[ error ] ${error}`)
+        res.json({ error: error })
+    })
 
     command.stderr.once('data', data => {
         console.log(`[ quote.stderr ] ${data}`)
+        res.json(pythonScriptBufferToJSON(data))
     })
 
     command.stdout.once('data', data => {
