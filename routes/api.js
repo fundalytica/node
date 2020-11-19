@@ -36,20 +36,6 @@ router.get('/', (req, res, next) => {
 router.get('/v1/quote/:symbol', async (req, res) => {
     const symbol = req.params.symbol
     console.log('/v1/quote/' + symbol)
-    command.once('error', error => {
-        console.log(`[ error ] ${error}`)
-        res.json({ error: error })
-    })
-
-    command.stderr.once('data', data => {
-        console.log(`[ quote.stderr ] ${data}`)
-        res.json(pythonScriptBufferToJSON(data))
-    })
-
-    command.stdout.once('data', data => {
-        console.log(`[ quote.stdout ] ${data}`)
-        res.json(pythonScriptBufferToJSON(data))
-    })
     // const args = ['/scripts/iex/iex-quote.py', '-s', symbol]
     const args = ['/scripts/yahoo/yahoo-quote.py', '-s', symbol]
     spawnHandler(args, res)
@@ -73,23 +59,26 @@ router.get('/v1/dips/:symbol-:percentage', async (req, res) => {
     spawnHandler(args, res)
 })
 
-    console.log(`stdout: ${command}`)
+const spawnHandler = (args, res) => {
+    const command = spawn('python3', args)
 
-    command.stderr.once('data', data => {
-        console.log(`[ dips.stderr ] ${data}`)
+    stdout = ''
+
+    command.stdout.on('data', data => {
+        // console.log(`[ stdout ] ${data}`)
+        stdout += data
+    })
+    command.on('close', code => {
+        res.json(pythonScriptBufferToJSON(stdout))
     })
 
-    // Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the client
-    // command.stdout.on('data', data => {
-    command.stdout.once('data', data => {
-        console.log(`[ dips.stdout ] ${data}`)
-
-        data = pythonScriptBufferToJSON(data)
-
-        // res.writeHead(200, {"Content-Type": "application/json"})
-        // res.end(JSON.stringify(data))
-        res.json(data)
+    command.stderr.on('data', data => {
+        console.error(`[ stderr ] ${data}`)
     })
-})
+    command.on('error', error => {
+        console.error(`[ error ] ${error}`)
+        res.json({ error: error })
+    })
+}
 
 module.exports = router
