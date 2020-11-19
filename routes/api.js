@@ -36,12 +36,6 @@ router.get('/', (req, res, next) => {
 router.get('/v1/quote/:symbol', async (req, res) => {
     const symbol = req.params.symbol
     console.log('/v1/quote/' + symbol)
-
-    const args = ['/scripts/iex/iex-quote.py', '-s', symbol]
-    // const command = execFile('python3', args)
-    const options = { shell: true } // requires root user in systemd service configuration
-    const command = execFile('/usr/bin/pipenv run /usr/bin/python3', args, options)
-
     command.once('error', error => {
         console.log(`[ error ] ${error}`)
         res.json({ error: error })
