@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router()
 
-const { execFile } = require('child_process')
+const { spawn } = require('child_process')
 
 const pythonScriptBufferToJSON = data => {
     // convert buffer to string
@@ -35,7 +35,6 @@ router.get('/', (req, res, next) => {
 // v1/quote/SPY
 router.get('/v1/quote/:symbol', async (req, res) => {
     const symbol = req.params.symbol
-
     console.log('/v1/quote/' + symbol)
 
     const args = ['/scripts/iex/iex-quote.py', '-s', symbol]
@@ -57,20 +56,28 @@ router.get('/v1/quote/:symbol', async (req, res) => {
         console.log(`[ quote.stdout ] ${data}`)
         res.json(pythonScriptBufferToJSON(data))
     })
+    // const args = ['/scripts/iex/iex-quote.py', '-s', symbol]
+    const args = ['/scripts/yahoo/yahoo-quote.py', '-s', symbol]
+    spawnHandler(args, res)
 })
 
 // v1/historical/QQQ
 router.get('/v1/historical/:symbol', async (req, res) => {
+    const symbol = req.params.symbol
+    console.log('/v1/historical/' + symbol)
+    const args = ['/scripts/yahoo/yahoo-historical.py', '-s', symbol]
+    spawnHandler(args, res)
 })
 
 // v1/dips/TSLA-20
 router.get('/v1/dips/:symbol-:percentage', async (req, res) => {
     const symbol = req.params.symbol
     const percentage = req.params.percentage
-
     console.log(`/v1/dips/${symbol}-${percentage}`)
 
-    const command = spawn('python3', ['/scripts/stocks/dips.py', symbol, percentage])
+    const args = ['/scripts/stocks/dips.py', '-s', symbol, '-p', percentage]
+    spawnHandler(args, res)
+})
 
     console.log(`stdout: ${command}`)
 
