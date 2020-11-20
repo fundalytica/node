@@ -50,12 +50,12 @@ router.get('/v1/historical/:symbol', async (req, res) => {
 })
 
 // v1/dips/TSLA-20
-router.get('/v1/dips/:symbol-:percentage', async (req, res) => {
+router.get('/v1/dip/:symbol-:dip', async (req, res) => {
     const symbol = req.params.symbol
-    const percentage = req.params.percentage
-    console.log(`/v1/dips/${symbol}-${percentage}`)
-
-    const args = ['/scripts/stocks/dips.py', '-s', symbol, '-p', percentage]
+    const dip = req.params.dip
+    console.log(`/v1/dip/${symbol}-${dip}`)
+    const provider = 'yahoo'
+    const args = ['/scripts/dip/dip.py', '-s', symbol, '-d', dip, '-p', provider]
     spawnHandler(args, res)
 })
 
@@ -63,18 +63,25 @@ const spawnHandler = (args, res) => {
     const command = spawn('python3', args)
 
     stdout = ''
+    stderr = ''
 
     command.stdout.on('data', data => {
-        // console.log(`[ stdout ] ${data}`)
         stdout += data
+        // console.log(`[ stdout ] ${data}`)
     })
-    command.on('close', code => {
-        res.json(pythonScriptBufferToJSON(stdout))
-    })
-
     command.stderr.on('data', data => {
+        stderr += data
         console.error(`[ stderr ] ${data}`)
     })
+    command.on('close', code => {
+        if(stdout != '') {
+            res.json(pythonScriptBufferToJSON(stdout))
+        }
+        else if(stderr != '') {
+            res.send(stderr)
+        }
+    })
+
     command.on('error', error => {
         console.error(`[ error ] ${error}`)
         res.json({ error: error })
