@@ -32,7 +32,7 @@ router.get('/', (req, res, next) => {
     res.render('index', { title: 'Fundalytica API' })
 })
 
-// v1/quote/SPY
+// api.fundalytica.com/v1/quote/SPY
 router.get('/v1/quote/:symbol', async (req, res) => {
     const symbol = req.params.symbol
     console.log('/v1/quote/' + symbol)
@@ -41,7 +41,7 @@ router.get('/v1/quote/:symbol', async (req, res) => {
     spawnHandler(args, res)
 })
 
-// v1/historical/QQQ
+// api.fundalytica.com/v1/historical/QQQ
 router.get('/v1/historical/:symbol', async (req, res) => {
     const symbol = req.params.symbol
     console.log('/v1/historical/' + symbol)
@@ -49,13 +49,13 @@ router.get('/v1/historical/:symbol', async (req, res) => {
     spawnHandler(args, res)
 })
 
-// v1/dips/TSLA-20
+// api.fundalytica.com/v1/dip/TSLA-20
 router.get('/v1/dip/:symbol-:dip', async (req, res) => {
     const symbol = req.params.symbol
     const dip = req.params.dip
-    console.log(`/v1/dip/${symbol}-${dip}`)
     const provider = 'yahoo'
-    const args = ['/scripts/dip/dip.py', '-s', symbol, '-d', dip, '-p', provider]
+    console.log(`/v1/dip/${symbol}-${dip} (${provider})`)
+    const args = ['/scripts/py-dip/dip.py', '-s', symbol, '-d', dip, '-p', provider]
     spawnHandler(args, res)
 })
 
@@ -63,16 +63,17 @@ const spawnHandler = (args, res) => {
     const command = spawn('python3', args)
 
     stdout = ''
-    stderr = ''
-
     command.stdout.on('data', data => {
         stdout += data
         // console.log(`[ stdout ] ${data}`)
     })
+
+    stderr = ''
     command.stderr.on('data', data => {
         stderr += data
         console.error(`[ stderr ] ${data}`)
     })
+
     command.on('close', code => {
         if(stdout != '') {
             res.json(pythonScriptBufferToJSON(stdout))
