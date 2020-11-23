@@ -1,5 +1,10 @@
-
 extends layout
+
+block scripts
+    //- script(src="https://code.highcharts.com/highcharts.js")
+    script(src="https://code.highcharts.com/stock/highstock.js")
+
+    script(src='/javascripts/dip.js' type='module')
 
 block content
     .text-center.p-4
