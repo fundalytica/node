@@ -2,11 +2,12 @@ extends layout.pug
 
 //- block style
 //-     style.
-//-         //- 
+//-         //-
 
 block scripts
     //- script( id='quotesjs' data-api-token=api_token src='/javascripts/quotes.js' type='module')
-    script( id='subscriptionjs' data-subscription-url=subscription_url data-subscribed-key=subscribed_key src='/javascripts/subscription.js' type='module')    
+    script(id='indexjs' data-description=description src='/javascripts/index.js' type='module')
+    script( id='subscriptionjs' data-subscription-url=subscription_url data-subscribed-key=subscribed_key src='/javascripts/subscription.js' type='module')
 
 block content
     //- section.bg-grey-700
@@ -19,7 +20,8 @@ block content
                 .topic.m-3.bg-blue-grey-200#welcome
                     .p-4
                         h2 Fundalytica
-                        p.lead= description
+                        //- p.lead#description= description
+                        p.lead#description |
 
                         if(subscription_url)
                             .mb-3
