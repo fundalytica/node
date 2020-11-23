@@ -4,7 +4,10 @@ html
         meta(charset='utf-8')
         meta(name='viewport' content='width=device-width, initial-scale=1, shrink-to-fit=no')
 
-        title Fundalytica
+        if(! title)
+            title Fundalytica
+        else
+            title= 'Fundalytica - ' + title
 
         include includes/matomo.pug
         include includes/social.pug
@@ -18,7 +21,7 @@ html
         //- https://htmlcolorcodes.com/
         link(href='/stylesheets/material_design_bg_colors_full.css' rel='stylesheet')
         link(href='/stylesheets/material_design_colors_full.css' rel='stylesheet')
-        
+
         link(href='/stylesheets/style.css' rel='stylesheet')
         link(href='/stylesheets/animation.css' rel='stylesheet')
 
