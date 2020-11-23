@@ -30,7 +30,7 @@ const topics = [
         color: 'bg-green-300',
         image: 'reports.svg',
         title: 'Brokerage Reports',
-        description: 'Brokerage reports are not always easy to read, try out a richer experience.', 
+        description: 'Brokerage reports are not always easy to read, try out a richer experience.',
         button: 'Upload Report 📋',
         action: 'wip'
     },
@@ -85,8 +85,8 @@ router.get('/subscription-success', (req, res) => {
     res.render('index', { topics: topics, subscribed: is_subscribed(req), subscription_url: 'success' })
 })
 
-router.get('/dip', (req, res) => res.render('dip'))
+router.get('/dip', (req, res) => res.render('dip', { title: 'Buy The Dip' }))
 
-router.get('/wip', (req, res) => res.render('wip'))
+router.get('/wip', (req, res) => res.render('wip', { title: 'WIP' }))
 
 module.exports = router
