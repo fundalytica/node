@@ -6,8 +6,8 @@ extends layout.pug
 
 block scripts
     //- script( id='quotesjs' data-api-token=api_token src='/javascripts/quotes.js' type='module')
-    script(id='indexjs' data-description=description src='/javascripts/index.js' type='module')
-    script( id='subscriptionjs' data-subscription-url=subscription_url data-subscribed-key=subscribed_key src='/javascripts/subscription.js' type='module')
+    script(id='indexjs' src='/javascripts/index.js' type='module')
+    script( id='subscriptionjs' data-subscription=subscription data-subscribed-key=subscribed_key src='/javascripts/subscription.js' type='module')
 
 block content
     //- section.bg-grey-700
@@ -20,19 +20,18 @@ block content
                 .topic.m-3.bg-blue-grey-200#welcome
                     .p-4
                         h2 Fundalytica
-                        //- p.lead#description= description
-                        p.lead#description |
+                        p.lead#description= description
 
-                        if(subscription_url)
+                        if(subscription)
                             .mb-3
-                                if(subscription_url == 'success')
+                                if(subscription == 'success')
                                     p.lead.text-white= 'Thank you for subscribing to Fundalytica 🤝'
-                                if(subscription_url == 'pending')
+                                if(subscription == 'pending')
                                     p.lead.text-white#pending= 'Please check your mail and confirm the subscription 👀'
                         else
                             p.mb-2
                                 span.fas.fa-envelope.pr-1
-                                | Do not miss any updates. Join us!
+                                span#join-us
                             div
                                 form(action='https://sendy.fundalytica.com/subscribe' method='POST' accept-charset='utf-8')
                                     input.form-control(type='text' name='email' placeholder='Enter your email address')
