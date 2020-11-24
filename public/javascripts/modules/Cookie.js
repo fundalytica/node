@@ -4,7 +4,7 @@ export default class Cookie {
     constructor() {     }
 
     static get SEPARATOR() { return '; ' }
-    static get DEFAULT_VALUE() { return 'y' }
+    static get DEFAULT_VALUE() { return 'yes' }
 
     static set(key, value) {
         const expiration = new Date('2100-01-01T00:00:00') // 2100
