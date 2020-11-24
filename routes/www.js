@@ -1,5 +1,5 @@
-var express = require('express')
-var router = express.Router()
+const express = require('express')
+const router = express.Router()
 
 const topics = [
     {
@@ -69,20 +69,21 @@ const topics = [
     },
 ]
 
-const is_subscribed = req => {
-    return (req.app.locals.subscribed_key in req.cookies)
-}
-
 router.get('/', (req, res) => {
-    res.render('index', { topics: topics, subscribed: is_subscribed(req) })
+    const subscription = req.flash('subscription')[0]
+    const subscribed_key = req.app.locals.subscribed_key
+    const subscribed = subscribed_key in req.cookies
+
+    res.render('index', { topics, subscription, subscribed_key, subscribed })
 })
 
 router.get('/subscription-pending', (req, res) => {
-    res.render('index', { topics: topics, subscribed: is_subscribed(req), subscription_url: 'pending' })
+    req.flash('subscription', 'pending')
+    res.redirect('/')
 })
-
 router.get('/subscription-success', (req, res) => {
-    res.render('index', { topics: topics, subscribed: is_subscribed(req), subscription_url: 'success' })
+    req.flash('subscription', 'success')
+    res.redirect('/')
 })
 
 router.get('/dip', (req, res) => res.render('dip', { title: 'Buy The Dip' }))
