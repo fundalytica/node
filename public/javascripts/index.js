@@ -1,14 +1,16 @@
-const description = document.getElementById('indexjs').getAttribute('data-description')
+const text = ' Do not miss any updates. Join us!'
 
 const run = () => {
-    const element = document.getElementById('description')
+    const element = document.getElementById('join-us')
 
-    const typewriter = new Typewriter(element, {
-        delay: 0.05 * 1000,
-        cursor: null
-    })
+    if(element) {
+        const typewriter = new Typewriter(element, {
+            delay: 0.05 * 1000,
+            cursor: null
+        })
 
-    typewriter.typeString(description).start()
+        typewriter.typeString(text).start()
+    }
 }
 
 $(run())
