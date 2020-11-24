@@ -18,14 +18,9 @@ app.set('port', port);
  * Global variables scoped to the application
  */
 
-const api_token = 'XXXXX'
-app.locals.api_token = api_token
-
-const description = 'Searching for the best performing assets and building great investing tools.'
-app.locals.description = description
-
-const subscribed_key = 'subscribed'
-app.locals.subscribed_key = subscribed_key
+app.locals.api_token = 'XXXXX'
+app.locals.description = 'Searching for the best performing assets and building great investing tools.'
+app.locals.subscribed_key = 'subscribed'
 
 /**
  * Create HTTP server.
