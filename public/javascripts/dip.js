@@ -1,7 +1,5 @@
 const script_tag = document.getElementById('dipjs')
 
-// const DEBUG = false
-
 // TODO: stock and dip selection on page
 // TODO: show more info in tooltip, all time high after X days, dip % from ath
 // TODO: text summary under chart
@@ -14,22 +12,23 @@ const script_tag = document.getElementById('dipjs')
 // TODO: data management, IEX . . . 15Y max
 
 const fetch = (symbol, dip) => {
-    // if(DEBUG) console.log('fetch ' + symbol)
+    // const url = `https://api.fundalytica.com/v1/historical/${symbol}`
+    const url = `https://api.fundalytica.com/v1/dip/${symbol}-${dip}`
+
+    if(DEBUG) console.log(url)
+
     // $('#symbol').text(symbol)
 
     $.ajax({
-        // url: `https://api.fundalytica.com/v1/historical/${symbol}`,
-        url: `https://api.fundalytica.com/v1/dip/${symbol}-${dip}`,
+        url: url,
         success: result => {
-            // console.log(result)
+            if(DEBUG) console.log(result)
 
-            // if(DEBUG) console.log(result)
             // `https://api.fundalytica.com/v1/historical/${symbol}`
             // const data = Object.keys(result).map(key => [parseInt(key), result[key]['Close']])
 
             // [ [x,y], ..., [x,y] ]
             const dataToSeries = data => Object.keys(data).map(key => [parseInt(key), data[key]])
-            console.log(dataToSeries(result.all.close))
 
             let options =  {}
 
@@ -51,6 +50,8 @@ const fetch = (symbol, dip) => {
 }
 
 // $('#fetch').click(fetch('SPY'))
+
+const DEBUG = true
 
 const defaultSymbol = 'SNAP'
 const defaultDip = 70
@@ -84,7 +85,6 @@ const options = {
 
     // plotOptions: {
     //     series: {
-    //         stacking: 'normal'
     //     }
     // },
 
