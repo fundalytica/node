@@ -4,12 +4,14 @@ const script_tag = document.getElementById('dipjs')
 // TODO: show more info in tooltip, all time high after X days, dip % from ath
 // TODO: text summary under chart
 
-// TODO: current price add
+// TODO: current price add, make it feel live with decimal points and regular refresh
 
 // TODO: data management, updates, cron
 // TODO: data management, data unavailable
 // TODO: data management, caching
 // TODO: data management, IEX . . . 15Y max
+
+// TODO: iphone app and widget
 
 const fetch = (symbol, dip) => {
     // const url = `https://api.fundalytica.com/v1/historical/${symbol}`
@@ -23,6 +25,7 @@ const fetch = (symbol, dip) => {
         url: url,
         success: result => {
             if(DEBUG) console.log(result)
+
 
             // `https://api.fundalytica.com/v1/historical/${symbol}`
             // const data = Object.keys(result).map(key => [parseInt(key), result[key]['Close']])
@@ -49,14 +52,13 @@ const fetch = (symbol, dip) => {
     })
 }
 
-// $('#fetch').click(fetch('SPY'))
-
 const DEBUG = true
 
 const defaultSymbol = 'SNAP'
 const defaultDip = 70
 $(fetch(defaultSymbol, defaultDip))
 
+// $('#fetch').click(fetch('SPY'))
 // $('.nav-link').click(e => fetch(e.target.id))
 
 const options = {
