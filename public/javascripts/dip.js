@@ -1,20 +1,62 @@
 const script_tag = document.getElementById('dipjs')
 
-const fetch = symbol => {
-    $.ajax({
-        url: `https://api.fundalytica.com/v1/historical/${symbol}`,
-        success: result => {
-            const property = 'Close'
-            const data = Object.keys(result).map(key => [parseInt(key), result[key][property]])
-            chart.addSeries({data: data})
+// const DEBUG = false
 
-            chart.setTitle( { text: symbol } )
+// TODO: stock and dip selection on page
+// TODO: show more info in tooltip, all time high after X days, dip % from ath
+// TODO: text summary under chart
+
+// TODO: current price add
+
+// TODO: data management, updates, cron
+// TODO: data management, data unavailable
+// TODO: data management, caching
+// TODO: data management, IEX . . . 15Y max
+
+const fetch = (symbol, dip) => {
+    // if(DEBUG) console.log('fetch ' + symbol)
+    // $('#symbol').text(symbol)
+
+    $.ajax({
+        // url: `https://api.fundalytica.com/v1/historical/${symbol}`,
+        url: `https://api.fundalytica.com/v1/dip/${symbol}-${dip}`,
+        success: result => {
+            // console.log(result)
+
+            // if(DEBUG) console.log(result)
+            // `https://api.fundalytica.com/v1/historical/${symbol}`
+            // const data = Object.keys(result).map(key => [parseInt(key), result[key]['Close']])
+
+            // [ [x,y], ..., [x,y] ]
+            const dataToSeries = data => Object.keys(data).map(key => [parseInt(key), data[key]])
+            console.log(dataToSeries(result.all.close))
+
+            let options =  {}
+
+            // options = { color: '#3F51B5', marker: { lineColor: '#555555', fillColor: '#FFFFFF' } }
+            // options.data = dataToSeries(result.all.close)
+            // chart.addSeries(options)
+
+            options =  { name: 'all time high', color: '#43A047', marker: { enabled: true, radius: 4, symbol: 'circle' }, lineWidth: 0, states: { hover: { lineWidthPlus: 0 } } }
+            options.data = dataToSeries(result.ath.close)
+            chart.addSeries(options)
+
+            options =  { name: `dip from all time high`, color: '#E53935', marker: { enabled: true, radius: 4, symbol: 'circle' }, lineWidth: 0, states: { hover: { lineWidthPlus: 0 } } }
+            options.data = dataToSeries(result.dip.close)
+            chart.addSeries(options)
+
+            chart.setTitle( { text: `$${symbol} Dips ( ${dip}% or worse )`, style: { color: '#B71C1C' } } )
         }
     })
 }
 
+// $('#fetch').click(fetch('SPY'))
+
 const defaultSymbol = 'SNAP'
-$(fetch(defaultSymbol))
+const defaultDip = 70
+$(fetch(defaultSymbol, defaultDip))
+
+// $('.nav-link').click(e => fetch(e.target.id))
 
 const options = {
     chart: {
@@ -28,7 +70,7 @@ const options = {
 
     title: { text: null },
 
-    legend: { enabled: false },
+    legend: { enabled: true },
 
     credits: { enabled: false },
 
@@ -40,12 +82,11 @@ const options = {
         // opposite: false
     },
 
-    plotOptions: {
-        series: {
-            color: '#3f51b5',
-            marker: { lineWidth: 2, lineColor: '#555555', fillColor: '#FFFFFF' }
-        }
-    },
+    // plotOptions: {
+    //     series: {
+    //         stacking: 'normal'
+    //     }
+    // },
 
     tooltip: {
         borderColor: '#000000',
