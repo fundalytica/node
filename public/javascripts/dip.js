@@ -1,51 +1,34 @@
 const script_tag = document.getElementById('dipjs')
 
-// TODO: stock and dip selection on page
-// TODO: show more info in tooltip, all time high after X days, dip % from ath
-// TODO: text summary under chart
-
-// TODO: current price add, make it feel live with decimal points and regular refresh
-
-// TODO: data management, updates, cron
-// TODO: data management, data unavailable
-// TODO: data management, caching
-// TODO: data management, IEX . . . 15Y max
-
-// TODO: iphone app and widget
-
 const fetch = (symbol, dip) => {
-    // const url = `https://api.fundalytica.com/v1/historical/${symbol}`
     const url = `https://api.fundalytica.com/v1/dip/${symbol}-${dip}`
 
     if(DEBUG) console.log(url)
-
-    // $('#symbol').text(symbol)
 
     $.ajax({
         url: url,
         success: result => {
             if(DEBUG) console.log(result)
 
-
-            // `https://api.fundalytica.com/v1/historical/${symbol}`
-            // const data = Object.keys(result).map(key => [parseInt(key), result[key]['Close']])
-
             // [ [x,y], ..., [x,y] ]
             const dataToSeries = data => Object.keys(data).map(key => [parseInt(key), data[key]])
 
-            let options =  {}
+            let seriesOptions =  {}
 
-            // options = { color: '#3F51B5', marker: { lineColor: '#555555', fillColor: '#FFFFFF' } }
-            // options.data = dataToSeries(result.all.close)
-            // chart.addSeries(options)
+            // seriesOptions = { color: '#3F51B5', marker: { lineColor: '#555555', fillColor: '#FFFFFF' } }
+            // seriesOptions.data = dataToSeries(result.all.close)
+            // chart.addSeries(seriesOptions)
 
-            options =  { name: 'all time high', color: '#43A047', marker: { enabled: true, radius: 4, symbol: 'circle' }, lineWidth: 0, states: { hover: { lineWidthPlus: 0 } } }
-            options.data = dataToSeries(result.ath.close)
-            chart.addSeries(options)
+            const marker = { enabled: true, radius: 4, symbol: 'circle' }
+            const states = { hover: { lineWidthPlus: 0 } }
 
-            options =  { name: `dip from all time high`, color: '#E53935', marker: { enabled: true, radius: 4, symbol: 'circle' }, lineWidth: 0, states: { hover: { lineWidthPlus: 0 } } }
-            options.data = dataToSeries(result.dip.close)
-            chart.addSeries(options)
+            seriesOptions =  { name: 'all time high', color: '#43A047', marker: marker, lineWidth: 0, states: states }
+            seriesOptions.data = dataToSeries(result.ath.close)
+            chart.addSeries(seriesOptions)
+
+            seriesOptions =  { name: `dip from all time high`, color: '#E53935', marker: marker, lineWidth: 0, states: states }
+            seriesOptions.data = dataToSeries(result.dip.close)
+            chart.addSeries(seriesOptions)
 
             chart.setTitle( { text: `$${symbol} Dips ( ${dip}% or worse )`, style: { color: '#B71C1C' } } )
         }
@@ -58,10 +41,7 @@ const defaultSymbol = 'SNAP'
 const defaultDip = 70
 $(fetch(defaultSymbol, defaultDip))
 
-// $('#fetch').click(fetch('SPY'))
-// $('.nav-link').click(e => fetch(e.target.id))
-
-const options = {
+const chartOptions = {
     chart: {
         backgroundColor: null,
         animation: false
@@ -104,4 +84,4 @@ const options = {
     }
 }
 
-const chart = Highcharts.stockChart('chart', options)
+const chart = Highcharts.stockChart('chart', chartOptions)
