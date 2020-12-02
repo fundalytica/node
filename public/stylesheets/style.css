@@ -18,10 +18,6 @@ footer a        { color: #000; transition: ease-in-out color .15s; }
 footer a:hover  { color: rgb(230, 72, 106); }
 footer img      { width: auto; height: 20px; }
 
-/* container */
-
-/* #container { min-height: calc(100vh - 150px); } */
-
 /* topics */
 
 /* .topic { display: none; } */
@@ -31,3 +27,8 @@ footer img      { width: auto; height: 20px; }
 /* links */
 
 a:hover { text-decoration: none; }
+
+/* https://philipwalton.github.io/solved-by-flexbox/demos/sticky-footer/ */
+
+body { display: flex; min-height: 100vh; flex-direction: column; }
+main { flex: 1; }
