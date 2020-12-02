@@ -18,7 +18,8 @@ app.use(express.urlencoded({ extended: false }))
 
 app.use(express.static(path.join(__dirname, 'public')))
 
-app.use(session({ secret: 'fundalytica', saveUninitialized: true, resave: true }))
+// http://expressjs.com/en/resources/middleware/session.html
+app.use(session({ secret: 'Ph3nrta6W4BfDp7MRkhR', saveUninitialized: false, resave: false, cookie: { sameSite: 'strict' } }))
 app.use(flash())
 
 // https://expressjs.com/en/resources/middleware/cors.html
@@ -42,7 +43,6 @@ app.use((err, req, res, next) => {
     res.locals.message = err.message
     // error details only in development
     res.locals.error = req.app.get('env') === 'development' ? err : {}
-
     res.render('error')
 })
 
