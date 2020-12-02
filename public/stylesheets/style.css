@@ -17,10 +17,7 @@ footer a        { color: #000; transition: ease-in-out color .15s; }
 footer a:hover  { color: rgb(230, 72, 106); }
 footer img      { width: auto; height: 20px; }
 
-/* topics */
 
-.topic { min-width: 300px; border-radius: 6px; }
-.topic img { width: auto; height: 30px; }
 
 /* topics */
 
