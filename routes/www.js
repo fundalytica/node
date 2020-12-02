@@ -72,9 +72,8 @@ const topics = [
 router.get('/', (req, res) => {
     const subscription = req.flash('subscription')[0]
     const subscribed_key = req.app.locals.subscribed_key
-    const subscribed = subscribed_key in req.cookies
 
-    res.render('index', { topics, subscription, subscribed_key, subscribed })
+    res.render('index', { topics, subscription, subscribed_key })
 })
 
 router.get('/subscription-pending', (req, res) => {
