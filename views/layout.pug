@@ -13,9 +13,7 @@ html
         include includes/social.pug
         include includes/favicon.pug
 
-        //- Bootstrap
         link(rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.3/css/bootstrap.min.css')
-        //- Font Awesome
         link(rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css')
 
         //- https://htmlcolorcodes.com/
@@ -23,24 +21,19 @@ html
         link(href='/stylesheets/material_design_colors_full.css' rel='stylesheet')
 
         link(href='/stylesheets/style.css' rel='stylesheet')
-        link(href='/stylesheets/animation.css' rel='stylesheet')
 
-        //- block links
+        block links
 
-        //- block style
+        block style
 
     body.bg-amber-50
-        include includes/header.pug
-        block content
-        include includes/footer.pug
-
-        //- jQuery
         script(src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js')
-        //- Bootstrap
         script(src='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.3/js/bootstrap.min.js')
-        //- Numeral
-        script(src='https://cdnjs.cloudflare.com/ajax/libs/numeral.js/2.0.6/numeral.min.js')
-        //- Typewriter
-        script(src='https://cdnjs.cloudflare.com/ajax/libs/TypewriterJS/2.13.1/core.min.js' type='module')
+
+        include includes/header.pug
+
+        block content
+
+        include includes/footer.pug
 
         block scripts
