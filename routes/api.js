@@ -3,31 +3,6 @@ const router = express.Router()
 
 const { spawn } = require('child_process')
 
-const pythonScriptBufferToJSON = data => {
-    // convert buffer to string
-    data = data.toString()
-
-    // remove new lines
-    data = data.replace(/\n/g, '')
-
-    // replace single quotes with double quotes
-    data = data.replace(/\'/g, '\"')
-
-    // replace None/True/False with null/true/false
-    data = data.replace(/None/g, 'null')
-    data = data.replace(/True/g, 'true')
-    data = data.replace(/False/g, 'false')
-
-    try {
-        data = JSON.parse(data)
-    }
-    catch (e) {
-        console.log(e)
-    }
-
-    return data
-}
-
 router.get('/', (req, res, next) => {
     res.render('index', { title: 'Fundalytica API' })
 })
@@ -49,7 +24,7 @@ router.get('/v1/historical/:symbol', async (req, res) => {
     spawnHandler(args, res)
 })
 
-// api.fundalytica.com/v1/dip/TSLA-20
+// api.fundalytica.com/v1/dip/SNAP-5
 router.get('/v1/dip/:symbol-:dip', async (req, res) => {
     const symbol = req.params.symbol
     const dip = req.params.dip
@@ -76,7 +51,12 @@ const spawnHandler = (args, res) => {
 
     command.on('close', code => {
         if(stdout != '') {
-            res.json(pythonScriptBufferToJSON(stdout))
+            try {
+                res.json(JSON.parse(stdout))
+            }
+            catch (e) {
+                console.log(e)
+            }
         }
         else if(stderr != '') {
             res.send(stderr)
