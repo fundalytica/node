@@ -22,12 +22,9 @@ footer img      { width: auto; height: 20px; }
 .topic { min-width: 300px; border-radius: 6px; }
 .topic img { width: auto; height: 30px; }
 
-/* .flex-equal */
 
-.flex-equal > * {
-    -ms-flex: 1;
-    flex:     1;
-}
+.topic { flex: 1; min-width: 300px; border-radius: 6px; }
+.topic img { width: auto; height: 30px; }
 
 /* links */
 
