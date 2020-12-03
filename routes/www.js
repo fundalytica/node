@@ -71,6 +71,10 @@ const topics = [
         button: 'View Stocks 🔍',
         action: 'route'
     },
+
+    // {
+        // comic book
+    // }
 ]
 
 router.get('/', (req, res) => {
