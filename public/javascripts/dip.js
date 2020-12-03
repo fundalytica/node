@@ -16,6 +16,14 @@ const fetch = (symbol, dip) => {
 
             data = result
 
+            // dates
+            const format = "D MMM 'YY"
+            const fromDate = moment(data.dates.from)
+            const toDate = moment(data.dates.to)
+            const diff = toDate.diff(fromDate)
+            const years = moment.duration(diff).asYears()
+            $('#dates').text(`${fromDate.format(format)} to ${toDate.format(format)} (${years.toFixed(1)} Years)`)
+
             // [ [x,y], ..., [x,y] ]
             const dataToSeries = data => Object.keys(data).map(key => [parseInt(key), data[key]])
 
