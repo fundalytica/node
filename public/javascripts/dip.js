@@ -1,6 +1,6 @@
 const script_tag = document.getElementById('dipjs')
 
-let data = null
+let data
 
 const fetch = (symbol, dip) => {
     const url = `https://api.fundalytica.com/v1/dip/${symbol}-${dip}`
@@ -26,26 +26,46 @@ const fetch = (symbol, dip) => {
 
             // all ticks, if available from py-dip
             // seriesOptions = { color: '#3F51B5', marker: { lineColor: '#555555', fillColor: '#FFFFFF' } }
-            // seriesOptions.data = dataToSeries(result.all.close)
+            // seriesOptions.data = dataToSeries(data.all.close)
             // chart.addSeries(seriesOptions)
 
             // ath series
             tooltip = { valueDecimals: 2, pointFormat: '<b>{point.y}</b>' }
             seriesOptions =  { name: 'all time high', color: '#43A047', lineWidth: 0, marker: marker, states: states, tooltip: tooltip }
-            seriesOptions.data = dataToSeries(result.ath.close)
+            seriesOptions.data = dataToSeries(data.ath.close)
             chart.addSeries(seriesOptions)
 
             // dip series
-            tooltip = { pointFormatter: function () { return `<b>${Highcharts.numberFormat(this.y, 2)}</b><br/>${Highcharts.numberFormat(data.dip.dip[this.x] * 100, 1)}%` }}
-            seriesOptions =  { name: `dip from all time high`, color: '#E53935', lineWidth: 0, marker: marker, states: states, tooltip: tooltip }
-            seriesOptions.data = dataToSeries(result.dip.close)
-            chart.addSeries(seriesOptions)
+            const addDipSeries = dipCloseData => {
+                tooltip = { pointFormatter: function () { return `<b>${Highcharts.numberFormat(this.y, 2)}</b><br/>${Highcharts.numberFormat(data.dip.dip[this.x] * 100, 1)}%` }}
+                seriesOptions =  { name: `dip from all time high`, color: '#E53935', lineWidth: 0, marker: marker, states: states, tooltip: tooltip }
+                seriesOptions.data = dataToSeries(dipCloseData)
+                chart.addSeries(seriesOptions)
+            }
+            addDipSeries(data.dip.close)
 
             // chart.setTitle( { text: '', style: { color: '#B71C1C' } } )
 
-            $('.slider').change(event => {
+            $('.slider').on("input change", (event) => {
                 const value = event.target.value
                 $('#subtitle').text(`-${value}% or worse`)
+
+                const percentage = -(value / 100)
+                const dip = {}
+                dip.dip = Object.keys(data.dip.dip)
+                    .filter(key => data.dip.dip[key] <= percentage )
+                    .reduce((obj, key) => { obj[key] = data.dip.dip[key]; return obj }, {})
+                dip.close = Object.keys(dip.dip)
+                    .reduce((obj, key) => { obj[key] = data.dip.close[key]; return obj }, {})
+
+                // console.log(percentage)
+                // console.log(dip)
+                // console.log(` length: ${Object.keys(dip.close).length} / ${Object.keys(dip.dip).length}`)
+
+                if (chart.series.length == 2) {
+                    chart.series[1].remove()
+                    addDipSeries(dip.close)
+                }
             });
         }
     })
@@ -59,46 +79,30 @@ $(fetch(defaultSymbol, defaultDip))
 
 $('.slider').val(defaultDip)
 
-Highcharts.setOptions({
-    lang: {
-        decimalPoint: '.',
-        thousandsSep: ','
-    }
-})
+Highcharts.setOptions({ lang: { decimalPoint: '.', thousandsSep: ',' } })
 
 const chartOptions = {
-    chart: {
-        backgroundColor: null,
-        animation: false
-    },
+    chart:          { backgroundColor: null, animation: false },
 
     rangeSelector : { enabled: false },
-    scrollbar: { enabled: false },
-    navigator: { enabled: false },
+    scrollbar:      { enabled: false },
+    navigator:      { enabled: false },
+    credits:        { enabled: false },
 
-    title: { text: null },
+    legend:         { enabled: true },
 
-    legend: { enabled: true },
+    xAxis:          { type: 'datetime' },
 
-    credits: { enabled: false },
-
-    xAxis: {
-        type: 'datetime'
-    },
-
-    yAxis: {
-        title: null,
-        labels: { formatter: function () { return numeral(this.value).format('0,0') } }
+    // yAxis: {
         // opposite: false
-    },
+    // },
 
     // plotOptions: {
     //     series: {
-
     //     }
     // },
 
-    tooltip: {
+    // tooltip: {
         /*
         header: xDateFormat
         */
@@ -138,7 +142,7 @@ const chartOptions = {
         //     const points = this.points ? this.points.map(pointFunction) : []
         //     return [header, points]
         // }
-    }
+    // }
 }
 
 const chart = Highcharts.stockChart('chart', chartOptions)
