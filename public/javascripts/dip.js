@@ -82,7 +82,7 @@ $('.slider').val(defaultDip)
 Highcharts.setOptions({ lang: { decimalPoint: '.', thousandsSep: ',' } })
 
 const chartOptions = {
-    chart:          { backgroundColor: null, animation: false },
+    chart:          { backgroundColor: null, animation: false }, // pinchType: null
 
     rangeSelector : { enabled: false },
     scrollbar:      { enabled: false },
