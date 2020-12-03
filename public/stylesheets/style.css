@@ -29,6 +29,7 @@ footer img      { width: auto; height: 20px; }
 a:hover { text-decoration: none; }
 
 /* https://philipwalton.github.io/solved-by-flexbox/demos/sticky-footer/ */
+/* https://allthingssmitty.com/2020/05/11/css-fix-for-100vh-in-mobile-webkit/ */
 
-body { display: flex; min-height: 100vh; flex-direction: column; }
+body { display: flex; min-height: 100vh; flex-direction: column; min-height: -webkit-fill-available; }
 main { flex: 1; }
