@@ -5,7 +5,7 @@ const path = require('path')
 
 const session = require('express-session')          // http://expressjs.com/en/resources/middleware/session.html
 const MemoryStore = require('memorystore')(session) // https://www.npmjs.com/package/memorystore
-const flash = require('connect-flash')
+const flash = require('express-flash')
 
 const vhost = require('vhost')                      // https://expressjs.com/en/resources/middleware/vhost.html
 const cors = require('cors')                        // https://expressjs.com/en/resources/middleware/cors.html

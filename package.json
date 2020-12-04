@@ -6,10 +6,10 @@
         "start": "nodemon -e js,pug ./bin/www"
     },
     "dependencies": {
-        "connect-flash": "^0.1.1",
         "cors": "^2.8.5",
         "dotenv": "^8.2.0",
         "express": "~4.16.1",
+        "express-flash": "0.0.2",
         "express-session": "^1.17.1",
         "http-errors": "~1.6.3",
         "memorystore": "^1.6.4",
