@@ -3,6 +3,8 @@ const path = require('path')
 const createError = require('http-errors')
 
 const session = require('express-session')
+const MemoryStore = require('memorystore')(session)
+
 const cookieParser = require('cookie-parser')
 const flash = require('connect-flash')
 
@@ -19,7 +21,15 @@ app.use(express.urlencoded({ extended: false }))
 app.use(express.static(path.join(__dirname, 'public')))
 
 // http://expressjs.com/en/resources/middleware/session.html
-app.use(session({ secret: 'Ph3nrta6W4BfDp7MRkhR', saveUninitialized: false, resave: false, cookie: { sameSite: 'strict' } }))
+// https://www.npmjs.com/package/memorystore
+app.use(session({
+    cookie: { maxAge: 86400000 },                       // 24h
+    store: new MemoryStore({ checkPeriod: 86400000 }),  // 24h check period
+    secret: 'Ph3nrta6W4BfDp7MRkhR',                     // random secret
+    saveUninitialized: false,
+    resave: false,
+    cookie: { sameSite: 'strict' }
+}))
 app.use(flash())
 
 // https://expressjs.com/en/resources/middleware/cors.html
