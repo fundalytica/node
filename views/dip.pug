@@ -9,19 +9,20 @@ block scripts
     script(src='/javascripts/dip.js' type='module')
 
 block content
-    main.text-center.p-4.d-flex.flex-column
-        div
-            p
-                strong#title.red-600
-            input#slider.slider(type="range" min="5" max="90", step="5").d-none
-            p#subtitle.red-600
-            p#dates.small
+    main.d-flex.flex-column.p-4
+        div.d-flex.flex-column.align-items-center
+            p#title.red-600.m-0.p-1
+            input#slider.slider(type="range" min="5" max="90" step="5").d-none
+            p#subtitle.red-600.m-0.p-1
+            p#dates.small.m-0.p-1
 
         #chart.d-none
 
-        div
-            #spinner.spinner-border.text-danger(role="status").d-none
-                span.sr-only
+        div.d-flex.flex-grow-1.justify-content-center
 
-        div
-            p#error.text-danger
+            div.align-self-center
+                #spinner.spinner-border.text-danger(role="status").d-none
+                    span.sr-only
+
+            div.align-self-center
+                p#error.text-danger
