@@ -7,8 +7,10 @@ const fetch = (symbol, dip) => {
 
     if(DEBUG) console.log(url)
 
-    $('#title').text(`$${symbol} Dips`)
+    $('#title').text(`${symbol} Dips`)
     $('#subtitle').text(`-${dip}% or worse`)
+    $("#spinner").removeClass('d-none')
+
     $.ajax({
         url: url,
         success: result => {
