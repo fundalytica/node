@@ -109,11 +109,14 @@ const chartOptions = {
 
     legend:         { enabled: true },
 
-    xAxis:          { type: 'datetime' },
+    xAxis: {
+        type: 'datetime'
+    },
 
-    // yAxis: {
-        // opposite: false
-    // },
+    yAxis: {
+        title: null,
+        opposite: true
+    },
 
     // plotOptions: {
     //     series: {
