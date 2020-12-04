@@ -1,8 +1,9 @@
 extends layout
 
 block content
-    .text-center.p-4
-        h1 🐥
-        p.text-danger= message
-        p.text-danger= error.status
-        pre #{error.stack}
+    main.text-center.p-4.d-flex.justify-content-center
+        div.align-self-center
+            h1 🐥
+            p.text-danger= message
+            p.text-danger= error.status
+            pre #{error.stack}
