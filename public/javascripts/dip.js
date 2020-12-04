@@ -166,4 +166,4 @@ const chartOptions = {
     // }
 }
 
-const chart = Highcharts.stockChart('chart', chartOptions)
+const chart = Highcharts.chart('chart', chartOptions)
