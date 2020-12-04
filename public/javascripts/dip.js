@@ -58,6 +58,13 @@ const fetch = (symbol, dip) => {
 
             // chart.setTitle( { text: '', style: { color: '#B71C1C' } } )
 
+            // show
+            $("#slider").removeClass('d-none')
+            $("#chart").removeClass('d-none')
+
+            // hide
+            $("#spinner").addClass('d-none')
+
             $('.slider').on("input change", (event) => {
                 const value = event.target.value
                 $('#subtitle').text(`-${value}% or worse`)
