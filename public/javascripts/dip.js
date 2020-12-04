@@ -94,7 +94,7 @@ const fetch = (symbol, dip) => {
 
 const DEBUG = true
 
-const defaultSymbol = 'SPY'
+const defaultSymbol = 'SNAP'
 const defaultDip = 5
 $(fetch(defaultSymbol, defaultDip))
 
