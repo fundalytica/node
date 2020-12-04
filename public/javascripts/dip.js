@@ -81,10 +81,8 @@ const fetch = (symbol, dip) => {
                 // console.log(dip)
                 // console.log(` length: ${Object.keys(dip.close).length} / ${Object.keys(dip.dip).length}`)
 
-                if (chart.series.length == 2) {
-                    chart.series[1].remove()
-                    addDipSeries(dip.close)
-                }
+                chart.get('dip').remove()
+                addDipSeries(dip.close)
             });
         }
     })
