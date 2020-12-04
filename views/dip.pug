@@ -11,10 +11,16 @@ block scripts
     script(src='/javascripts/dip.js' type='module')
 
 block content
-    main.text-center.p-4
-        p#title.red-600
-        input.slider(type="range" min="5" max="90", step="5")
-        p#subtitle.small.red-600
-        p#dates.small
-        #chart.m-0.p-0
-        //- #p Data Table (Edge Cases, All Dips, All ATH)
+    main.text-center.p-4.d-flex.flex-column
+        div
+            p
+                strong#title.red-600
+            input#slider.slider(type="range" min="5" max="90", step="5").d-none
+            p#subtitle.red-600
+            p#dates.small
+
+        #chart.d-none
+
+        div
+            #spinner.spinner-border.text-danger(role="status").d-none
+                span.sr-only
