@@ -16,6 +16,13 @@ const fetch = (symbol, dip) => {
         success: result => {
             if(DEBUG) console.log(result)
 
+            $("#spinner").addClass('d-none')
+
+            if(result.error) {
+                $('#error').text(`${symbol} market data is not currently available`)
+                return
+            }
+
             data = result
 
             // dates
@@ -61,9 +68,6 @@ const fetch = (symbol, dip) => {
             // show
             $("#slider").removeClass('d-none')
             $("#chart").removeClass('d-none')
-
-            // hide
-            $("#spinner").addClass('d-none')
 
             $('.slider').on("input change", (event) => {
                 const value = event.target.value
