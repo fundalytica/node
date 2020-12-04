@@ -105,6 +105,7 @@ const chartOptions = {
     scrollbar:      { enabled: false },
     navigator:      { enabled: false },
     credits:        { enabled: false },
+    title:          { text: null },
 
     legend:         { enabled: true },
 
