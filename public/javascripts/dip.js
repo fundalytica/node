@@ -31,24 +31,26 @@ const fetch = (symbol, dip) => {
 
             // series options
             let seriesOptions, tooltip
-            const states = { hover: { lineWidthPlus: 0 } }
-            const marker = { enabled: true, radius: 4, symbol: 'circle' }
+            const states = { hover: { lineWidthPlus: 0 }, inactive: { opacity: 1 } }
+            const markerRadius = 4
+            const marker = { enabled: true, radius: markerRadius, symbol: 'circle' }
 
-            // all ticks, if available from py-dip
-            // seriesOptions = { color: '#3F51B5', marker: { lineColor: '#555555', fillColor: '#FFFFFF' } }
-            // seriesOptions.data = dataToSeries(data.all.close)
-            // chart.addSeries(seriesOptions)
+            // all ticks
+            tooltip = { valueDecimals: 2, pointFormat: '<b>{point.y}</b>' }
+            seriesOptions =  { id: 'all', name: 'price', color: '#3F51B5', lineWidth: 1, marker: { radius: markerRadius }, states: states, tooltip: tooltip }
+            seriesOptions.data = dataToSeries(data.all.close)
+            chart.addSeries(seriesOptions)
 
             // ath series
             tooltip = { valueDecimals: 2, pointFormat: '<b>{point.y}</b>' }
-            seriesOptions =  { name: 'all time high', color: '#43A047', lineWidth: 0, marker: marker, states: states, tooltip: tooltip }
+            seriesOptions =  { id: 'ath', name: 'all time high', color: '#43A047', lineWidth: 0, marker: marker, states: states, tooltip: tooltip }
             seriesOptions.data = dataToSeries(data.ath.close)
             chart.addSeries(seriesOptions)
 
             // dip series
             const addDipSeries = dipCloseData => {
                 tooltip = { pointFormatter: function () { return `<b>${Highcharts.numberFormat(this.y, 2)}</b><br/>${Highcharts.numberFormat(data.dip.dip[this.x] * 100, 1)}%` }}
-                seriesOptions =  { name: `dip from all time high`, color: '#E53935', lineWidth: 0, marker: marker, states: states, tooltip: tooltip }
+                seriesOptions =  { id: 'dip', name: 'dip', color: '#E53935', lineWidth: 0, marker: marker, states: states, tooltip: tooltip }
                 seriesOptions.data = dataToSeries(dipCloseData)
                 chart.addSeries(seriesOptions)
             }
