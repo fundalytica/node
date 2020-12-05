@@ -115,12 +115,14 @@ const chartOptions = {
     legend:         { enabled: true },
 
     xAxis: {
-        type: 'datetime'
+        type: 'datetime',
+        minPadding: 0.02,
+        maxPadding: 0.02
     },
 
     yAxis: {
         title: null,
-        opposite: true
+        opposite: true,
     },
 
     // plotOptions: {
