@@ -25,21 +25,24 @@ router.get('/v1/quote/:symbol', async (req, res) => {
     spawnHandler(args, res)
 })
 
-// api.fundalytica.com/v1/historical/QQQ
 router.get('/v1/historical/:symbol', async (req, res) => {
     const symbol = req.params.symbol
     console.log('/v1/historical/' + symbol)
-    const args = ['/scripts/yahoo/yahoo-historical.py', '-s', symbol]
+    // const args = ['/scripts/yahoo/yahoo-historical.py', '-s', symbol]
+    const args = ['/scripts/py-historical/historical.py', '-s', symbol, '-p', provider]
     spawnHandler(args, res)
 })
-
-// api.fundalytica.com/v1/dip/SNAP-5
-router.get('/v1/dip/:symbol-:dip', async (req, res) => {
+router.get('/v1/historical/ath/:symbol', async (req, res) => {
+    const symbol = req.params.symbol
+    console.log(`/v1/ath/${symbol} (${provider})`)
+    const args = ['/scripts/py-historical/historical.py', '-s', symbol, '-p', provider, '--ath']
+    spawnHandler(args, res)
+})
+router.get('/v1/historical/dip/:symbol-:dip', async (req, res) => {
     const symbol = req.params.symbol
     const dip = req.params.dip
-    const provider = 'yahoo'
     console.log(`/v1/dip/${symbol}-${dip} (${provider})`)
-    const args = ['/scripts/py-dip/dip.py', '-s', symbol, '-d', dip, '-p', provider]
+    const args = ['/scripts/py-historical/historical.py', '-s', symbol, '-p', provider, '--dip', dip]
     spawnHandler(args, res)
 })
 
