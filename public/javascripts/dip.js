@@ -2,13 +2,13 @@ const script_tag = document.getElementById('dipjs')
 
 let data
 
-const fetch = (symbol, dip) => {
-    const url = `https://api.fundalytica.com/v1/historical/dip/${symbol}-${dip}`
+const fetch = (symbol, minimumDip, defaultDip) => {
+    const url = `https://api.fundalytica.com/v1/historical/dip/${symbol}-${minimumDip}`
 
     if(DEBUG) console.log(url)
 
     $('#title').text(`${symbol} Dips`)
-    $('#subtitle').text(`-${dip}% or worse`)
+    $('#subtitle').text(`-${defaultDip}% or worse`)
     $("#spinner").removeClass('d-none')
 
     $.ajax({
@@ -94,9 +94,10 @@ const fetch = (symbol, dip) => {
 
 const DEBUG = true
 
-const defaultSymbol = 'SNAP'
+const symbol = 'SNAP'
+const minimumDip = 5
 const defaultDip = 10
-$(fetch(defaultSymbol, defaultDip))
+$(fetch(symbol, minimumDip, defaultDip))
 
 $('.slider').val(defaultDip)
 
