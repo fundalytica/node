@@ -4,10 +4,19 @@ const router = express.Router()
 const { spawn } = require('child_process')
 
 router.get('/', (req, res, next) => {
-    res.render('index', { title: 'Fundalytica API' })
+    res.render('api', {
+        text: 'Fundalytica API',
+        urls: [
+            '/v1/quote/:symbol',
+            '/v1/historical/:symbol',
+            '/v1/historical/ath/:symbol',
+            '/v1/historical/dip/:symbol-:dip'
+        ]
+    })
 })
 
-// api.fundalytica.com/v1/quote/SPY
+const provider = 'yahoo'
+
 router.get('/v1/quote/:symbol', async (req, res) => {
     const symbol = req.params.symbol
     console.log('/v1/quote/' + symbol)
