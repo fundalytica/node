@@ -3,8 +3,19 @@ const router = express.Router()
 
 const topics = [
     {
+        id: 'ath',
+        hashtag: 'analytics',
+        color: 'bg-green-400',
+        image: 'ath.svg',
+        title: 'All Time Highs',
+        description: 'We analyze the historical data of any stock and show you the all time high prices throughout its history.',
+        button: 'Show Me 📈',
+        action: 'route'
+    },
+
+    {
         id: 'dip',
-        hashtag: 'tool',
+        hashtag: 'analytics',
         color: 'bg-red-300',
         image: 'dip.svg',
         title: 'Buy The Dip',
@@ -28,7 +39,7 @@ const topics = [
     {
         // id: 'reports',
         hashtag: 'tool',
-        color: 'bg-green-300',
+        color: 'bg-brown-300',
         image: 'reports.svg',
         title: 'Brokerage Reports',
         description: 'Brokerage reports are not always easy to read, try out a richer experience.',
@@ -40,7 +51,7 @@ const topics = [
         // id: 'benchmark',
         id: 'wip',
         hashtag: 'tool',
-        color: 'bg-green-300',
+        color: 'bg-brown-300',
         image: 'benchmark.svg',
         title: 'The Benchmark',
         description: 'Every investment should be compared to the broader market. Do you know what your alpha is?',
