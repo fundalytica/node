@@ -95,7 +95,7 @@ const fetch = (symbol, dip) => {
 const DEBUG = true
 
 const defaultSymbol = 'SNAP'
-const defaultDip = 5
+const defaultDip = 10
 $(fetch(defaultSymbol, defaultDip))
 
 $('.slider').val(defaultDip)
