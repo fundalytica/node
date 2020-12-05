@@ -3,7 +3,7 @@ const script_tag = document.getElementById('dipjs')
 let data
 
 const fetch = (symbol, dip) => {
-    const url = `https://api.fundalytica.com/v1/dip/${symbol}-${dip}`
+    const url = `https://api.fundalytica.com/v1/historical/dip/${symbol}-${dip}`
 
     if(DEBUG) console.log(url)
 
