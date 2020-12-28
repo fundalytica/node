@@ -104,8 +104,8 @@ router.get('/subscription-success', (req, res) => {
     res.redirect('/')
 })
 
+router.get('/ath', (req, res) => res.render('ath', { title: 'All Time Highs' }))
 router.get('/dip', (req, res) => res.render('dip', { title: 'Buy The Dip' }))
-
 router.get('/wip', (req, res) => res.render('wip', { title: 'WIP' }))
 
 module.exports = router
