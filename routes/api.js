@@ -46,7 +46,7 @@ router.get('/v1/historical/dip/:symbol-:dip', async (req, res) => {
     spawnHandler(args, res)
 })
 
-const spawnHandler = (args, res) => {
+const spawnHandler = async (args, res) => {
     const command = spawn('python3', args)
 
     stdout = ''
