@@ -1,0 +1,7 @@
+a[aria-expanded=true] .fa-angle-down {
+    display: none;
+}
+
+a[aria-expanded=false] .fa-angle-up {
+    display: none;
+}
