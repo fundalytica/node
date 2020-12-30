@@ -1,28 +1,49 @@
 extends layout
 
-block links
-    link(href='/stylesheets/dip.css' rel='stylesheet')
+block style
+    link(href='/stylesheets/ath.css' rel='stylesheet')
+    link(href='/stylesheets/no_more_tables.css' rel='stylesheet')
 
 block scripts
-    script(src='https://code.highcharts.com/highcharts.js')
+    script(src='https://cdnjs.cloudflare.com/ajax/libs/highstock/6.0.3/highstock.js')
     script(src='https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js')
-    script(src='/javascripts/dip.js' type='module')
+    script(src='https://cdnjs.cloudflare.com/ajax/libs/numeral.js/2.0.6/numeral.min.js')
+    script(src='/javascripts/ath.js' type='module')
 
 block content
     main.d-flex.flex-column.p-4
         div.d-flex.flex-column.align-items-center
-            p#title.red-600.m-0.p-1
-            input#slider.slider(type="range" min="5" max="90" step="5").d-none
-            p#subtitle.red-600.m-0.p-1
-            p#dates.small.m-0.p-1
+            form.needs-validation.input-group.mb-3.w-50(id='symbol-form').d-none
+                input.form-control(id='symbol' type='text' name='symbol' placeholder='Symbol' pattern="[a-zA-Z]{1,4}((\.){1}[aA|bB]{1}){0,1}$" minlength="1" maxlength="5" required oninvalid="this.setCustomValidity('Invalid stock symbol 📈')"
+  oninput="this.setCustomValidity('')")
+                .input-group-append
+                    button.btn.btn-outline-secondary(type='submit' name='submit') Select
+
+            h5.green-600.m-0.p-1(id="title")
+            p.small.m-0.p-1(id="dates")
 
         #chart.d-none
 
-        div.d-flex.flex-grow-1.justify-content-center
+        a.btn(id="toggle" data-toggle='collapse' href='#no-more-tables' aria-expanded='false' aria-controls="no-more-tables").d-none
+            i.fa.fa-table.px-2
+            span(id="points")
+            i.fa.fa-angle-down.px-2
+            i.fa.fa-angle-up.px-2
 
+        #no-more-tables.collapse
+            table.table.table-sm.small(id="table").d-none
+                thead.thead-dark
+                    tr
+                        th Date
+                        th Price
+                        th Change
+                        th After
+                tbody.table-striped
+
+        div.d-flex.flex-grow-1.justify-content-center
             div.align-self-center
-                #spinner.spinner-border.text-danger(role="status").d-none
+                .spinner-border.text-success(id="spinner" role="status").d-none
                     span.sr-only
 
             div.align-self-center
-                p#error.text-danger
+                p.text-danger(id="error")
