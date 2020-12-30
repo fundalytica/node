@@ -7,7 +7,7 @@ const strings = new Strings()
 const fetch = options => {
     const url = `https://api.fundalytica.com/v1/historical/dip/${options.symbol}-${options.minimumDip}`
 
-    $('#title').text(`${options.symbol} Dips`)
+    $('#title').text(`${options.symbol} - Dips`)
     $('#subtitle').text(`-${options.defaultDip}% or worse`)
     $("#spinner").removeClass('d-none')
 
