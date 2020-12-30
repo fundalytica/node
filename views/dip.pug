@@ -4,7 +4,8 @@ block links
     link(href='/stylesheets/dip.css' rel='stylesheet')
 
 block scripts
-    script(src='https://code.highcharts.com/highcharts.js')
+
+    script(src='https://cdnjs.cloudflare.com/ajax/libs/highstock/6.0.3/highstock.js')
     script(src='https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js')
     script(src='/javascripts/dip.js' type='module')
 
@@ -19,7 +20,6 @@ block content
         #chart.d-none
 
         div.d-flex.flex-grow-1.justify-content-center
-
             div.align-self-center
                 #spinner.spinner-border.text-danger(role="status").d-none
                     span.sr-only
