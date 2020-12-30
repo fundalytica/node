@@ -31,7 +31,7 @@ export default class Chart {
             legend:         { enabled: options.legend }
         }
 
-        this.chart = Highcharts.chart(this.id, chartOptions)
+        this.chart = Highcharts.stockChart(this.id, chartOptions)
 
         this.chartData = new ChartData()
     }
