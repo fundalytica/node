@@ -15,20 +15,7 @@ export default class Chart {
             scrollbar:      { enabled: false },
             navigator:      { enabled: false },
             credits:        { enabled: false },
-            title:          { text: null },
 
-            legend:         { enabled: true },
-
-            xAxis: {
-                type: 'datetime',
-                minPadding: 0.02,
-                maxPadding: 0.02
-            },
-
-            yAxis: {
-                title: null,
-                opposite: true,
-            }
             legend:         { enabled: options.legend }
         }
 
