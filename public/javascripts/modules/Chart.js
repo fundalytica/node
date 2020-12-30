@@ -35,7 +35,7 @@ export default class Chart {
 
     addSeries(closeData, replace=false) {
         const seriesId = 'all'
-        if(replace) this.chart.get(seriesId).remove()
+        if(replace && this.chart.get(seriesId)) this.chart.get(seriesId).remove()
 
         const marker = { radius: 4 }
         const states = { hover: { lineWidthPlus: 0 }, inactive: { opacity: 1 } }
@@ -49,7 +49,7 @@ export default class Chart {
 
     addATHSeries(ATHCloseData, replace=false) {
         const seriesId = 'ath'
-        if(replace) this.chart.get(seriesId).remove()
+        if(replace && this.chart.get(seriesId)) this.chart.get(seriesId).remove()
 
         const marker = { enabled: true, radius: 4, symbol: 'circle' }
         const states = { hover: { lineWidthPlus: 0 }, inactive: { opacity: 1 } }
@@ -58,12 +58,12 @@ export default class Chart {
         const seriesOptions =  { id: seriesId, name: 'all time high', color: '#43A047', lineWidth: 0, marker: marker, states: states, tooltip: tooltip }
         seriesOptions.data = this.chartData.dataToSeries(ATHCloseData)
 
-        this.chart.addSeries(seriesOptions)        
+        this.chart.addSeries(seriesOptions)
     }
 
     addDipSeries(dipCloseData, dipPercentageData, replace=false) {
         const seriesId = 'dip'
-        if(replace) this.chart.get(seriesId).remove()
+        if(replace && this.chart.get(seriesId)) this.chart.get(seriesId).remove()
 
         const marker = { enabled: true, radius: 4, symbol: 'circle' }
         const states = { hover: { lineWidthPlus: 0 }, inactive: { opacity: 1 } }
