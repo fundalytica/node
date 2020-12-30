@@ -4,8 +4,9 @@ export default class Chart {
     constructor(id, options=null) {
         this.id = id
 
-        Highcharts.setOptions({ lang: { decimalPoint: '.', thousandsSep: ',' } })
         if(! options) options = { legend: true }
+
+        // Highcharts.setOptions({ lang: { decimalPoint: '.', thousandsSep: ',' } })
 
         const chartOptions = {
             chart:          { backgroundColor: null, animation: false, pinchType: null },
