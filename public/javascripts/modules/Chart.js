@@ -1,10 +1,11 @@
 import ChartData from './ChartData.js'
 
 export default class Chart {
-    constructor(id) {
+    constructor(id, options=null) {
         this.id = id
 
         Highcharts.setOptions({ lang: { decimalPoint: '.', thousandsSep: ',' } })
+        if(! options) options = { legend: true }
 
         const chartOptions = {
             chart:          { backgroundColor: null, animation: false, pinchType: null },
@@ -27,6 +28,7 @@ export default class Chart {
                 title: null,
                 opposite: true,
             }
+            legend:         { enabled: options.legend }
         }
 
         this.chart = Highcharts.chart(this.id, chartOptions)
