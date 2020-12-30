@@ -6,7 +6,6 @@ const strings = new Strings()
 
 const fetch = options => {
     const url = `https://api.fundalytica.com/v1/historical/dip/${options.symbol}-${options.minimumDip}`
-    console.log(url)
 
     $('#title').text(`${options.symbol} Dips`)
     $('#subtitle').text(`-${options.defaultDip}% or worse`)
@@ -15,8 +14,6 @@ const fetch = options => {
     $.ajax({
         url: url,
         success: data => {
-            console.log(data)
-
             $("#spinner").addClass('d-none')
 
             if(data.error) {
