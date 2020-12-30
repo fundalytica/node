@@ -9,7 +9,7 @@ export default class Chart {
         // Highcharts.setOptions({ lang: { decimalPoint: '.', thousandsSep: ',' } })
 
         const chartOptions = {
-            chart:          { backgroundColor: null, animation: false, pinchType: null },
+            chart:          { backgroundColor: null, pinchType: null },
 
             rangeSelector : { enabled: false },
             scrollbar:      { enabled: false },
