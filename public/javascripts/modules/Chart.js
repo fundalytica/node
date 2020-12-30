@@ -24,8 +24,13 @@ export default class Chart {
         this.chartData = new ChartData()
     }
 
-    show() {
-        $(`#${this.id}`).removeClass('d-none')
+    show(flag=true) {
+        if(flag == true) {
+            $(`#${this.id}`).removeClass('d-none')
+        }
+        else {
+            $(`#${this.id}`).addClass('d-none')
+        }
     }
 
     addSeries(closeData, replace=false) {
