@@ -14,4 +14,12 @@ export default class Utils {
 
         return chunked_arr
     }
+
+    // Object Utils
+
+    static reverse_object(obj) {
+        const newObj = {}
+        Object.keys(obj).reverse().forEach(x => { newObj[x] = obj[x] })
+        return newObj
+    }
 }
