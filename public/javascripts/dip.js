@@ -22,7 +22,7 @@ const fetch = options => {
             else {
                 $('#dates').text(strings.range(data.dates.from, data.dates.to))
 
-                chart.addSeries(data.all.close)
+                // chart.addSeries(data.all.close)
                 chart.addATHSeries(data.ath.close)
                 chart.addDipSeries(data.dip.close, data.dip.dip)
                 chart.show()
