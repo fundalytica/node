@@ -22,16 +22,18 @@ block content
                             if(subscription == 'pending')
                                 p.lead.text-white#pending= 'Please check your mail and confirm the subscription 👀'
                     else
-                        p.mb-2
+                        p.mb-2.ml-1
                             span.fas.fa-envelope.pr-1
                             span#join Do not miss any updates. Join now!
                         div
                             form(action='https://sendy.fundalytica.com/subscribe' method='POST' accept-charset='utf-8')
-                                input.form-control(type='text' name='email' placeholder='Enter your email address')
-                                input(type='hidden' name='list' value='YeHtmGHSnDiXFSxu24X9dA')
-                                input(type='hidden' name='api_key' value='wCVlWNlmf3YBshY4ek8y')
-                                input(type='text' name='hp').d-none
-                                button.btn.btn-outline-light.mt-3.p-3(name='submit' type='submit') Subscribe Now
+                                .input-group
+                                    input.form-control(type='text' name='email' placeholder='Enter your email')
+                                    input(type='hidden' name='list' value='YeHtmGHSnDiXFSxu24X9dA')
+                                    input(type='hidden' name='api_key' value='wCVlWNlmf3YBshY4ek8y')
+                                    input(type='text' name='hp').d-none
+                                    .input-group-append
+                                        button.btn.btn-outline-secondary.rounded-right(type='submit' name='submit') Subscribe
 
             each topic, index in topics
                 .topic.m-3(class=topic.color)
