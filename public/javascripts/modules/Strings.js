@@ -1,5 +1,5 @@
 export default class Strings {
-    range(from, to) {
+    static range(from, to) {
         const format = "D MMM 'YY"
 
         const fromDate = moment(from)
