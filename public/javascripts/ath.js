@@ -1,9 +1,9 @@
 import Chart from './modules/Chart.js'
-import Strings from './modules/Strings.js'
-import Utils from './modules/Utils.js'
+import ChartStrings from './modules/ChartStrings.js'
 
-const chart = new Chart('chart', { legend: false })
-const strings = new Strings()
+import Strings from './modules/Strings.js'
+
+const chart = new Chart('chart', { legend: false }, 'ath')
 
 const UILoading = options => {
     $("#symbol-form").addClass('d-none')
@@ -35,7 +35,7 @@ const UISuccess = (options, data) => {
         $('#symbol').focus()
     }
     else {
-        $('#dates').text(strings.range(data.dates.from, data.dates.to))
+        $('#dates').text(Strings.range(data.dates.from, data.dates.to))
 
         chart.addATHSeries(data.ath.close, true)
         chart.show()
@@ -47,40 +47,26 @@ const UISuccess = (options, data) => {
 }
 
 const updateTable = close => {
-    close = Utils.reverse_object(close)
+    const timestampKeys = Object.keys(close).sort().reverse()
 
-    for(const timestamp in close) {
-        const price = close[timestamp]
+    for(const index in timestampKeys) {
+        const timestamp = timestampKeys[index]
         const date = moment.unix(timestamp / 1000)
+        const price = close[timestamp]
 
         let row = '<tr>'
 
         row += `<td data-title="Date">${date.format("MMM D, YYYY")}</td>`
         row += `<td data-title="Price">${numeral(price).format('0,0.00')}</td>`
-
-        let changeString = '-'
-        let afterString = '-'
-        const index = Object.keys(close).indexOf(timestamp)
-        if(index < Object.keys(close).length - 1) {
-            const previousTimestamp = Object.keys(close)[index + 1]
-            const previousPrice = close[previousTimestamp]
-            const percentage = (price / previousPrice) - 1
-            const previousDate = moment.unix(previousTimestamp / 1000)
-            changeString = numeral(percentage).format('%0,0.0')
-            const diff = date.diff(previousDate)
-            const days = moment.duration(diff).asDays()
-            afterString = `${numeral(days).format(',')} ${days > 1 ? 'days' : 'day'}`
-        }
-
-        row += `<td data-title="Change">${changeString}</td>`
-        row += `<td data-title="After">${afterString}</td>`
+        row += `<td data-title="Change">${ChartStrings.priceChangeString(close, timestamp)}</td>`
+        row += `<td data-title="After">${ChartStrings.afterDaysString(close, timestamp)}</td>`
         row += '</tr>'
 
         $('#table > tbody:last-child').append(row)
     }
 
     const pointsString = numeral(Object.keys(close).length).format('0,0')
-    $("#points").text(`${pointsString} data points`)
+    $("#points").text(`${pointsString} ATH days`)
 }
 
 const fetch = options => {
