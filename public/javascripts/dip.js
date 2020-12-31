@@ -2,7 +2,6 @@ import Chart from './modules/Chart.js'
 import Strings from './modules/Strings.js'
 
 const chart = new Chart('chart')
-const strings = new Strings()
 
 const fetch = options => {
     const url = `https://api.fundalytica.com/v1/historical/dip/${options.symbol}-${options.minimumDip}`
@@ -20,7 +19,7 @@ const fetch = options => {
                 $('#error').text(`${options.symbol} market data is currently not available`)
             }
             else {
-                $('#dates').text(strings.range(data.dates.from, data.dates.to))
+                $('#dates').text(Strings.range(data.dates.from, data.dates.to))
 
                 // chart.addSeries(data.all.close)
                 chart.addATHSeries(data.ath.close)
