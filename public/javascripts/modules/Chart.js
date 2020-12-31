@@ -1,7 +1,8 @@
 import ChartData from './ChartData.js'
+import ChartStrings from './ChartStrings.js'
 
 export default class Chart {
-    constructor(id, options=null) {
+    constructor(id, options=null, tag=null) {
         this.id = id
 
         if(! options) options = { legend: true }
@@ -11,7 +12,7 @@ export default class Chart {
         const chartOptions = {
             chart:          { backgroundColor: null, pinchType: null },
 
-            rangeSelector : { enabled: false },
+            rangeSelector:  { enabled: false },
             scrollbar:      { enabled: false },
             navigator:      { enabled: false },
             credits:        { enabled: false },
@@ -19,9 +20,36 @@ export default class Chart {
             legend:         { enabled: options.legend }
         }
 
+        if(tag == 'ath') chartOptions.tooltip = this.athTooltip
+
         this.chart = Highcharts.stockChart(this.id, chartOptions)
 
         this.chartData = new ChartData()
+    }
+
+    get athTooltip() {
+        return {
+            formatter() {
+                const header = `<span style="font-size: 10px">${Highcharts.dateFormat('%A, %b %e, %Y', new Date(parseInt(this.x)))}</span>`
+
+                const data = this.points[0].series.data
+
+                // { x: xval, y: yval } => { xval: yval }
+                const dataObj = {}
+                for(const index in data) {
+                    const timestamp = data[index].x
+                    const price = data[index].y
+                    dataObj[timestamp] = price
+                }
+
+                const pointFunction = function(point) {
+                    return `<b>${Highcharts.numberFormat(point.y, 2)}</b><br/>Change: ${ChartStrings.priceChangeString(dataObj, point.x)}<br/>After: ${ChartStrings.afterDaysString(dataObj, point.x)}`
+                }
+
+                const points = this.points ? this.points.map(pointFunction) : []
+                return [header, points]
+            }
+        }
     }
 
     show(flag=true) {
@@ -53,6 +81,7 @@ export default class Chart {
 
         const marker = { enabled: true, radius: 4, symbol: 'circle' }
         const states = { hover: { lineWidthPlus: 0 }, inactive: { opacity: 1 } }
+
         const tooltip = { valueDecimals: 2, pointFormat: '<b>{point.y}</b>' }
 
         const seriesOptions =  { id: seriesId, name: 'all time high', color: '#43A047', lineWidth: 0, marker: marker, states: states, tooltip: tooltip }
