@@ -7,12 +7,19 @@ router.get('/', (req, res, next) => {
     res.render('api', {
         text: 'Fundalytica API',
         urls: [
+            '/v1/options/portfolio',
             '/v1/quote/:symbol',
             '/v1/historical/:symbol',
             '/v1/historical/ath/:symbol',
             '/v1/historical/dip/:symbol-:dip'
         ]
     })
+})
+
+router.get('/v1/options/portfolio', async (req, res) => {
+    console.log('/v1/options/portfolio')
+    const args = ['/scripts/ib-summary/ib-summary.py', '--options', '--json']
+    spawnHandler(args, res)
 })
 
 const provider = 'yahoo'
