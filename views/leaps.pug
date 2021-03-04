@@ -1,0 +1,37 @@
+extends layout
+
+block style
+    link(href='/stylesheets/leaps.css' rel='stylesheet')
+    link(href='/stylesheets/no_more_tables.css' rel='stylesheet')
+
+block scripts
+    script(src='https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js')
+    script(src='https://cdnjs.cloudflare.com/ajax/libs/numeral.js/2.0.6/numeral.min.js')
+
+    script(src='/javascripts/leaps.js' type='module')
+
+block content
+    main.d-flex.flex-column.justify-content-center.text-center.p-4
+        div.align-self-center.p-2
+            h3.text-primary LEAPS Portfolio
+            p.small(id="date").d-none
+
+        - var ids = ['puts', 'calls']
+        each id in ids
+            a.btn(id="toggle-"+id data-toggle='collapse' href='#no-more-tables-'+id aria-expanded='true' aria-controls="no-more-tables-"+id).d-none
+                i.fa.fa-table.px-2
+                span(id="count-"+id)
+                i.fa.fa-angle-down.px-2
+                i.fa.fa-angle-up.px-2
+            .no-more-tables(id="no-more-tables-"+id).collapse.show
+                table.table.table-sm.small(id="table-"+id).d-none
+                    thead.thead-dark
+                    tbody.table-striped
+
+        div.d-flex.flex-grow-1.justify-content-center
+            div.align-self-center
+                .spinner-border.text-success(id="spinner" role="status").d-none
+                    span.sr-only
+
+            div.align-self-center
+                p.text-danger(id="error").d-none
