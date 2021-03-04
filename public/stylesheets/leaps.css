@@ -1,0 +1,33 @@
+a[aria-expanded=true] .fa-angle-down {
+    display: none;
+}
+a[aria-expanded=false] .fa-angle-up {
+    display: none;
+}
+
+.center-align {
+    text-align: center;
+}
+
+@media only screen and (max-width: 800px) {
+    table img {
+        margin: 4px 0;
+    }
+}
+@media only screen and (min-width: 800px) {
+    table td {
+        height: 50px;
+    }
+}
+
+table img {
+    text-align: left;
+
+    max-height: 18px;
+    width: auto;
+    max-width: 80px;
+
+    object-fit: contain;
+
+    /* margin: 20px 0; */
+}
