@@ -3,6 +3,29 @@ const router = express.Router()
 
 const topics = [
     {
+        id: 'leaps',
+        hashtag: 'portfolio',
+        image: 'leaps.svg',
+        color: 'bg-light-blue-400',
+        title: 'LEAPS Portfolio',
+        description: 'We trade options with expiration dates usually longer than one year. Check out our current portfolio.',
+        button: 'See Portfolio 💼',
+        action: 'route'
+    },
+
+    {
+        // id: 'spacs',
+        id: 'wip',
+        hashtag: 'portfolio',
+        image: 'spacs.svg',
+        color: 'bg-light-blue-400',
+        title: 'SPACs Portfolio',
+        description: 'We love investing in SPACs and Chamath Palihapitiya is our SPAC king. Check out our picks so far.',
+        button: 'Our SPACs 🤴',
+        action: 'route'
+    },
+
+    {
         id: 'ath',
         hashtag: 'analytics',
         color: 'bg-green-400',
@@ -29,7 +52,7 @@ const topics = [
         id: 'wip',
         hashtag: 'data',
         image: 'ipodata.svg',
-        color: 'bg-blue-300',
+        color: 'bg-purple-200',
         title: 'IPO Datastore',
         description: 'We collected and enriched all the IPO data of the last 10 years so you can use it too.',
         button: 'Preview Data 👾',
@@ -39,7 +62,7 @@ const topics = [
     {
         // id: 'reports',
         hashtag: 'tool',
-        color: 'bg-brown-300',
+        color: 'bg-orange-300',
         image: 'reports.svg',
         title: 'Brokerage Reports',
         description: 'Brokerage reports are not always easy to read, try out a richer experience.',
@@ -51,7 +74,7 @@ const topics = [
         // id: 'benchmark',
         id: 'wip',
         hashtag: 'tool',
-        color: 'bg-brown-300',
+        color: 'bg-orange-300',
         image: 'benchmark.svg',
         title: 'The Benchmark',
         description: 'Every investment should be compared to the broader market. Do you know what your alpha is?',
@@ -59,22 +82,22 @@ const topics = [
         action: 'route'
     },
 
-    {
-        // id: 'norway',
-        id: 'wip',
-        hashtag: 'fund',
-        color: 'bg-purple-200',
-        image: 'norges.png',
-        title: 'Norway Pension Fund',
-        description: 'We dive into annual reports to find out how one of the largest pension funds invests.',
-        button: 'View Results 🕵️‍♂️',
-        action: 'route'
-    },
+    // {
+    //     // id: 'norway',
+    //     id: 'wip',
+    //     hashtag: 'fund',
+    //     color: 'bg-purple-200',
+    //     image: 'norges.png',
+    //     title: 'Norway Pension Fund',
+    //     description: 'We dive into annual reports to find out how one of the largest pension funds invests.',
+    //     button: 'View Results 🕵️‍♂️',
+    //     action: 'route'
+    // },
 
     {
         // id: 'qqq',
         id: 'wip',
-        hashtag: 'fund',
+        hashtag: 'data',
         color: 'bg-purple-200',
         image: 'invesco.svg',
         title: 'QQQ ETF Holdings',
@@ -104,6 +127,7 @@ router.get('/subscription-success', (req, res) => {
     res.redirect('/')
 })
 
+router.get('/leaps', (req, res) => res.render('leaps', { title: 'LEAPS Portfolio' }))
 router.get('/ath', (req, res) => res.render('ath', { title: 'All Time Highs' }))
 router.get('/dip', (req, res) => res.render('dip', { title: 'Buy The Dip' }))
 router.get('/wip', (req, res) => res.render('wip', { title: 'WIP' }))
