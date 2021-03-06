@@ -28,6 +28,6 @@ table img {
     max-width: 80px;
 
     object-fit: contain;
-
-    /* margin: 20px 0; */
 }
+
+.info { padding: 0; margin: 0; }
