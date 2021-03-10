@@ -21,11 +21,11 @@ block content
                 button.btn.btn-sm.btn-secondary.dropdown-toggle(type="button" id="dropdown-sort" data-bs-toggle="dropdown" aria-expanded="false").d-none.mb-2
                 ul.dropdown-menu(id="dropdown-menu-sort" aria-labelledby="dropdown-sort")
 
-            div.btn-group(role="group" aria-label="toggle button group")
-                input.btn-check(type="radio" name="btnradio" id="btnradio1" autocomplete="off")
-                label.btn.btn-outline-secondary.btn-sm(for="btnradio1") asc
-                input.btn-check(type="radio" name="btnradio" id="btnradio2" autocomplete="off" checked)
-                label.btn.btn-outline-secondary.btn-sm(for="btnradio2") desc
+            div.btn-group(id="btn-group-order" role="group" aria-label="toggle button group").d-none
+                input.btn-check(type="radio" name="btnradio" id="btn-radio-asc" autocomplete="off" checked)
+                label.btn.btn-outline-secondary.btn-sm(for="btn-radio-asc") asc
+                input.btn-check(type="radio" name="btnradio" id="btn-radio-desc" autocomplete="off")
+                label.btn.btn-outline-secondary.btn-sm(for="btn-radio-desc") desc
 
 
         - var ids = ['puts', 'calls', 'warrants']
