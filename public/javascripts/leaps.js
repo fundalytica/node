@@ -15,6 +15,7 @@ const current_value = data => data.price * data.quantity * 100
 let globalData = null
 
 let currentSort = null
+let currentOrder = null
 const sortOptions = ['symbol','expiration','basis','value','profit']
 
 const hideIDElements = (id, hide = true) => {
@@ -35,6 +36,8 @@ const hideIDElements = (id, hide = true) => {
 const UILoading = options => {
     $('#date').addClass('d-none')
     $(`#dropdown-sort`).addClass('d-none')
+    $(`#btn-group-order`).addClass('d-none')
+
     $("#spinner").removeClass('d-none')
 
     $("#error").addClass('d-none')
@@ -51,10 +54,12 @@ const UISuccess = (options, data) => {
     if(data.error) { return UIError(data.error) }
 
     $("#spinner").addClass('d-none')
+    $(`#btn-group-order`).removeClass('d-none')
 
     updateDate(data.generated)
 
     currentSort = sortOptions[0]
+    currentOrder = 'asc'
     updateDropdown()
 
     manipulateData(data.positions)
@@ -204,7 +209,7 @@ const updateTables = data => {
 }
 
 const sortData = (data, asc = true) => {
-    asc = asc ? 1 : -1
+    asc = (currentOrder == 'asc') ? 1 : -1
 
     if(currentSort == 'symbol') {
         data.sort((a,b) => {
@@ -241,7 +246,17 @@ const fetch = options => {
         .fail(() => UIError(`${url} fail`))
 }
 
+const setupEvents = () => {
+    $("#btn-group-order .btn-check").click(e => {
+        currentOrder = (e.currentTarget.id == 'btn-radio-asc') ? 'asc' : 'desc'
+        console.log(currentOrder)
+        clearTables()
+        updateTables(globalData.positions)
+    })
+}
+
 const run = () => {
+    setupEvents()
     fetch({})
 }
 
