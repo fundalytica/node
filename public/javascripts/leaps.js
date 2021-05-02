@@ -51,6 +51,7 @@ const UILoading = options => {
 }
 
 const UISuccess = (options, data) => {
+    console.log(data)
     if(data.error) { return UIError(data.error) }
 
     $("#spinner").addClass('d-none')
