@@ -3,6 +3,28 @@ const router = express.Router()
 
 const topics = [
     {
+        id: 'futures',
+        hashtag: 'data',
+        image: 'crypto.svg',
+        color: 'bg-deep-purple-a100',
+        title: 'BTC/ETH Futures',
+        description: 'Contango or backwardation? Go long or go short? We track premiums on Kraken, BitMEX & Deribit.',
+        button: 'Show Premiums 👀',
+        action: 'route'
+    },
+
+    // {
+    //     id: 'wip',
+    //     hashtag: 'portfolio',
+    //     image: 'crypto.svg',
+    //     color: 'bg-deep-purple-a100',
+    //     title: 'Bullish Crypto Fund',
+    //     description: 'BTC, ETH, Altcoins, NFTs, Futures, Options',
+    //     button: 'Check It Out 🪙',
+    //     action: 'route'
+    // },
+
+    {
         id: 'leaps',
         hashtag: 'portfolio',
         image: 'leaps.svg',
@@ -13,17 +35,17 @@ const topics = [
         action: 'route'
     },
 
-    {
-        // id: 'spacs',
-        id: 'wip',
-        hashtag: 'portfolio',
-        image: 'spacs.svg',
-        color: 'bg-deep-purple-a100',
-        title: 'SPACs Portfolio',
-        description: 'We love investing in SPACs and Chamath Palihapitiya is our SPAC king. Check out our picks so far.',
-        button: 'Our SPACs 🤴',
-        action: 'route'
-    },
+    // {
+    //     // id: 'spacs',
+    //     id: 'wip',
+    //     hashtag: 'portfolio',
+    //     image: 'spacs.svg',
+    //     color: 'bg-deep-purple-a100',
+    //     title: 'SPACs Portfolio',
+    //     description: 'We love investing in SPACs and Chamath Palihapitiya is our SPAC king. Check out our picks so far.',
+    //     button: 'Our SPACs 🤴',
+    //     action: 'route'
+    // },
 
     {
         id: 'ath',
@@ -32,7 +54,7 @@ const topics = [
         image: 'ath.svg',
         title: 'All Time Highs',
         description: 'We analyze the historical data of any stock and show you the all time high prices throughout its history.',
-        button: 'Show Me 📈',
+        button: 'Charts 📈',
         action: 'route'
     },
 
@@ -43,7 +65,7 @@ const topics = [
         image: 'dip.svg',
         title: 'Buy The Dip',
         description: 'We are looking out for the next stock price dips because we love investing at low prices. Do not miss the opportunity!',
-        button: 'Show Me 📉',
+        button: 'Charts 📉',
         action: 'route'
     },
 
@@ -127,6 +149,7 @@ router.get('/subscription-success', (req, res) => {
     res.redirect('/')
 })
 
+router.get('/futures', (req, res) => res.render('futures', { title: 'Futures' }))
 router.get('/leaps', (req, res) => res.render('leaps', { title: 'LEAPS Portfolio' }))
 router.get('/ath', (req, res) => res.render('ath', { title: 'All Time Highs' }))
 router.get('/dip', (req, res) => res.render('dip', { title: 'Buy The Dip' }))
