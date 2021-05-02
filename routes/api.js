@@ -1,14 +1,16 @@
 const express = require('express')
 const router = express.Router()
 
-const { spawn } = require('child_process')
+const { PythonShell } = require('python-shell')
 
 router.get('/', (req, res, next) => {
     res.render('api', {
         text: 'Fundalytica API',
         urls: [
             '/v1/options/portfolio',
+
             '/v1/quote/:symbol',
+
             '/v1/historical/:symbol',
             '/v1/historical/ath/:symbol',
             '/v1/historical/dip/:symbol-:dip'
@@ -18,73 +20,58 @@ router.get('/', (req, res, next) => {
 
 router.get('/v1/options/portfolio', async (req, res) => {
     console.log('/v1/options/portfolio')
-    const args = ['/scripts/ib-summary/ib-summary.py', '--options', '--json']
-    spawnHandler(args, res)
-})
 
-const provider = 'yahoo'
+    shellHandler('/scripts/ib-summary/ib-summary.py', ['--options', '--json'], res)
+})
 
 router.get('/v1/quote/:symbol', async (req, res) => {
     const symbol = req.params.symbol
+
     console.log('/v1/quote/' + symbol)
-    // const args = ['/scripts/iex/iex-quote.py', '-s', symbol]
-    const args = ['/scripts/yahoo/yahoo-quote.py', '-s', symbol]
-    spawnHandler(args, res)
+
+    // shellHandler('/scripts/iex/iex-quote.py', ['-s', symbol], res)
+    shellHandler('/scripts/yahoo/yahoo-quote.py', ['-s', symbol], res)
 })
 
 router.get('/v1/historical/:symbol', async (req, res) => {
     const symbol = req.params.symbol
-    console.log('/v1/historical/' + symbol)
-    // const args = ['/scripts/yahoo/yahoo-historical.py', '-s', symbol]
-    const args = ['/scripts/py-historical/historical.py', '-s', symbol, '-p', provider]
-    spawnHandler(args, res)
+    const provider = 'yahoo'
+
+    console.log(`/v1/historical/${symbol} (${provider})`)
+
+    // shellHandler('/scripts/yahoo/yahoo-historical.py', ['-s', symbol], res)
+    shellHandler('/scripts/py-historical/historical.py', ['-s', symbol, '-p', provider], res)
 })
 router.get('/v1/historical/ath/:symbol', async (req, res) => {
     const symbol = req.params.symbol
+    const provider = 'yahoo'
+
     console.log(`/v1/ath/${symbol} (${provider})`)
-    const args = ['/scripts/py-historical/historical.py', '-s', symbol, '-p', provider, '--ath']
-    spawnHandler(args, res)
+
+    shellHandler('/scripts/py-historical/historical.py', ['-s', symbol, '-p', provider, '--ath'], res)
 })
 router.get('/v1/historical/dip/:symbol-:dip', async (req, res) => {
     const symbol = req.params.symbol
     const dip = req.params.dip
+    const provider = 'yahoo'
+
     console.log(`/v1/dip/${symbol}-${dip} (${provider})`)
-    const args = ['/scripts/py-historical/historical.py', '-s', symbol, '-p', provider, '--dip', dip]
-    spawnHandler(args, res)
+
+    shellHandler('/scripts/py-historical/historical.py', ['-s', symbol, '-p', provider, '--dip', dip], res)
 })
 
-const spawnHandler = async (args, res) => {
-    const command = spawn('python3', args)
+const shellHandler = (script, args, res) => {
+    const options = { args: args, mode: 'json' }
 
-    stdout = ''
-    command.stdout.on('data', data => {
-        stdout += data
-        // console.log(`[ stdout ] ${data}`)
-    })
-
-    stderr = ''
-    command.stderr.on('data', data => {
-        stderr += data
-        console.error(`[ stderr ] ${data}`)
-    })
-
-    command.on('close', code => {
-        if(stdout != '') {
-            try {
-                res.json(JSON.parse(stdout))
-            }
-            catch (e) {
-                console.log(e)
-            }
+    PythonShell.run(script, options, (error, results) => {
+        if (error) {
+            res.json({ error: error })
+            console.error(`error: %j`, error)
         }
-        else if(stderr != '') {
-            res.send(stderr)
+        else {
+            res.json(results)
+            console.log(`results: %j`, results)
         }
-    })
-
-    command.on('error', error => {
-        console.error(`[ error ] ${error}`)
-        res.json({ error: error })
     })
 }
 
