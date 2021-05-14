@@ -30,7 +30,10 @@ app.use(flash())
 
 app.use(vhost('www.fundalytica.com', require('./routes/www')))
 app.use(cors({ origin: 'https://www.fundalytica.com' }))
+
 app.use(vhost('api.fundalytica.com', require('./routes/api')))
+app.use(vhost('api.fundalytica.com', require('./routes/api/options')))
+app.use(vhost('api.fundalytica.com', require('./routes/api/crypto')))
 
 // 404 handler
 app.use((req, res, next) => {
