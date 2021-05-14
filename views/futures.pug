@@ -1,7 +1,7 @@
 extends layout
 
 block style
-    //- link(href='/stylesheets/futures.css' rel='stylesheet')
+    link(href='/stylesheets/futures.css' rel='stylesheet')
     link(href='/stylesheets/no_more_tables.css' rel='stylesheet')
 
 block scripts
@@ -13,4 +13,14 @@ block scripts
 block content
     main.d-flex.flex-column.justify-content-center.text-center.p-4
         div.align-self-center.p-2
-            h3.text-dark Futures Premiums
+            h3.text-dark.p-0.m-0 Crypto Futures Premiums
+
+            a(href="https://futures.kraken.com" target="_blank")
+                img(class="exchange" src="https://www.fundalytica.com/images/logos/crypto/kraken.svg")
+
+            p.small.text-primary(id="socket")
+
+            .no-more-table.pt-2
+                table.table.small
+                    thead.table-dark
+                    tbody
