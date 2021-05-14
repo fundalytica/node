@@ -52,6 +52,7 @@ const UILoading = options => {
 
 const UISuccess = (options, data) => {
     console.log(data)
+
     if(data.error) { return UIError(data.error) }
 
     $("#spinner").addClass('d-none')
@@ -145,7 +146,6 @@ const updateTables = data => {
     }
 
     for(const id of IDs) {
-
         if(['puts','calls'].includes(id)) {
             const options_data = (id == 'puts') ? puts(data) : calls(data)
 
