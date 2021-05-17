@@ -12,6 +12,15 @@ const cors = require('cors')                        // https://expressjs.com/en/
 
 const app = express()
 
+const mongoose = require('mongoose')
+const UserModel = require('./models/user')
+
+const passport = require('passport')
+require('./auth/auth')
+
+mongoose.connect('mongodb://localhost/fundalytica', { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true })
+mongoose.connection.on('error', error => console.log(error))
+
 app.set('view engine', 'pug')
 
 app.use(express.json())
@@ -30,6 +39,9 @@ app.use(flash())
 
 app.use(vhost('www.fundalytica.com', require('./routes/www')))
 app.use(cors({ origin: 'https://www.fundalytica.com' }))
+
+app.use(vhost('www.fundalytica.com', require('./routes/user')))
+app.use(vhost('www.fundalytica.com', require('./routes/secure')))
 
 app.use(vhost('api.fundalytica.com', require('./routes/api')))
 app.use(vhost('api.fundalytica.com', require('./routes/api/options')))
