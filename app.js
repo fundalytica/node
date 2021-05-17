@@ -28,18 +28,12 @@ app.use(express.urlencoded({ extended: true }))
 
 app.use(express.static(path.join(__dirname, 'public')))
 
-app.use(session({
-    cookie: { sameSite: 'strict', maxAge: 86400000 },
-    store: new MemoryStore({ checkPeriod: 86400000 }),
-    secret: process.env.SESSION_SECRET,
-    saveUninitialized: false,
-    resave: false
-}))
+app.use(session({ cookie: { sameSite: 'strict', maxAge: 86400000 }, store: new MemoryStore({ checkPeriod: 86400000 }), secret: process.env.SESSION_SECRET, saveUninitialized: false, resave: false }))
 app.use(flash())
 
-app.use(vhost('www.fundalytica.com', require('./routes/www')))
 app.use(cors({ origin: 'https://www.fundalytica.com' }))
 
+app.use(vhost('www.fundalytica.com', require('./routes/www')))
 app.use(vhost('www.fundalytica.com', require('./routes/user')))
 app.use(vhost('www.fundalytica.com', require('./routes/secure')))
 
