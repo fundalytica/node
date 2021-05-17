@@ -24,7 +24,7 @@ mongoose.connection.on('error', error => console.log(error))
 app.set('view engine', 'pug')
 
 app.use(express.json())
-app.use(express.urlencoded({ extended: false }))
+app.use(express.urlencoded({ extended: true }))
 
 app.use(express.static(path.join(__dirname, 'public')))
 
