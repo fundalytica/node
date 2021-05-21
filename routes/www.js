@@ -30,7 +30,7 @@ const topics = [
         image: 'options.svg',
         color: 'bg-deep-purple-a100',
         title: 'Options Portfolio',
-        description: 'When volatility goes up, we will sell derivatives and capture the higher premium. Check our currently open positions.',
+        description: 'When volatility goes up, we will sell derivatives to capture the higher premium. We share our currently open positions.',
         button: 'See Portfolio 💼',
         action: 'route'
     },
