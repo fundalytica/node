@@ -8,11 +8,15 @@ img.exchange {
 table img {
     text-align: left;
 
-    max-height: 18px;
-    width: auto;
-    max-width: 80px;
-
+    height: 20px; width: 20px;
     object-fit: contain;
+
+    margin-right: 6px;
+    vertical-align: middle;
+}
+
+td span {
+    vertical-align: middle;
 }
 
 /* no more tables breakpoint is 800px */
