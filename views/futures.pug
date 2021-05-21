@@ -20,7 +20,32 @@ block content
 
             p.small.text-primary(id="socket")
 
-            .no-more-table.pt-2
-                table.table.small
+            .no-more-tables.pt-2
+                table.table.small(id="table-futures").d-none
                     thead.table-dark
+                        tr
+                            th id
+                            th first
+                            th last
                     tbody
+                        tr
+                            td(data-title="id") 1
+                            td(data-title="first") Steve
+                            td(data-title="last") Jobs
+                        tr
+                            td(data-title="id") 2
+                            td(data-title="first") Bill
+                            td(data-title="last") Gates
+                        tr
+                            td(data-title="id") 3
+                            td(data-title="first") Elon
+                            td(data-title="last") Musk
+
+
+        div.d-flex.flex-grow-1.justify-content-center
+            div.align-self-center
+                .spinner-border.text-success(id="spinner" role="status").d-none
+                    span.sr-only Loading...
+
+            div.align-self-center
+                p.text-danger(id="error").d-none
