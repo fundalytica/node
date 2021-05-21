@@ -15,6 +15,15 @@ table img {
     object-fit: contain;
 }
 
-.status {
+/* no more tables breakpoint is 800px */
+@media only screen and (min-width: 800px) {
+    /* change top and bottom cell padding to 16x */
+    .no-more-tables td {
+        /* bootstrap default padding is 8px */
+        padding: 16px 8px 16px 8px;
+    }
+}
+
+.status i {
     font-size: 8px;
 }
