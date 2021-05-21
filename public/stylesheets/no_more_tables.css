@@ -1,4 +1,7 @@
+/* https://css-tricks.com/responsive-data-tables/ */
+
 @media only screen and (max-width: 800px) {
+
     /* Force table to not be like tables anymore */
 	.no-more-tables table,
 	.no-more-tables thead,
@@ -16,7 +19,10 @@
 		left: -9999px;
 	}
 
-	.no-more-tables tr { border-bottom: 1px solid #dee2e6; }
+	.no-more-tables tr {
+		/* custom */
+		border-bottom: 1px solid #dee2e6;
+	}
 
 	.no-more-tables td {
 		/* Behave  like a "row" */
@@ -24,7 +30,8 @@
 		/* border-bottom: 1px solid #eee; */
 		position: relative;
 		padding-left: 50%;
-		white-space: normal;
+
+		/* custom */
 		text-align:left;
 	}
 
@@ -37,6 +44,8 @@
 		width: 45%;
 		padding-right: 10px;
 		white-space: nowrap;
+
+		/* custom */
 		text-align:left;
 		font-weight: bold;
 	}
