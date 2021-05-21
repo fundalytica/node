@@ -1,0 +1,9 @@
+* { font-family: avenir, sans-serif; }
+
+header, main, footer { width: 50%; border: 1px solid black; }
+
+main { flex: 1; }
+
+/* https://css-tricks.com/css-fix-for-100vh-in-mobile-webkit/ */
+html { height: -webkit-fill-available; }
+body { min-height: 100vh; min-height: -webkit-fill-available; }
