@@ -44,14 +44,14 @@ block content
                     p.info(id="assignment-"+id).px-2.py-1
 
             .no-more-tables(id="no-more-tables-"+id).collapse.show
-                table.table.table-sm.small(id="table-"+id).d-none
+                table.table.small(id="table-"+id).d-none
                     thead.table-dark
                     tbody
 
         div.d-flex.flex-grow-1.justify-content-center
             div.align-self-center
                 .spinner-border.text-success(id="spinner" role="status").d-none
-                    span.sr-only
+                    span.sr-only Loading...
 
             div.align-self-center
                 p.text-danger(id="error").d-none
