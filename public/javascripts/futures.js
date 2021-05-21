@@ -1,14 +1,62 @@
 // import FuturesKraken from './modules/FuturesKraken.js'
 
+const IDs = ["futures"]
+
+const fetch = options => {
+    UILoading(options)
+
+    const url = 'https://api.fundalytica.com/v1/crypto/futures/tickers/symbols/kraken'
+    $.ajax({ url: url })
+        .done(data => {
+            UISuccess(options, data)
+        })
+        .fail(() => UIError(`${url} fail`))
+}
+
 const UILoading = options => {
+    clearTables()
+
+    $("#spinner").removeClass('d-none')
+
+    $("#error").addClass('d-none')
+    $('#error').text('')
+
+    for(const id of IDs) {
+        hideIDElements(id)
+    }
+}
+
+const UIError = error => {
+    $("#spinner").addClass('d-none')
+
+    $('#error').text(`😭 ${error}`)
+    $("#error").removeClass('d-none')
 }
 
 const UISuccess = (options, data) => {
+    $("#spinner").addClass('d-none')
+
     console.log(data)
 
     updateTables(data)
 
     socket(symbols(data))
+}
+
+const clearTables = () => {
+    for(const id of IDs) {
+        $(`#table-${id} thead`).empty()
+        $(`#table-${id} tbody`).empty()
+    }
+}
+
+const hideIDElements = (id, hide = true) => {
+    if(hide) {
+        $(`#table-${id}`).addClass('d-none')
+    }
+    else {
+        $(`#table-${id}`).removeClass('d-none')
+    }
 }
 
 const symbols = data => {
@@ -22,22 +70,6 @@ const symbols = data => {
     }
 
     return symbols
-}
-
-const UIError = error => {
-    console.log(error)
-}
-
-const fetch = options => {
-    UILoading(options)
-
-    const krakenSymbolsURL = 'https://api.fundalytica.com/v1/crypto/futures/tickers/symbols/kraken'
-
-    $.ajax({ url: krakenSymbolsURL })
-        .done(data => {
-            UISuccess(options, data)
-        })
-        .fail(() => UIError(`${url} fail`))
 }
 
 const socket = symbols => {
@@ -116,11 +148,7 @@ const updateText = (element, text) => {
     $(element).text(text)
 }
 
-const clearTables = () => {
-    $(`#table thead`).empty()
-}
-
-const addHeader = (headers, hide) => {
+const addHeader = (id, headers, hide) => {
     let row = '<tr>'
 
     for (const key of headers) {
@@ -131,10 +159,10 @@ const addHeader = (headers, hide) => {
 
     row += '</tr>'
 
-    $(`table > thead`).append(row)
+    $(`#table-${id} > thead`).append(row)
 }
 
-const addRow = (headers, values, hide) => {
+const addRow = (id, headers, values, hide) => {
     const symbol = values[headers.indexOf('symbol')]
     let row = `<tr id=${symbol} class="text-secondary">`
 
@@ -146,19 +174,21 @@ const addRow = (headers, values, hide) => {
 
         if (key == 'pair') value = value.toUpperCase()
 
-        row += `<td class="${key} p-3 center-align align-middle" data-title="${key}">${value}</td>`
+        row += `<td class="${key} center-align align-middle" data-title="${key}">${value}</td>`
     }
 
     row += '</tr>'
 
-    $(`table > tbody:last-child`).append(row)
+    $(`#table-${id} > tbody:last-child`).append(row)
 }
 
 const updateTables = data => {
+    const id = 'futures'
+
     const headers = ['logo', 'pair', 'period', 'symbol', 'expiration', 'days', 'price', 'premium', 'annualized', 'status']
     const hide = ['symbol']
 
-    addHeader(headers, hide)
+    addHeader(id, headers, hide)
 
     const rows = []
 
@@ -194,8 +224,10 @@ const updateTables = data => {
     })
 
     for (const row of rows) {
-        addRow(headers, row, hide)
+        addRow(id, headers, row, hide)
     }
+
+    hideIDElements(id, false)
 }
 
 const expiration = symbol => {
@@ -211,22 +243,7 @@ const expiration = symbol => {
 const days = symbol => expiration(symbol).diff(moment(), 'days')
 
 const run = () => {
-    clearTables()
     fetch({})
 }
 
 $(run)
-
-// TODO
-
-// line removal and refresh (10 lines hidden at bottom)
-
-// contango / backwardation mode
-// ALERTS
-// STRIPE
-// USER LOGIN
-// separate perpetural from fixed
-// blend in more exchanges
-// telegram
-// triple logo top
-// crypto futures abstraction py & js classes
