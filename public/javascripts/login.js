@@ -1,10 +1,10 @@
 const run = () => {
-    console.log('login')
+    // console.log('login')
 
-    $("#login").click(e => {
-        e.preventDefault()
-        console.log('login popup')
-    })
+    // $("#login").click(e => {
+    //     // e.preventDefault()
+    //     console.log('login popup')
+    // })
 }
 
 $(run)
