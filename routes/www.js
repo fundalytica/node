@@ -25,12 +25,12 @@ const topics = [
     // },
 
     {
-        id: 'leaps',
+        id: 'options',
         hashtag: 'portfolio',
-        image: 'leaps.svg',
+        image: 'options.svg',
         color: 'bg-deep-purple-a100',
-        title: 'LEAPS Portfolio',
-        description: 'We trade options with expiration dates usually longer than one year. Check out our current portfolio.',
+        title: 'Options Portfolio',
+        description: 'When volatility goes up, we will sell derivatives and capture the higher premium. Check our currently open positions.',
         button: 'See Portfolio 💼',
         action: 'route'
     },
@@ -129,7 +129,7 @@ const topics = [
     },
 
     // {
-        // comic book
+    // comic book
     // }
 ]
 
@@ -149,8 +149,10 @@ router.get('/subscription-success', (req, res) => {
     res.redirect('/')
 })
 
+router.get('/login', (req, res) => res.render('login'))
+
 router.get('/futures', (req, res) => res.render('futures', { title: 'Futures' }))
-router.get('/leaps', (req, res) => res.render('leaps', { title: 'LEAPS Portfolio' }))
+router.get('/options', (req, res) => res.render('options', { title: 'Options Portfolio' }))
 router.get('/ath', (req, res) => res.render('ath', { title: 'All Time Highs' }))
 router.get('/dip', (req, res) => res.render('dip', { title: 'Buy The Dip' }))
 router.get('/wip', (req, res) => res.render('wip', { title: 'WIP' }))
