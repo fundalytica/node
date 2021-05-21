@@ -14,8 +14,8 @@ const UISuccess = (options, data) => {
 const symbols = data => {
     let symbols = []
 
-    for(const pair in data['pairs']) {
-        for(const period in data['pairs'][pair]) {
+    for (const pair in data['pairs']) {
+        for (const period in data['pairs'][pair]) {
             const symbol = data['pairs'][pair][period]
             symbols.push(symbol)
         }
@@ -47,7 +47,7 @@ const socket = symbols => {
 
     // const product_ids = '["pi_xbtusd","pi_ethusd"]'
     let product_ids = []
-    for(const symbol of symbols) {
+    for (const symbol of symbols) {
         product_ids.push(`"${symbol}"`)
     }
     product_ids = `[${product_ids.join(',')}]`
@@ -55,13 +55,20 @@ const socket = symbols => {
     const subscribe = `{"event": "subscribe", "feed": "ticker", "product_ids": ${product_ids}}`
 
     var ws = new WebSocket(url)
+
     ws.onopen = () => ws.send(subscribe)
 
+    ws.onerror = e => {
+        console.log(e)
+    }
+
     ws.onmessage = e => {
+        console.log('msg')
+
         const data = JSON.parse(e.data)
 
-        if(data.event) {
-            if(data.event == 'subscribed') {
+        if (data.event) {
+            if (data.event == 'subscribed') {
                 console.log(`${data.event} ${data.product_ids[0]}`)
 
                 const symbol = data.product_ids[0].toLowerCase()
@@ -78,13 +85,13 @@ const socket = symbols => {
                 console.log(data)
             }
         }
-        if(! data.event) {
+        if (!data.event) {
             const symbol = data['product_id'].toLowerCase()
             const markPrice = data['markPrice']
 
             updateText(`#${symbol} > .price`, numeral(markPrice).format('$0,0'))
 
-            if(! data['funding_rate']) {
+            if (!data['funding_rate']) {
                 const premium = data['premium']
                 const annualized = premium / days(symbol) * 365
 
@@ -98,11 +105,11 @@ const socket = symbols => {
 const updateText = (element, text) => {
     const currentText = $(element).text()
 
-    if(currentText != text) {
+    if (currentText != text) {
         $(element).finish()
 
-        $(element).animate({opacity: .5}, 100, "linear", function() {
-            $(this).animate({opacity: 1}, 100)
+        $(element).animate({ opacity: .5 }, 100, "linear", function () {
+            $(this).animate({ opacity: 1 }, 100)
         })
     }
 
@@ -117,7 +124,7 @@ const addHeader = (headers, hide) => {
     let row = '<tr>'
 
     for (const key of headers) {
-        if(hide.includes(key)) continue
+        if (hide.includes(key)) continue
 
         row += `<th class="center-align align-middle">${key}</th>`
     }
@@ -135,9 +142,9 @@ const addRow = (headers, values, hide) => {
         const key = headers[i]
         let value = values[i]
 
-        if(hide.includes(key)) continue
+        if (hide.includes(key)) continue
 
-        if(key == 'pair') value = value.toUpperCase()
+        if (key == 'pair') value = value.toUpperCase()
 
         row += `<td class="${key} p-3 center-align align-middle" data-title="${key}">${value}</td>`
     }
@@ -148,18 +155,18 @@ const addRow = (headers, values, hide) => {
 }
 
 const updateTables = data => {
-    const headers = ['logo','pair','period','symbol','expiration','days','price','premium', 'annualized','status']
+    const headers = ['logo', 'pair', 'period', 'symbol', 'expiration', 'days', 'price', 'premium', 'annualized', 'status']
     const hide = ['symbol']
 
     addHeader(headers, hide)
 
     const rows = []
 
-    for(const pair in data['pairs']) {
+    for (const pair in data['pairs']) {
         const symbols = data['pairs'][pair]
 
-        for(const period in symbols) {
-            const crypto = pair.substr(0,3)
+        for (const period in symbols) {
+            const crypto = pair.substr(0, 3)
             const symbol = symbols[period]
 
             const expiration_string = expiration(symbol) ? expiration(symbol).format("DD MMM 'YY") : '-'
@@ -168,17 +175,17 @@ const updateTables = data => {
             const status = '<i class="text-danger bi bi-circle-fill"></i>'
             const logo = `<img class="logo" src="https://www.fundalytica.com/images/logos/crypto/${crypto}.svg" />`
 
-            const values = [logo, pair, period, symbol, expiration_string, days_string, '-', '-', '-',status]
+            const values = [logo, pair, period, symbol, expiration_string, days_string, '-', '-', '-', status]
             rows.push(values)
         }
     }
 
     // sort
     const pairIndex = headers.indexOf('pair')
-    const pairOrder = ['xbtusd','ethusd']
+    const pairOrder = ['xbtusd', 'ethusd']
     const symbolIndex = headers.indexOf('symbol')
-    rows.sort((a,b) => {
-        if(pairOrder.indexOf(a[pairIndex]) == pairOrder.indexOf(b[pairIndex])) {
+    rows.sort((a, b) => {
+        if (pairOrder.indexOf(a[pairIndex]) == pairOrder.indexOf(b[pairIndex])) {
             return b[symbolIndex].localeCompare(a[symbolIndex])
         }
         else {
@@ -186,7 +193,7 @@ const updateTables = data => {
         }
     })
 
-    for(const row of rows) {
+    for (const row of rows) {
         addRow(headers, row, hide)
     }
 }
@@ -194,7 +201,7 @@ const updateTables = data => {
 const expiration = symbol => {
     const split = symbol.split('_')
 
-    if(split.length == 2) return null
+    if (split.length == 2) return null
 
     const date = split[2]
 
