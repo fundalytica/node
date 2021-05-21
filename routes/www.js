@@ -30,7 +30,7 @@ const topics = [
         image: 'options.svg',
         color: 'bg-deep-purple-a100',
         title: 'Options Portfolio',
-        description: 'When volatility goes up, we will sell derivatives to capture the higher premium. We share our currently open positions.',
+        description: 'When volatility goes up, we will sell options to capture the higher premium. We share our open positions.',
         button: 'See Portfolio 💼',
         action: 'route'
     },
@@ -83,6 +83,7 @@ const topics = [
 
     {
         // id: 'reports',
+        id: 'wip',
         hashtag: 'tool',
         color: 'bg-orange-300',
         image: 'reports.svg',
@@ -156,5 +157,6 @@ router.get('/options', (req, res) => res.render('options', { title: 'Options Por
 router.get('/ath', (req, res) => res.render('ath', { title: 'All Time Highs' }))
 router.get('/dip', (req, res) => res.render('dip', { title: 'Buy The Dip' }))
 router.get('/wip', (req, res) => res.render('wip', { title: 'WIP' }))
+router.get('/test', (req, res) => res.render('test', { title: 'Test' }))
 
 module.exports = router
