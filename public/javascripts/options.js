@@ -136,7 +136,7 @@ const updateTables = data => {
     let row = '<tr>'
     for(const key of keys) {
         if(! ignore.includes(key)) {
-            row += `<th class="center-align align-middle">${key}</th>`
+            row += `<th class="align-middle">${key}</th>`
         }
     }
     row += '</tr>'
@@ -185,7 +185,7 @@ const updateTables = data => {
 
                         if(key == 'symbol') value = `<a href='https://www.tradingview.com/symbols/${value}' target='_blank'>\$${value}</a>`
                         if(key == 'expiration') value = expiration_format(value)
-                        row += `<td class="center-align align-middle" data-title="${key}">${value}</td>`
+                        row += `<td class="align-middle" data-title="${key}">${value}</td>`
                     }
                 }
                 row += '</tr>'
