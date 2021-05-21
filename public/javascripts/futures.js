@@ -183,8 +183,8 @@ const addRow = (id, headers, values, hide) => {
 const updateTables = data => {
     const id = 'futures'
 
-    const headers = ['pair', 'period', 'symbol', 'expiration', 'days', 'price', 'premium', 'annualized', 'status']
-    const hide = ['symbol']
+    const headers = ['pair', 'pair_data', 'period', 'symbol', 'expiration', 'days', 'price', 'premium', 'annualized', 'status']
+    const hide = ['symbol', 'pair_data']
 
     addHeader(id, headers, hide)
 
@@ -203,13 +203,13 @@ const updateTables = data => {
             const status = '<i class="text-danger bi bi-circle-fill"></i>'
             const logo_pair = `<img class="logo" src="https://www.fundalytica.com/images/logos/crypto/${crypto}.svg" /> <span>${pair.toUpperCase()}</span>`
 
-            const values = [logo_pair, period, symbol, expiration_string, days_string, '-', '-', '-', status]
+            const values = [logo_pair, pair, period, symbol, expiration_string, days_string, '-', '-', '-', status]
             rows.push(values)
         }
     }
 
     // sort
-    const pairIndex = headers.indexOf('pair')
+    const pairIndex = headers.indexOf('pair_data')
     const pairOrder = ['xbtusd', 'ethusd']
     const symbolIndex = headers.indexOf('symbol')
     rows.sort((a, b) => {
