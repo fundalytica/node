@@ -154,7 +154,7 @@ const addHeader = (id, headers, hide) => {
     for (const key of headers) {
         if (hide.includes(key)) continue
 
-        row += `<th class="center-align align-middle">${key}</th>`
+        row += `<th class="align-middle">${key}</th>`
     }
 
     row += '</tr>'
@@ -172,9 +172,7 @@ const addRow = (id, headers, values, hide) => {
 
         if (hide.includes(key)) continue
 
-        if (key == 'pair') value = value.toUpperCase()
-
-        row += `<td class="${key} center-align align-middle" data-title="${key}">${value}</td>`
+        row += `<td class="${key} align-middle" data-title="${key}">${value}</td>`
     }
 
     row += '</tr>'
@@ -185,7 +183,7 @@ const addRow = (id, headers, values, hide) => {
 const updateTables = data => {
     const id = 'futures'
 
-    const headers = ['logo', 'pair', 'period', 'symbol', 'expiration', 'days', 'price', 'premium', 'annualized', 'status']
+    const headers = ['pair', 'period', 'symbol', 'expiration', 'days', 'price', 'premium', 'annualized', 'status']
     const hide = ['symbol']
 
     addHeader(id, headers, hide)
@@ -203,9 +201,9 @@ const updateTables = data => {
             const days_string = expiration(symbol) ? `${days(symbol)}d` : '-'
 
             const status = '<i class="text-danger bi bi-circle-fill"></i>'
-            const logo = `<img class="logo" src="https://www.fundalytica.com/images/logos/crypto/${crypto}.svg" />`
+            const logo_pair = `<img class="logo" src="https://www.fundalytica.com/images/logos/crypto/${crypto}.svg" /> <span>${pair.toUpperCase()}</span>`
 
-            const values = [logo, pair, period, symbol, expiration_string, days_string, '-', '-', '-', status]
+            const values = [logo_pair, period, symbol, expiration_string, days_string, '-', '-', '-', status]
             rows.push(values)
         }
     }
