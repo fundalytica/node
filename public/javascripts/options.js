@@ -33,7 +33,7 @@ const hideIDElements = (id, hide = true) => {
     }
 }
 
-const UILoading = options => {
+const UILoading = () => {
     $('#date').addClass('d-none')
     $(`#dropdown-sort`).addClass('d-none')
     $(`#btn-group-order`).addClass('d-none')
@@ -50,7 +50,7 @@ const UILoading = options => {
     }
 }
 
-const UISuccess = (options, data) => {
+const UISuccess = data => {
     console.log(data)
 
     if(data.error) { return UIError(data.error) }
@@ -234,15 +234,15 @@ const sortData = (data, asc = true) => {
     }
 }
 
-const fetch = options => {
-    UILoading(options)
+const fetch = () => {
+    UILoading()
 
     const url = 'https://api.fundalytica.com/v1/options/portfolio'
 
     $.ajax({ url: url })
         .done(data => {
             globalData = data
-            UISuccess(options, data)
+            UISuccess(data)
         })
         .fail(() => UIError(`${url} fail`))
 }
