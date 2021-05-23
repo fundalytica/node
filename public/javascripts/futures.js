@@ -1,217 +1,109 @@
-// import FuturesKraken from './modules/FuturesKraken.js'
+import UIManager from './modules/UI/UIManager.js'
+import UITableUtils from './modules/UI/UITableUtils.js'
+import UITextUtils from './modules/UI/UITextUtils.js'
+import UIUtils from './modules/UI/UIUtils.js'
 
-const IDs = ["futures"]
+import FuturesKraken from './modules/Futures/FuturesKraken.js'
 
-const fetch = options => {
-    UILoading(options)
+const UI = new UIManager("#spinner", "#error")
+const futures = new FuturesKraken()
+const table = '#table-futures'
 
-    const url = 'https://api.fundalytica.com/v1/crypto/futures/tickers/symbols/kraken'
-    $.ajax({ url: url })
-        .done(data => {
-            UISuccess(options, data)
-        })
-        .fail(() => UIError(`${url} fail`))
-}
+const run = () => {
+    UI.loading()
 
-const UILoading = options => {
-    clearTables()
+    UIUtils.hide(table)
+    UITableUtils.clearTable(table)
 
-    $("#spinner").removeClass('d-none')
+    const done = data => {
+        UI.ready()
 
-    $("#error").addClass('d-none')
-    $('#error').text('')
-
-    for(const id of IDs) {
-        hideIDElements(id)
+        initializeTable(table, data)
+        socket()
     }
+
+    futures.init(done, UI.error)
 }
 
-const UIError = error => {
-    $("#spinner").addClass('d-none')
+const socket = () => {
+    const subscribed = symbol => {
+        symbol = symbol.toLowerCase()
 
-    $('#error').text(`😭 ${error}`)
-    $("#error").removeClass('d-none')
-}
+        const header = UITableUtils.headerList(table)
 
-const UISuccess = (options, data) => {
-    $("#spinner").addClass('d-none')
+        const rowIndex = UITableUtils.findRowIndex(table, header.indexOf('symbol'), symbol)
+        const nRow = rowIndex + 1
 
-    console.log(data)
+        // entire row color
+        $(`${table} tr:nth-child(${nRow})`).removeClass('text-secondary')
 
-    updateTables(data)
-
-    socket(symbols(data))
-}
-
-const clearTables = () => {
-    for(const id of IDs) {
-        $(`#table-${id} thead`).empty()
-        $(`#table-${id} tbody`).empty()
+        // status icon color
+        const nColumn = header.indexOf('status') + 1
+        const selector = `${table} tr:nth-child(${nRow}) td:nth-child(${nColumn}) i`
+        $(selector).removeClass('text-danger').addClass('text-success')
     }
-}
 
-const hideIDElements = (id, hide = true) => {
-    if(hide) {
-        $(`#table-${id}`).addClass('d-none')
-    }
-    else {
-        $(`#table-${id}`).removeClass('d-none')
-    }
-}
+    const update = data => {
+        const symbol = data['product_id'].toLowerCase()
 
-const symbols = data => {
-    let symbols = []
+        const perpetual = 'funding_rate' in data
+        const fixed = !perpetual
 
-    for (const pair in data['pairs']) {
-        for (const period in data['pairs'][pair]) {
-            const symbol = data['pairs'][pair][period]
-            symbols.push(symbol)
+        const header = UITableUtils.headerList(table)
+
+        // update mark price
+        const markPrice = data['markPrice']
+        const markPriceString = numeral(markPrice).format('$0,0')
+        const rowIndex = UITableUtils.findRowIndex(table, header.indexOf('symbol'), symbol)
+        const columnIndex = header.indexOf('price')
+        UITableUtils.updateValue(table, rowIndex, columnIndex, markPriceString, UITextUtils.blinkText)
+
+        // fixed contract, update premium and annualized
+        if (fixed) {
+            const premium = data['premium']
+            const annualized = premium / FuturesKraken.days(symbol) * 365
+            const premiumString = numeral(premium / 100).format('0.0%')
+            const annualizedString = numeral(annualized / 100).format('0.0%')
+
+            UITableUtils.updateValue(table, rowIndex, header.indexOf('premium'), premiumString, UITextUtils.blinkText)
+            UITableUtils.updateValue(table, rowIndex, header.indexOf('annualized'), annualizedString, UITextUtils.blinkText)
         }
     }
 
-    return symbols
-}
+    futures.initSocket(subscribed, update)
 
-const socket = symbols => {
     $('#socket').text(`futures.kraken.com WebSocket`)
-
-    const url = 'wss://futures.kraken.com/ws/v1'
-
-    // const product_ids = '["pi_xbtusd","pi_ethusd"]'
-    let product_ids = []
-    for (const symbol of symbols) {
-        product_ids.push(`"${symbol}"`)
-    }
-    product_ids = `[${product_ids.join(',')}]`
-
-    const subscribe = `{"event": "subscribe", "feed": "ticker", "product_ids": ${product_ids}}`
-
-    var ws = new WebSocket(url)
-
-    ws.onopen = () => ws.send(subscribe)
-
-    ws.onerror = e => {
-        console.log(e)
-    }
-
-    ws.onmessage = e => {
-        console.log('msg')
-
-        const data = JSON.parse(e.data)
-
-        if (data.event) {
-            if (data.event == 'subscribed') {
-                console.log(`${data.event} ${data.product_ids[0]}`)
-
-                const symbol = data.product_ids[0].toLowerCase()
-
-                // entire row color
-                $(`#${symbol}`).removeClass('text-secondary')
-
-                // status icon color
-                $(`#${symbol} .status i`).removeClass('text-danger')
-                $(`#${symbol} .status i`).addClass('text-success')
-            }
-            else {
-                console.log('ws.onmessage')
-                console.log(data)
-            }
-        }
-        if (!data.event) {
-            const symbol = data['product_id'].toLowerCase()
-            const markPrice = data['markPrice']
-
-            updateText(`#${symbol} > .price`, numeral(markPrice).format('$0,0'))
-
-            if (!data['funding_rate']) {
-                const premium = data['premium']
-                const annualized = premium / days(symbol) * 365
-
-                updateText(`#${symbol} > .premium`, numeral(premium / 100).format('0.0%'))
-                updateText(`#${symbol} > .annualized`, numeral(annualized / 100).format('0.0%'))
-            }
-        }
-    }
 }
 
-const updateText = (element, text) => {
-    const currentText = $(element).text()
-
-    if (currentText != text) {
-        $(element).finish()
-
-        $(element).animate({ opacity: .5 }, 100, "linear", function () {
-            $(this).animate({ opacity: 1 }, 100)
-        })
-    }
-
-    $(element).text(text)
-}
-
-const addHeader = (id, headers, hide) => {
-    let row = '<tr>'
-
-    for (const key of headers) {
-        if (hide.includes(key)) continue
-
-        row += `<th class="align-middle">${key}</th>`
-    }
-
-    row += '</tr>'
-
-    $(`#table-${id} > thead`).append(row)
-}
-
-const addRow = (id, headers, values, hide) => {
-    const symbol = values[headers.indexOf('symbol')]
-    let row = `<tr id=${symbol} class="text-secondary">`
-
-    for (let i = 0; i < values.length; i++) {
-        const key = headers[i]
-        let value = values[i]
-
-        if (hide.includes(key)) continue
-
-        row += `<td class="${key} align-middle" data-title="${key}">${value}</td>`
-    }
-
-    row += '</tr>'
-
-    $(`#table-${id} > tbody:last-child`).append(row)
-}
-
-const updateTables = data => {
-    const id = 'futures'
-
-    const headers = ['pair', 'pair_data', 'period', 'symbol', 'expiration', 'days', 'price', 'premium', 'annualized', 'status']
-    const hide = ['symbol', 'pair_data']
-
-    addHeader(id, headers, hide)
+const initializeTable = (table, data) => {
+    const header = ['pair', 'pair_data', 'period', 'symbol', 'expiration', 'days', 'price', 'premium', 'annualized', 'status']
+    UITableUtils.addHeader(table, header)
 
     const rows = []
 
     for (const pair in data['pairs']) {
-        const symbols = data['pairs'][pair]
+        const pairSymbols = data['pairs'][pair]
 
-        for (const period in symbols) {
+        for (const period in pairSymbols) {
             const crypto = pair.substr(0, 3)
-            const symbol = symbols[period]
+            const symbol = pairSymbols[period]
 
-            const expiration_string = expiration(symbol) ? expiration(symbol).format("DD MMM 'YY") : '-'
-            const days_string = expiration(symbol) ? `${days(symbol)}d` : '-'
+            const expiration = FuturesKraken.expiration(symbol)
+            const expiration_string = expiration ? expiration.format("DD MMM 'YY") : '-'
+            const days_string = expiration ? `${FuturesKraken.days(symbol)}d` : '-'
 
-            const status = '<i class="text-danger bi bi-circle-fill"></i>'
+            const status = '<i class="status text-danger bi bi-circle-fill"></i>'
             const logo_pair = `<img class="logo" src="https://www.fundalytica.com/images/logos/crypto/${crypto}.svg" /> <span>${pair.toUpperCase()}</span>`
 
-            const values = [logo_pair, pair, period, symbol, expiration_string, days_string, '-', '-', '-', status]
-            rows.push(values)
+            const row = [logo_pair, pair, period, symbol, expiration_string, days_string, '-', '-', '-', status]
+            rows.push(row)
         }
     }
 
     // sort
-    const pairIndex = headers.indexOf('pair_data')
+    const pairIndex = header.indexOf('pair_data')
     const pairOrder = ['xbtusd', 'ethusd']
-    const symbolIndex = headers.indexOf('symbol')
+    const symbolIndex = header.indexOf('symbol')
     rows.sort((a, b) => {
         if (pairOrder.indexOf(a[pairIndex]) == pairOrder.indexOf(b[pairIndex])) {
             return b[symbolIndex].localeCompare(a[symbolIndex])
@@ -221,27 +113,22 @@ const updateTables = data => {
         }
     })
 
+    // add rows
     for (const row of rows) {
-        addRow(id, headers, row, hide)
+        UITableUtils.addRow(table, row)
     }
 
-    hideIDElements(id, false)
-}
+    // hide columns
+    const hide = ['symbol', 'pair_data']
+    UITableUtils.hideColumns(table, header, hide)
 
-const expiration = symbol => {
-    const split = symbol.split('_')
+    // makes table responsive
+    UITableUtils.addDataTitle(table, header)
 
-    if (split.length == 2) return null
+    // fade out text
+    $(`${table} tbody tr`).addClass('text-secondary')
 
-    const date = split[2]
-
-    return moment(date, "YYMMDD")
-}
-
-const days = symbol => expiration(symbol).diff(moment(), 'days')
-
-const run = () => {
-    fetch({})
+    UIUtils.show(table)
 }
 
 $(run)
