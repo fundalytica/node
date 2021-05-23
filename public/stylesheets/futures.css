@@ -28,6 +28,6 @@ td span {
     }
 }
 
-.status i {
-    font-size: 8px;
+i.status {
+    font-size: 10px;
 }
