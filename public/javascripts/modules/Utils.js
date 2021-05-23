@@ -15,6 +15,18 @@ export default class Utils {
         return chunked_arr
     }
 
+    // Common Elements
+
+    static intersection(a,b) {
+        return a.filter(x => b.includes(x))
+    }
+
+    // Not Common Elements
+
+    static difference(a,b) {
+        return a.filter(x => ! b.includes(x))
+    }
+
     // Object Utils
 
     static reverse_object(obj) {
