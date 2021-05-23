@@ -7,7 +7,7 @@ const topics = [
         hashtag: 'data',
         image: 'crypto.svg',
         color: 'bg-deep-purple-a100',
-        title: 'BTC/ETH Futures',
+        title: 'Crypto Futures',
         description: 'Contango or backwardation? Go long or go short? We track premiums on Kraken, BitMEX & Deribit.',
         button: 'Show Premiums 👀',
         action: 'route'
@@ -29,7 +29,7 @@ const topics = [
         hashtag: 'portfolio',
         image: 'options.svg',
         color: 'bg-deep-purple-a100',
-        title: 'Options Portfolio',
+        title: 'Option Writing',
         description: 'When volatility goes up, we will sell options to capture the higher premium. We share our open positions.',
         button: 'See Portfolio 💼',
         action: 'route'
