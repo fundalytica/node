@@ -15,16 +15,20 @@ export default class Utils {
         return chunked_arr
     }
 
+    static propertyTotal(array, key) {
+        return array.reduce((acc, val) => acc += parseFloat(val[key]), 0)
+    }
+
     // Common Elements
 
-    static intersection(a,b) {
+    static intersection(a, b) {
         return a.filter(x => b.includes(x))
     }
 
     // Not Common Elements
 
-    static difference(a,b) {
-        return a.filter(x => ! b.includes(x))
+    static difference(a, b) {
+        return a.filter(x => !b.includes(x))
     }
 
     // Object Utils
