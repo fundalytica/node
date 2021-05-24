@@ -1,7 +1,9 @@
-export default class Strings {
-    static range(from, to) {
-        const format = "D MMM 'YY"
+export default class StringUtils {
+    static capitalize(string) {
+        return string.charAt(0).toUpperCase() + string.slice(1)
+    }
 
+    static range(from, to, format) {
         const fromDate = moment(from)
         const toDate = moment(to)
 
