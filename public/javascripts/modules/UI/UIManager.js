@@ -1,24 +1,24 @@
 export default class UIManager {
-    constructor(spinner, error) {
-        this.spinner = spinner
-        this.error = error
+    constructor(spinnerId, errorId) {
+        this.spinnerId = spinnerId
+        this.errorId = errorId
     }
 
     loading() {
-        $(this.spinner).removeClass('d-none')
+        $(this.spinnerId).removeClass('d-none')
 
-        $(this.error).addClass('d-none')
-        $(this.error).text('')
+        $(this.errorId).addClass('d-none')
+        $(this.errorId).text('')
     }
 
     error(error) {
-        $(this.spinner).addClass('d-none')
+        $(this.spinnerId).addClass('d-none')
 
-        $(this.error).text(`😭 ${error}`)
-        $(this.error).removeClass('d-none')
+        $(this.errorId).text(`😭 ${error}`)
+        $(this.errorId).removeClass('d-none')
     }
 
     ready() {
-        $(this.spinner).addClass('d-none')
+        $(this.spinnerId).addClass('d-none')
     }
 }
