@@ -1,89 +1,42 @@
-const IDs = ['puts', 'calls', 'warrants']
-const currency_fmt = '$0,0'
-const formats = { strike: '0,0.0', basis: currency_fmt, value: currency_fmt, profit: currency_fmt }
+import UIManager from './modules/UI/UIManager.js'
+import UITableUtils from './modules/UI/UITableUtils.js'
+import UIUtils from './modules/UI/UIUtils.js'
 
-const capitalize = string => string.charAt(0).toUpperCase() + string.slice(1)
-const expiration_format = expiration => `${expiration.substr(0,2)} ${capitalize(expiration.substr(2,3).toLowerCase())} '${expiration.substr(5,2)}`
-const moment_expiration_format = "DD MMM 'YY"
+import Utils from './modules/Utils.js'
+import StringUtils from './modules/StringUtils.js'
 
-const puts = data => data.filter(row => row.right == 'P')
-const calls = data => data.filter(row => row.right == 'C')
-const total = (data, prop) => data.reduce((acc, val) => acc += parseFloat(val[prop]), 0)
-const assign_total = data => data.reduce((acc, val) => acc += parseFloat(val.strike * val.quantity * 100), 0)
-const current_value = data => data.price * data.quantity * 100
+import OptionsData from './modules/OptionsData.js'
 
-let globalData = null
+const UI = new UIManager("#spinner", "#error")
+const options = new OptionsData()
 
-let currentSort = null
-let currentOrder = null
-const sortOptions = ['symbol','expiration','basis','value','profit']
+const date = '#date'
+const tableOrdering = ['#dropdown-sort', '#btn-group-order']
+const tables = ['#table-puts', '#table-calls']
+const tablesAccessories = ['#toggle-puts', '#toggle-calls', '#info-puts', '#info-calls']
 
-const hideIDElements = (id, hide = true) => {
-    if(hide) {
-        $(`#toggle-${id}`).addClass('d-none')
-        $(`#info-${id}`).removeClass('d-flex')
-        $(`#info-${id}`).addClass('d-none')
-        $(`#table-${id}`).addClass('d-none')
+const currencyFormat = '$0,0'
+const formats = { strike: '0,0.0', basis: currencyFormat, value: currencyFormat, profit: currencyFormat }
+
+const run = () => {
+    UI.loading()
+
+    UIUtils.hide(date)
+    UIUtils.hide(tables.concat(tablesAccessories, tableOrdering))
+
+    const done = () => {
+        updateDate(options.generated)
+        updateDropdown()
+        updateTables(options.positions)
+
+        registerClickEventOrder()
+
+        UI.ready()
     }
-    else {
-        $(`#toggle-${id}`).removeClass('d-none')
-        $(`#info-${id}`).addClass('d-flex')
-        $(`#info-${id}`).removeClass('d-none')
-        $(`#table-${id}`).removeClass('d-none')
-    }
-}
 
-const UILoading = () => {
-    $('#date').addClass('d-none')
-    $(`#dropdown-sort`).addClass('d-none')
-    $(`#btn-group-order`).addClass('d-none')
+    const fail = error => UI.error(error)
 
-    $("#spinner").removeClass('d-none')
-
-    $("#error").addClass('d-none')
-    $('#error').text('')
-
-    clearTables()
-
-    for(const id of IDs) {
-        hideIDElements(id)
-    }
-}
-
-const UISuccess = data => {
-    console.log(data)
-
-    if(data.error) { return UIError(data.error) }
-
-    $("#spinner").addClass('d-none')
-    $(`#btn-group-order`).removeClass('d-none')
-
-    updateDate(data.generated)
-
-    currentSort = sortOptions[0]
-    currentOrder = 'asc'
-    updateDropdown()
-
-    manipulateData(data.positions)
-
-    updateTables(data.positions)
-}
-
-const UIError = error => {
-    $("#spinner").addClass('d-none')
-
-    $('#error').text(`😭 ${error}`)
-    $("#error").removeClass('d-none')
-}
-
-const manipulateData = data => {
-    for(const item of data) {
-        // calculate value
-        item.value = current_value(item)
-        // delete price
-        delete item.price
-        item.profit = item.value - item.basis
-    }
+    options.init(done, fail)
 }
 
 const updateDate = generated => {
@@ -91,174 +44,126 @@ const updateDate = generated => {
 
     const days = moment().diff(moment(date), 'days')
     const css = days >= 7 ? 'text-danger' : 'text-secondary'
-    $('#date').addClass(css)
+    $(date).addClass(css)
 
     date = moment(date).format('D MMM YYYY')
-    $('#date').text(`Last Update: ${date} (${days}d ago)`)
+    $(date).text(`Last Update: ${date} (${days}d ago)`)
 
-    $('#date').removeClass('d-none')
+    UIUtils.show(date)
 }
 
 const updateDropdown = () => {
-    $('#dropdown-sort').text(`Sorted by ${currentSort}`)
+    $('#dropdown-sort').text(`Sorted by ${options.sort}`)
 
-    $('#dropdown-menu-sort').empty()
-    for(const option of sortOptions) {
-        const button = `<li><button class='btn-sm dropdown-item' type='button'>${option}</button></li>`
-        $('#dropdown-menu-sort').append(button)
-    }
+    UIUtils.populateDropdown('#dropdown-menu-sort', options.sortKeys)
+    $('li > button.dropdown-item').addClass('btn-sm')
 
-    $(`#dropdown-sort`).removeClass('d-none')
-
-    $(".dropdown-menu button").off()
-    $(".dropdown-menu button").click(e => {
-        currentSort = $(e.currentTarget).text()
-        updateDropdown()
-        clearTables()
-        updateTables(globalData.positions)
-    })
-}
-
-const clearTables = () => {
-    for(const id of IDs) {
-        $(`#table-${id} thead`).empty()
-        $(`#table-${id} tbody`).empty()
-    }
+    registerClickEventSort()
 }
 
 const updateTables = data => {
-    const keys = Object.keys(data[0])
-    keys.unshift('logo')
+    // clear
+    UITableUtils.clearTables(tables)
 
-    const ignore = ['right']
+    // header
+    const header = Object.keys(data[0])
+    // add logo
+    header.unshift('logo')
 
-    // header row
-    let row = '<tr>'
-    for(const key of keys) {
-        if(! ignore.includes(key)) {
-            row += `<th class="align-middle">${key}</th>`
-        }
-    }
-    row += '</tr>'
-    // append
-    for(const id of IDs) {
-        $(`#table-${id} > thead`).append(row)
-    }
+    for (const right of ['puts', 'calls']) {
+        const positions = (right == 'puts') ? options.puts(data) : options.calls(data)
+        const count = positions.length
 
-    for(const id of IDs) {
-        if(['puts','calls'].includes(id)) {
-            const options_data = (id == 'puts') ? puts(data) : calls(data)
+        const table = `#table-${right}`
 
-            // info text
-            const count = options_data.length
-            if(count) {
-                let text = `${count} ${capitalize(id)}`
-                $(`#count-${id}`).text(text)
+        // summary
+        updateTableSummary(right, positions)
 
-                text = `Basis ${numeral(total(options_data, 'basis')).format(currency_fmt)}`
-                $(`#basis-${id}`).text(text)
+        // header
+        UITableUtils.addHeader(table, header)
 
-                text = `Value ${numeral(total(options_data, 'value')).format(currency_fmt)}`
-                $(`#value-${id}`).text(text)
+        if (count) {
+            // rows
+            for (const option of positions) {
+                const row = []
 
-                text = `Profit ${numeral(total(options_data, 'profit')).format(currency_fmt)}`
-                $(`#profit-${id}`).text(text)
+                for (const key of header) {
+                    let value = option[key]
 
-                text = `Assignment ${numeral(assign_total(options_data)).format(currency_fmt)}`
-                $(`#assignment-${id}`).text(text)
-            }
-
-            sortData(options_data)
-
-            // for each position
-            for(const item of options_data) {
-                // body row
-                let row = '<tr>'
-                for(const key of keys) {
-                    if(! ignore.includes(key)) {
-                        let value = item[key]
-
-                        if(formats[key]) value = numeral(value).format(formats[key])
-
-                        // if(key == 'logo') value = `<img onerror="this.style.display='none'" src="https://www.fundalytica.com/images/logos/stocks/${item.symbol.toLowerCase()}.svg" />`
-                        if(key == 'logo') value = `<img onerror="this.src='https://www.fundalytica.com/images/logos/stocks/${item.symbol.toLowerCase()}.png'" src="https://www.fundalytica.com/images/logos/stocks/${item.symbol.toLowerCase()}.svg" />`
-
-                        if(key == 'symbol') value = `<a href='https://www.tradingview.com/symbols/${value}' target='_blank'>\$${value}</a>`
-                        if(key == 'expiration') value = expiration_format(value)
-                        row += `<td class="align-middle" data-title="${key}">${value}</td>`
+                    // logo
+                    if (key == 'logo') {
+                        const logoFile = (symbol, extension = 'svg') => `https://www.fundalytica.com/images/logos/stocks/${symbol.toLowerCase()}.${extension}`
+                        value = `<img onerror="this.src='${logoFile(option.symbol, 'png')}'" src="${logoFile(option.symbol)}" />`
                     }
+                    // symbol
+                    else if (key == 'symbol') {
+                        value = `<a href='https://www.tradingview.com/symbols/${value}' target='_blank'>\$${value}</a>`
+                    }
+                    // expiration
+                    else if (key == 'expiration') {
+                        value = moment(value, 'DDMMMYY',).format("DD MMM 'YY")
+                    }
+
+                    // format
+                    if (formats[key]) value = numeral(value).format(formats[key])
+
+                    row.push(value)
                 }
-                row += '</tr>'
-                // append
-                $(`#table-${id} > tbody:last-child`).append(row)
+
+                UITableUtils.addRow(table, row)
+                UITableUtils.addDataTitle(table, header)
             }
 
-            hideIDElements(id, (count == 0))
+            // align
+            $('td').addClass('align-middle')
+
+            // hide columns
+            const hide = ['right', 'price']
+            UITableUtils.hideColumns(table, header, hide)
         }
 
-        // if(id == 'warrants') {
-        //     const count = 0
-
-        //     if(count) {
-        //         let text = `${count} ${capitalize(id)}`
-        //         $(`#count-${id}`).text(text)
-        //     }
-
-        //     hideIDElements(id, (count == 0))
-        // }
+        // visibility, tables & accessories
+        const hide = (count == 0)
+        UIUtils.hide(tables.filter(t => t.includes(right)), hide)
+        UIUtils.hide(tablesAccessories.filter(t => t.includes(right)), hide)
     }
+
+    // visibility, common ordering
+    const hide = !(options.puts(data).length || options.calls(data).length)
+    UIUtils.hide(tableOrdering, hide)
 }
 
-const sortData = (data, asc = true) => {
-    asc = (currentOrder == 'asc') ? 1 : -1
-
-    if(currentSort == 'symbol') {
-        data.sort((a,b) => {
-            return String(a[currentSort]).localeCompare(String(b[currentSort])) * asc
-        })
-    }
-    else if(currentSort == 'expiration') {
-        data.sort((a,b) => {
-            return (moment(a[currentSort], moment_expiration_format) - moment(b[currentSort], moment_expiration_format)) * asc
-        })
-    }
-    else if(['basis','value'].includes(currentSort)) {
-        data.sort((a,b) => {
-            return (parseFloat(a[currentSort]) - parseFloat(b[currentSort])) * asc
-        })
-    }
-    else {
-        data.sort((a,b) => {
-            return (parseFloat(a[currentSort]) - parseFloat(b[currentSort])) * asc
-        })
-    }
+const updateTableSummary = (right, positions) => {
+    $(`#count-${right}`).text(`${positions.length} ${StringUtils.capitalize(right)}`)
+    $(`#basis-${right}`).text(`Basis ${numeral(Utils.propertyTotal(positions, 'basis')).format(currencyFormat)}`)
+    $(`#value-${right}`).text(`Value ${numeral(Utils.propertyTotal(positions, 'value')).format(currencyFormat)}`)
+    $(`#profit-${right}`).text(`Profit ${numeral(Utils.propertyTotal(positions, 'profit')).format(currencyFormat)}`)
+    $(`#assignment-${right}`).text(`Assignment ${numeral(OptionsData.assignmentTotal(positions)).format(currencyFormat)}`)
 }
 
-const fetch = () => {
-    UILoading()
+const registerClickEventSort = () => {
+    const selector = ".dropdown-menu button"
 
-    const url = 'https://api.fundalytica.com/v1/options/portfolio'
+    $(selector).off()
 
-    $.ajax({ url: url })
-        .done(data => {
-            globalData = data
-            UISuccess(data)
-        })
-        .fail(() => UIError(`${url} fail`))
-}
+    $(selector).click(e => {
+        options.sort = $(e.currentTarget).text()
 
-const setupEvents = () => {
-    $("#btn-group-order .btn-check").click(e => {
-        currentOrder = (e.currentTarget.id == 'btn-radio-asc') ? 'asc' : 'desc'
-        console.log(currentOrder)
-        clearTables()
-        updateTables(globalData.positions)
+        updateDropdown()
+        updateTables(options.positions)
     })
 }
 
-const run = () => {
-    setupEvents()
-    fetch({})
+const registerClickEventOrder = () => {
+    const selector = "#btn-group-order .btn-check"
+
+    $(selector).off()
+
+    $(selector).click(e => {
+        options.order = e.currentTarget.id.includes('asc') ? 'asc' : 'desc'
+
+        updateTables(options.positions)
+    })
 }
 
 $(run)
