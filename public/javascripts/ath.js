@@ -1,7 +1,7 @@
 import Chart from './modules/Chart.js'
 import ChartStrings from './modules/ChartStrings.js'
 
-import Strings from './modules/Strings.js'
+import StringUtils from './modules/StringUtils.js'
 
 const chart = new Chart('chart', { legend: false }, 'ath')
 
@@ -28,14 +28,14 @@ const UISuccess = (options, data) => {
     $("#symbol-form").removeClass('d-none')
     $('#symbol').val('')
 
-    if(data.error) {
+    if (data.error) {
         $('#title').text('')
         $('#error').text(`${options.symbol} market data is currently not available`)
 
         $('#symbol').focus()
     }
     else {
-        $('#dates').text(Strings.range(data.dates.from, data.dates.to))
+        $('#dates').text(StringUtils.range(data.dates.from, data.dates.to, "D MMM 'YY"))
 
         chart.addATHSeries(data.ath.close, true)
         chart.show()
@@ -49,7 +49,7 @@ const UISuccess = (options, data) => {
 const updateTable = close => {
     const timestampKeys = Object.keys(close).sort().reverse()
 
-    for(const index in timestampKeys) {
+    for (const index in timestampKeys) {
         const timestamp = timestampKeys[index]
         const date = moment.unix(timestamp / 1000)
         const price = close[timestamp]

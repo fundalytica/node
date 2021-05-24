@@ -1,5 +1,5 @@
 import Chart from './modules/Chart.js'
-import Strings from './modules/Strings.js'
+import StringUtils from './modules/StringUtils.js'
 
 const chart = new Chart('chart')
 
@@ -15,11 +15,11 @@ const fetch = options => {
         success: data => {
             $("#spinner").addClass('d-none')
 
-            if(data.error) {
+            if (data.error) {
                 $('#error').text(`${options.symbol} market data is currently not available`)
             }
             else {
-                $('#dates').text(Strings.range(data.dates.from, data.dates.to))
+                $('#dates').text(StringUtils.range(data.dates.from, data.dates.to, "D MMM 'YY"))
 
                 // chart.addSeries(data.all.close)
                 chart.addATHSeries(data.ath.close)
