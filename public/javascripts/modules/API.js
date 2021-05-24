@@ -14,13 +14,13 @@ export default class API {
         let fetch = 0
         let data = {}
 
-        for(const symbol of symbols) {
+        for (const symbol of symbols) {
             const url = this.quoteURI + '/' + symbol
 
             const success = result => {
                 fetch++
                 data[result.symbol] = result
-                if(fetch == symbols.length) callback(data)
+                if (fetch == symbols.length) callback(data)
             }
 
             $.getJSON({ url, success })
