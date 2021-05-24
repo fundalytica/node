@@ -13,7 +13,6 @@ const run = () => {
     UI.loading()
 
     UIUtils.hide(table)
-    UITableUtils.clearTable(table)
 
     const done = data => {
         UI.ready()
@@ -22,7 +21,9 @@ const run = () => {
         socket()
     }
 
-    futures.init(done, UI.error)
+    const fail = error => UI.error(error)
+
+    futures.init(done, fail)
 }
 
 const socket = () => {
@@ -127,6 +128,9 @@ const initializeTable = (table, data) => {
 
     // fade out text
     $(`${table} tbody tr`).addClass('text-secondary')
+
+    // align
+    $('td').addClass('align-middle')
 
     UIUtils.show(table)
 }
