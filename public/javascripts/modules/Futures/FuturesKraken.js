@@ -5,6 +5,8 @@ export default class FuturesKraken {
         const symbolsURL = 'https://api.fundalytica.com/v1/crypto/futures/tickers/symbols/kraken'
 
         const doneCallback = data => {
+            if (data.error) return fail(data.error)
+
             this.symbols = data
             done(data)
         }
