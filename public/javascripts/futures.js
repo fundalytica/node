@@ -40,8 +40,8 @@ const socket = () => {
 
         // status icon color
         const nColumn = header.indexOf('status') + 1
-        const selector = `${table} tr:nth-child(${nRow}) td:nth-child(${nColumn}) i`
-        $(selector).removeClass('text-danger').addClass('text-success')
+        const selector = `${table} tr:nth-child(${nRow}) td:nth-child(${nColumn}) svg`
+        $(selector).removeClass('status-off').addClass('status-on')
     }
 
     const update = data => {
@@ -93,7 +93,7 @@ const initializeTable = (table, data) => {
             const expiration_string = expiration ? expiration.format("DD MMM 'YY") : '-'
             const days_string = expiration ? `${FuturesKraken.days(symbol)}d` : '-'
 
-            const status = '<i class="status text-danger bi bi-circle-fill"></i>'
+            const status = '<svg viewBox="0 0 20 20" class="status status-off"><circle cx="10" cy="10" r="10"/></svg>'
             const logo_pair = `<img class="logo" src="https://www.fundalytica.com/images/logos/crypto/${crypto}.svg" /> <span>${pair.toUpperCase()}</span>`
 
             const row = [logo_pair, pair, period, symbol, expiration_string, days_string, '-', '-', '-', status]

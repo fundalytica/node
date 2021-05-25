@@ -31,6 +31,12 @@ td span {
     }
 }
 
-i.status {
-    font-size: 10px;
+svg.status {
+    width: 10px; height: auto;
+}
+svg.status-on {
+    fill: green;
+}
+svg.status-off {
+    fill:red;
 }
