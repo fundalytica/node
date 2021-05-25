@@ -8,6 +8,10 @@ export default class UIUtils {
         }
     }
 
+    static scriptAttribute(scriptId, attr) {
+        return document.querySelector(scriptId).getAttribute(attr)
+    }
+
     static show(selector) {
         UIUtils.hide(selector, false)
     }
