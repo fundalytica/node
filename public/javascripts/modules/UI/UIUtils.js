@@ -1,27 +1,44 @@
 export default class UIUtils {
-    static show(ids) {
-        UIUtils.hide(ids, false)
-    }
-
-    static hide(ids, hide = true) {
-        if (Array.isArray(ids)) {
-            for (const id of ids) {
-                UIUtils.hideId(id, hide)
-            }
+    static ready(fn) {
+        if (document.readyState != 'loading') {
+            fn()
         }
         else {
-            const id = ids
-            UIUtils.hideId(id, hide)
+            document.addEventListener('DOMContentLoaded', fn)
         }
     }
 
-    static hideId(id, hide) {
+    static show(selector) {
+        UIUtils.hide(selector, false)
+    }
+
+    static hide(selector, hide = true) {
+        const elements = document.querySelectorAll(selector)
+        elements.forEach(el => UIUtils.hideElement(el, hide))
+    }
+
+    static hideElement(el, hide) {
+        const className = 'd-none'
+
         if (hide) {
-            $(`${id}`).addClass('d-none')
+            el.classList.add(className)
         }
         else {
-            $(`${id}`).removeClass('d-none')
+            el.classList.remove(className)
         }
+    }
+
+    static showMany() {
+
+    }
+
+    static hideMany() {
+
+    }
+
+    static isHidden(selector) {
+        const className = 'd-none'
+        return document.querySelector(selector).classList.contains(className)
     }
 
     static populateDropdown(dropdown, values) {
