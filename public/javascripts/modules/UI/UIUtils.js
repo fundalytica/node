@@ -12,6 +12,14 @@ export default class UIUtils {
         return document.querySelector(scriptId).getAttribute(attr)
     }
 
+    static addClass(selector, className) {
+        document.querySelectorAll(selector).forEach(el => el.classList.add(className))
+    }
+
+    static removeClass(selector, className) {
+        document.querySelectorAll(selector).forEach(el => el.classList.remove(className))
+    }
+
     static show(selector) {
         UIUtils.hide(selector, false)
     }
