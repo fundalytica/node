@@ -36,12 +36,13 @@ const socket = () => {
         const nRow = rowIndex + 1
 
         // entire row color
-        $(`${table} tr:nth-child(${nRow})`).removeClass('text-secondary')
+        UIUtils.removeClass(`${table} tr:nth-child(${nRow})`, 'text-secondary')
 
         // status icon color
         const nColumn = header.indexOf('status') + 1
         const selector = `${table} tr:nth-child(${nRow}) td:nth-child(${nColumn}) svg`
-        $(selector).removeClass('status-off').addClass('status-on')
+        UIUtils.removeClass(selector, 'status-off')
+        UIUtils.addClass(selector, 'status-on')
     }
 
     const update = data => {
@@ -73,7 +74,7 @@ const socket = () => {
 
     futures.initSocket(subscribed, update)
 
-    $('#socket').text(`futures.kraken.com WebSocket`)
+    UITextUtils.text('#socket', 'futures.kraken.com WebSocket')
 }
 
 const initializeTable = (table, data) => {
@@ -127,12 +128,9 @@ const initializeTable = (table, data) => {
     UITableUtils.addDataTitle(table, header)
 
     // fade out text
-    $(`${table} tbody tr`).addClass('text-secondary')
-
-    // align
-    $('td').addClass('align-middle')
+    UIUtils.addClass(`${table} tbody tr`, 'text-secondary')
 
     UIUtils.show(table)
 }
 
-$(run)
+UIUtils.ready(run)
