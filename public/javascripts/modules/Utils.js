@@ -11,8 +11,8 @@ export default class Utils {
 
         fetch(url)
             .then(errorHandling)
-            .then(response => response.json().then(done))
             .catch(fail)
+            .then(response => response.json().then(done))
     }
 
     // Array Utils
