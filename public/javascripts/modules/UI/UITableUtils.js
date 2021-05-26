@@ -1,3 +1,5 @@
+import UIUtils from './UIUtils.js'
+
 export default class UITableUtils {
     static clearTable(table) {
         $(`${table} thead`).empty()
@@ -11,29 +13,28 @@ export default class UITableUtils {
     }
 
     static addHeader(table, values) {
-        let row = '<tr>'
+        const tableHeadRef = document.querySelector(`${table} > thead`)
+        const newRow = tableHeadRef.insertRow()
 
         for (const value of values) {
-            row += `<th>${value}</th>`
+            const th = document.createElement("th")
+
+            const text = document.createTextNode(value)
+            th.appendChild(text)
+
+            newRow.appendChild(th)
         }
-
-        row += '</tr>'
-
-        $(`${table} > thead`).append(row)
     }
 
     static addRow(table, values) {
-        let row = '<tr>'
+        const tableBodyRef = document.querySelector(`${table} > tbody`)
+        const newRow = tableBodyRef.insertRow()
 
         for (let i = 0; i < values.length; i++) {
-            const value = values[i]
+            const newCell = newRow.insertCell()
 
-            row += `<td>${value}</td>`
+            newCell.innerHTML = values[i]
         }
-
-        row += '</tr>'
-
-        $(`${table} > tbody:last-child`).append(row)
     }
 
     static hideColumns(table, header, hide) {
