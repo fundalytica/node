@@ -5,6 +5,7 @@ img.exchange {
 
 svg.status {
     width: 10px; height: auto;
+    vertical-align: baseline;
 }
 svg.status-on {
     fill: green;
@@ -19,12 +20,8 @@ table img {
     margin-right: 8px;
 }
 
-th, td {
-    /* text-align: left; */
-}
-
-td span {
-    vertical-align: middle;
+td img, td span {
+    vertical-align: top;
 }
 
 /* no more tables breakpoint is 800px */
