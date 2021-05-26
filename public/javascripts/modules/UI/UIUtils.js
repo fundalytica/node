@@ -20,6 +20,14 @@ export default class UIUtils {
         document.querySelectorAll(selector).forEach(el => el.classList.remove(className))
     }
 
+    static addListener(selector, event, handler) {
+        document.querySelectorAll(selector).forEach(el => el.addEventListener(event, handler))
+    }
+
+    static removeListener(selector, event, handler) {
+        document.querySelectorAll(selector).forEach(el => el.removeEventListener(event, handler))
+    }
+
     static show(selector) {
         UIUtils.hide(selector, false)
     }
@@ -48,17 +56,31 @@ export default class UIUtils {
 
     }
 
+    static empty(selector) {
+        const el = document.querySelector(selector)
+        while (el.firstChild) el.removeChild(el.firstChild)
+    }
+
     static isHidden(selector) {
         const className = 'd-none'
         return document.querySelector(selector).classList.contains(className)
     }
 
-    static populateDropdown(dropdown, values) {
-        $(dropdown).empty()
+    static populateDropdown(selector, values) {
+        UIUtils.empty(selector)
+
+        const dropdown = document.querySelector(selector)
 
         for (const value of values) {
-            const button = `<li><button class='dropdown-item' type='button'>${value}</button></li>`
-            $(dropdown).append(button)
+            const li = document.createElement('li')
+            const button = document.createElement('button')
+            const text = document.createTextNode(value)
+
+            button.appendChild(text)
+            li.appendChild(button)
+            dropdown.appendChild(li)
+
+            button.setAttribute('type', 'button')
         }
     }
 }
