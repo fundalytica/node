@@ -1,21 +1,26 @@
 img.exchange {
-    max-height: 100px;
-    max-width: 100px;
-    width: auto;
-    object-fit: contain;
+    height: 100px;
+    width: 100px;
+}
+
+svg.status {
+    width: 10px; height: auto;
+}
+svg.status-on {
+    fill: green;
+}
+svg.status-off {
+    fill:red;
 }
 
 table img {
-    text-align: left;
+    height: 20px;
+    width: 20px;
+    margin-right: 8px;
+}
 
-    max-height: 20px;
-    width: auto;
-    min-width: 20px;
-
-    object-fit: contain;
-
-    margin-right: 6px;
-    vertical-align: middle;
+th, td {
+    /* text-align: left; */
 }
 
 td span {
@@ -27,16 +32,6 @@ td span {
     /* change top and bottom cell padding to 16x */
     .no-more-tables td {
         /* bootstrap default padding is 8px */
-        padding: 16px 8px 16px 8px;
+        padding: 16px 16px 16px 16px;
     }
-}
-
-svg.status {
-    width: 10px; height: auto;
-}
-svg.status-on {
-    fill: green;
-}
-svg.status-off {
-    fill:red;
 }
