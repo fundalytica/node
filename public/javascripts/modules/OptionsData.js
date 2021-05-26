@@ -1,3 +1,5 @@
+import Utils from './Utils.js'
+
 export default class OptionsData {
     constructor() {
         this.sortKeys = ['symbol', 'expiration', 'basis', 'value', 'profit']
@@ -38,7 +40,7 @@ export default class OptionsData {
             done()
         }
 
-        $.ajax({ url }).done(doneCallback).fail(() => fail(`${url} fail`))
+        Utils.request(url, doneCallback, fail)
     }
 
     enrichPositions() {
@@ -59,7 +61,7 @@ export default class OptionsData {
             this.positions.sort((a, b) => String(a[sort]).localeCompare(String(b[sort])) * ascending)
         }
         else if (sort == 'expiration') {
-            this.positions.sort((a, b) => (moment(a[sort], moment_expiration_format) - moment(b[sort], moment_expiration_format)) * ascending)
+            this.positions.sort((a, b) => (moment(a[sort], "DD MMM 'YY") - moment(b[sort], "DD MMM 'YY")) * ascending)
         }
         else if (['basis', 'value'].includes(sort)) {
             this.positions.sort((a, b) => (parseFloat(a[sort]) - parseFloat(b[sort])) * ascending)
