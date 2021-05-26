@@ -2,8 +2,8 @@ import UIUtils from './UIUtils.js'
 
 export default class UITableUtils {
     static clearTable(table) {
-        $(`${table} thead`).empty()
-        $(`${table} tbody`).empty()
+        UIUtils.empty(`${table} thead`)
+        UIUtils.empty(`${table} tbody`)
     }
 
     static clearTables(tables) {
