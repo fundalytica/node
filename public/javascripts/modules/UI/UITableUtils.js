@@ -40,8 +40,9 @@ export default class UITableUtils {
     static hideColumns(table, header, hide) {
         for (const column of hide) {
             const nColumn = header.indexOf(column) + 1
-            $(`${table} tr th:nth-child(${nColumn})`).addClass('d-none')
-            $(`${table} tr td:nth-child(${nColumn})`).addClass('d-none')
+
+            UIUtils.hide(`${table} tr th:nth-child(${nColumn})`)
+            UIUtils.hide(`${table} tr td:nth-child(${nColumn})`)
         }
     }
 
@@ -64,6 +65,7 @@ export default class UITableUtils {
 
         for (let i = 0; i < trElements.length; i++) {
             const tr = trElements[i]
+
             const tdElements = tr.getElementsByTagName('td')
             const td = tdElements[columnIndex]
 
@@ -81,7 +83,7 @@ export default class UITableUtils {
 
         const column = row.querySelector(`td:nth-child(${columnIndex + 1})`)
 
-        method($(column), value)
+        method(column, value)
     }
 
     static addDataTitle(table, header) {
