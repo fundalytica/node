@@ -15,7 +15,7 @@ server.on('error', error => {
         throw error
     }
 
-    if (['EACCES','EADDRINUSE'].includes(error.code)) {
+    if (['EACCES', 'EADDRINUSE'].includes(error.code)) {
         console.error(`${port} ${error.code}`)
         process.exit(1)
     }
