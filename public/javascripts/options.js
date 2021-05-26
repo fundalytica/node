@@ -1,5 +1,6 @@
 import UIManager from './modules/UI/UIManager.js'
 import UITableUtils from './modules/UI/UITableUtils.js'
+import UITextUtils from './modules/UI/UITextUtils.js'
 import UIUtils from './modules/UI/UIUtils.js'
 
 import Utils from './modules/Utils.js'
@@ -10,7 +11,7 @@ import OptionsData from './modules/OptionsData.js'
 const UI = new UIManager("#spinner", "#error")
 const options = new OptionsData()
 
-const date = '#date'
+const dateSelector = '#date'
 const tableOrdering = ['#dropdown-sort', '#btn-group-order']
 const tables = ['#table-puts', '#table-calls']
 const tablesAccessories = ['#toggle-puts', '#toggle-calls', '#info-puts', '#info-calls']
@@ -21,14 +22,13 @@ const formats = { strike: '0,0.0', basis: currencyFormat, value: currencyFormat,
 const run = () => {
     UI.loading()
 
-    UIUtils.hide(date)
+    UIUtils.hide(dateSelector)
     UIUtils.hide(tables.concat(tablesAccessories, tableOrdering))
 
     const done = () => {
         updateDate(options.generated)
         updateDropdown()
         updateTables(options.positions)
-
         registerClickEventOrder()
 
         UI.ready()
@@ -40,23 +40,23 @@ const run = () => {
 }
 
 const updateDate = generated => {
-    let date = generated.split(',')[0]
+    const date = generated.split(',')[0]
+    const formattedDate = moment(date).format('D MMM YYYY')
 
     const days = moment().diff(moment(date), 'days')
-    const css = days >= 7 ? 'text-danger' : 'text-secondary'
-    $(date).addClass(css)
+    const className = days >= 7 ? 'text-danger' : 'text-secondary'
 
-    date = moment(date).format('D MMM YYYY')
-    $(date).text(`Last Update: ${date} (${days}d ago)`)
-
-    UIUtils.show(date)
+    UITextUtils.text(dateSelector, `Last Update: ${formattedDate} (${days}d ago)`)
+    UIUtils.addClass(dateSelector, className)
+    UIUtils.show(dateSelector)
 }
 
 const updateDropdown = () => {
-    $('#dropdown-sort').text(`Sorted by ${options.sort}`)
+    UITextUtils.text('#dropdown-sort', `Sorted by ${options.sort}`)
 
     UIUtils.populateDropdown('#dropdown-menu-sort', options.sortKeys)
-    $('li > button.dropdown-item').addClass('btn-sm')
+    UIUtils.addClass('.dropdown-menu > li > button', 'dropdown-item')
+    UIUtils.addClass('.dropdown-menu > li > button', 'btn-sm')
 
     registerClickEventSort()
 }
@@ -101,7 +101,7 @@ const updateTables = data => {
                     }
                     // expiration
                     else if (key == 'expiration') {
-                        value = moment(value, 'DDMMMYY',).format("DD MMM 'YY")
+                        value = moment(value, 'DDMMMYY',).format(options.expirationDisplayFormat)
                     }
 
                     // format
@@ -115,7 +115,7 @@ const updateTables = data => {
             }
 
             // align
-            $('td').addClass('align-middle')
+            UIUtils.addClass('td', 'align-middle')
 
             // hide columns
             const hide = ['right', 'price']
@@ -134,36 +134,37 @@ const updateTables = data => {
 }
 
 const updateTableSummary = (right, positions) => {
-    $(`#count-${right}`).text(`${positions.length} ${StringUtils.capitalize(right)}`)
-    $(`#basis-${right}`).text(`Basis ${numeral(Utils.propertyTotal(positions, 'basis')).format(currencyFormat)}`)
-    $(`#value-${right}`).text(`Value ${numeral(Utils.propertyTotal(positions, 'value')).format(currencyFormat)}`)
-    $(`#profit-${right}`).text(`Profit ${numeral(Utils.propertyTotal(positions, 'profit')).format(currencyFormat)}`)
-    $(`#assignment-${right}`).text(`Assignment ${numeral(OptionsData.assignmentTotal(positions)).format(currencyFormat)}`)
+
+    UITextUtils.text(`#count-${right}`, `${positions.length} ${StringUtils.capitalize(right)}`)
+    UITextUtils.text(`#basis-${right}`, `Basis ${numeral(Utils.propertyTotal(positions, 'basis')).format(currencyFormat)}`)
+    UITextUtils.text(`#value-${right}`, `Value ${numeral(Utils.propertyTotal(positions, 'value')).format(currencyFormat)}`)
+    UITextUtils.text(`#profit-${right}`, `Profit ${numeral(Utils.propertyTotal(positions, 'profit')).format(currencyFormat)}`)
+    UITextUtils.text(`#assignment-${right}`, `Assignment ${numeral(OptionsData.assignmentTotal(positions)).format(currencyFormat)}`)
 }
 
 const registerClickEventSort = () => {
     const selector = ".dropdown-menu button"
 
-    $(selector).off()
-
-    $(selector).click(e => {
-        options.sort = $(e.currentTarget).text()
-
+    const handler = e => {
+        options.sort = e.currentTarget.innerText
         updateDropdown()
         updateTables(options.positions)
-    })
+    }
+
+    UIUtils.removeListener(selector, 'click', handler)
+    UIUtils.addListener(selector, 'click', handler)
 }
 
 const registerClickEventOrder = () => {
     const selector = "#btn-group-order .btn-check"
 
-    $(selector).off()
-
-    $(selector).click(e => {
+    const handler = e => {
         options.order = e.currentTarget.id.includes('asc') ? 'asc' : 'desc'
-
         updateTables(options.positions)
-    })
+    }
+
+    UIUtils.removeListener(selector, 'click', handler)
+    UIUtils.addListener(selector, 'click', handler)
 }
 
-$(run)
+UIUtils.ready(run)
