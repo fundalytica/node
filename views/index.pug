@@ -20,7 +20,7 @@ block content
                             if(subscription == 'success')
                                 p.lead.text-white= 'Thank you for subscribing to Fundalytica 🤝'
                             if(subscription == 'pending')
-                                p.lead.text-white#pending= 'Please check your mail and confirm the subscription 👀'
+                                p.lead.text-white.pending= 'Please check your mail and confirm the subscription 👀'
                     else
                         p.mb-2.ms-1
                             span.fas.fa-envelope.pe-1
@@ -44,7 +44,7 @@ block content
                         h2= topic.title
                         p.lead= topic.description
                         - var href = (! topic.action) ? '#' : ((topic.action == 'route') ? topic.id : topic.action)
-                        - var target = (topic.action == 'route') ? '_self' : '_blank'
+                        - var target = ['route','wip'].includes(topic.action) ? '_self' : '_blank'
                         - var button_class = (! topic.action) ? 'disabled' : ''
                         a.btn.btn-outline-light.text-nowrap.p-3(class=button_class href=href target=target)= topic.button
 
