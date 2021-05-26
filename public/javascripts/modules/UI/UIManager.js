@@ -1,3 +1,5 @@
+import UIUtils from './UIUtils.js'
+
 export default class UIManager {
     constructor(spinnerId, errorId) {
         this.spinnerId = spinnerId
@@ -5,20 +7,19 @@ export default class UIManager {
     }
 
     loading() {
-        $(this.spinnerId).removeClass('d-none')
+        UIUtils.show(this.spinnerId)
+        UIUtils.hide(this.errorId)
 
-        $(this.errorId).addClass('d-none')
-        $(this.errorId).text('')
+        document.querySelector(this.errorId).textContent = ''
     }
 
     error(error) {
-        $(this.spinnerId).addClass('d-none')
-
-        $(this.errorId).text(`😭 ${error}`)
-        $(this.errorId).removeClass('d-none')
+        UIUtils.hide(this.spinnerId)
+        UIUtils.show(this.errorId)
+        document.querySelector(this.errorId).textContent = `😭 ${error}`
     }
 
     ready() {
-        $(this.spinnerId).addClass('d-none')
+        UIUtils.hide(this.spinnerId)
     }
 }
