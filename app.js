@@ -55,7 +55,7 @@ app.use((error, req, res, next) => {
     res.render('error')
 })
 
+// universal description
 app.locals.description = 'Searching for the best performing assets and building great investing tools.'
-app.locals.subscribed_key = 'subscribed'
 
 module.exports = app
