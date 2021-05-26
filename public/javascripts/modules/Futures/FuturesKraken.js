@@ -1,3 +1,5 @@
+import Utils from '../Utils.js'
+
 export default class FuturesKraken {
     constructor() { }
 
@@ -11,7 +13,7 @@ export default class FuturesKraken {
             done(data)
         }
 
-        $.ajax({ url: symbolsURL }).done(doneCallback).fail(() => fail(`${symbolsURL} fail`))
+        Utils.request(symbolsURL, doneCallback, fail)
     }
 
     initSocket(subscribed, update) {

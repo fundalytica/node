@@ -1,6 +1,20 @@
 export default class Utils {
     constructor() { }
 
+    // Network
+
+    static request(url, done, fail) {
+        const errorHandling = response => {
+            if (!response.ok) throw Error(`${url} - ${response.status} (${response.statusText})`)
+            return response
+        }
+
+        fetch(url)
+            .then(errorHandling)
+            .then(response => response.json().then(done))
+            .catch(fail)
+    }
+
     // Array Utils
 
     static chunk(array, size) {
