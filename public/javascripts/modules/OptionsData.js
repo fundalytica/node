@@ -4,6 +4,7 @@ export default class OptionsData {
     constructor() {
         this.sortKeys = ['symbol', 'expiration', 'basis', 'value', 'profit']
         this.orderKeys = ['asc', 'desc']
+        this.expirationDisplayFormat = "DD MMM 'YY"
 
         this._sort = this.sortKeys[0]
         this._order = this.orderKeys[0]
@@ -53,7 +54,7 @@ export default class OptionsData {
         }
     }
 
-    sortPositions() {
+    sortPositions(expirationFormat) {
         const ascending = (this.order == 'asc') ? 1 : -1
         const sort = this.sort
 
@@ -61,7 +62,7 @@ export default class OptionsData {
             this.positions.sort((a, b) => String(a[sort]).localeCompare(String(b[sort])) * ascending)
         }
         else if (sort == 'expiration') {
-            this.positions.sort((a, b) => (moment(a[sort], "DD MMM 'YY") - moment(b[sort], "DD MMM 'YY")) * ascending)
+            this.positions.sort((a, b) => (moment(a[sort], this.expirationDisplayFormat) - moment(b[sort], this.expirationDisplayFormat)) * ascending)
         }
         else if (['basis', 'value'].includes(sort)) {
             this.positions.sort((a, b) => (parseFloat(a[sort]) - parseFloat(b[sort])) * ascending)
