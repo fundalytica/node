@@ -1,18 +1,15 @@
 export default class UITextUtils {
-    static updateText(element, text, blink = false) {
-        const change = element.textContent != text
 
-        if (change) {
-            element.textContent = text
-        }
-
-        return change
+    static text(selector, string) {
+        document.querySelector(selector).textContent = string
     }
 
-    static blinkText(element, text) {
-        const change = UITextUtils.updateText(element, text, true)
+    static blinkText(selector, string) {
+        const element = document.querySelector(selector)
+        const change = element.textContent != string
 
         if (change) {
+            element.textContent = string
             UITextUtils.blink(element)
         }
     }

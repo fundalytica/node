@@ -78,12 +78,8 @@ export default class UITableUtils {
     }
 
     static updateValue(table, rowIndex, columnIndex, value, method) {
-        const rows = document.querySelectorAll(`${table} > tbody > tr`)
-        const row = rows[rowIndex]
-
-        const column = row.querySelector(`td:nth-child(${columnIndex + 1})`)
-
-        method(column, value)
+        const selector = `${table} > tbody > tr:nth-child(${rowIndex + 1}) > td:nth-child(${columnIndex + 1})`
+        method(selector, value)
     }
 
     static addDataTitle(table, header) {
