@@ -1,8 +1,17 @@
 @keyframes fade {
-    0%   { opacity: .1; }
-    100% { opacity: 1; }
+    0%   { opacity: 0.1;    }
+    100% { opacity: 1;      }
 }
 
-#pending {
+.pending {
     animation: fade 2s alternate infinite;
+}
+
+@keyframes blink {
+    0%      { opacity: 0.5; }
+    100%    { opacity: 1;   }
+}
+
+.blink {
+    animation: blink 0.5s linear;
 }
