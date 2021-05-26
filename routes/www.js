@@ -13,17 +13,6 @@ const topics = [
         action: 'route'
     },
 
-    // {
-    //     id: 'wip',
-    //     hashtag: 'portfolio',
-    //     image: 'crypto.svg',
-    //     color: 'bg-deep-purple-a100',
-    //     title: 'Bullish Crypto Fund',
-    //     description: 'BTC, ETH, Altcoins, NFTs, Futures, Options',
-    //     button: 'Check It Out 🪙',
-    //     action: 'route'
-    // },
-
     {
         id: 'options',
         hashtag: 'portfolio',
@@ -34,18 +23,6 @@ const topics = [
         button: 'See Portfolio 💼',
         action: 'route'
     },
-
-    // {
-    //     // id: 'spacs',
-    //     id: 'wip',
-    //     hashtag: 'portfolio',
-    //     image: 'spacs.svg',
-    //     color: 'bg-deep-purple-a100',
-    //     title: 'SPACs Portfolio',
-    //     description: 'We love investing in SPACs and Chamath Palihapitiya is our SPAC king. Check out our picks so far.',
-    //     button: 'Our SPACs 🤴',
-    //     action: 'route'
-    // },
 
     {
         id: 'ath',
@@ -70,41 +47,58 @@ const topics = [
     },
 
     {
-        // id: 'ipodata',
-        id: 'wip',
+        id: 'ipodata',
         hashtag: 'data',
         image: 'ipodata.svg',
         color: 'bg-light-blue-400',
         title: 'IPO Datastore',
         description: 'We collected and enriched all the IPO data of the last 10 years so you can use it too.',
         button: 'Preview Data 👾',
-        action: 'route'
+        action: 'wip'
     },
 
     {
-        // id: 'reports',
-        id: 'wip',
+        id: 'reports',
         hashtag: 'tool',
         color: 'bg-orange-300',
         image: 'reports.svg',
         title: 'Brokerage Reports',
         description: 'Brokerage reports are not always easy to read, try out a richer experience.',
         button: 'Upload Report 📋',
-        action: 'route'
+        action: 'wip'
     },
 
     {
-        // id: 'benchmark',
-        id: 'wip',
+        id: 'benchmark',
         hashtag: 'tool',
         color: 'bg-orange-300',
         image: 'benchmark.svg',
         title: 'The Benchmark',
         description: 'Every investment should be compared to the broader market. Do you know what your alpha is?',
         button: 'Find Out 🔬',
-        action: 'route'
+        action: 'wip'
     },
 
+    {
+        id: 'qqq',
+        hashtag: 'data',
+        color: 'bg-light-blue-400',
+        image: 'invesco.svg',
+        title: 'QQQ ETF Holdings',
+        description: 'All the great companies included in the Invesco QQQ ETF (NASDAQ 100).',
+        button: 'View Stocks 🔍',
+        action: 'wip'
+    },
+
+    //     id: 'crypto',
+    //     hashtag: 'portfolio',
+    //     image: 'crypto.svg',
+    //     color: 'bg-deep-purple-a100',
+    //     title: 'Bullish Crypto Fund',
+    //     description: 'BTC, ETH, Altcoins, NFTs, Futures, Options',
+    //     button: 'Check It Out 🪙',
+    //     action: 'route'
+    // },
     // {
     //     // id: 'norway',
     //     id: 'wip',
@@ -116,29 +110,29 @@ const topics = [
     //     button: 'View Results 🕵️‍♂️',
     //     action: 'route'
     // },
-
-    {
-        // id: 'qqq',
-        id: 'wip',
-        hashtag: 'data',
-        color: 'bg-light-blue-400',
-        image: 'invesco.svg',
-        title: 'QQQ ETF Holdings',
-        description: 'All the great companies included in the Invesco QQQ ETF (NASDAQ 100).',
-        button: 'View Stocks 🔍',
-        action: 'route'
-    },
-
+    // {
+    //     // id: 'spacs',
+    //     id: 'wip',
+    //     hashtag: 'portfolio',
+    //     image: 'spacs.svg',
+    //     color: 'bg-deep-purple-a100',
+    //     title: 'SPACs Portfolio',
+    //     description: 'We love investing in SPACs and Chamath Palihapitiya is our SPAC king. Check out our picks so far.',
+    //     button: 'Our SPACs 🤴',
+    //     action: 'route'
+    // },
+    // {
     // {
     // comic book
     // }
 ]
 
 router.get('/', (req, res) => {
+    const description = req.app.locals.description
     const subscription = req.flash('subscription')[0]
-    const subscribed_key = req.app.locals.subscribed_key
+    const subscribed_key = 'subscribed'
 
-    res.render('index', { topics, subscription, subscribed_key })
+    res.render('index', { description, topics, subscription, subscribed_key })
 })
 
 router.get('/subscription-pending', (req, res) => {
@@ -150,13 +144,19 @@ router.get('/subscription-success', (req, res) => {
     res.redirect('/')
 })
 
-router.get('/login', (req, res) => res.render('login'))
+const topicRoute = topic => {
+    const id = topic['id']
+    const title = topic['title']
+    const description = topic['description']
 
-router.get('/futures', (req, res) => res.render('futures', { title: 'Futures' }))
-router.get('/options', (req, res) => res.render('options', { title: 'Options Portfolio' }))
-router.get('/ath', (req, res) => res.render('ath', { title: 'All Time Highs' }))
-router.get('/dip', (req, res) => res.render('dip', { title: 'Buy The Dip' }))
-router.get('/wip', (req, res) => res.render('wip', { title: 'WIP' }))
-router.get('/test', (req, res) => res.render('test', { title: 'Test' }))
+    router.get(`/${id}`, (req, res) => res.render(id, { title, description }))
+}
+
+topics.forEach(t => topicRoute(t))
+
+router.get('/login', (req, res) => res.render('login'))
+router.get('/wip', (req, res) => res.render('wip'))
+
+router.get('/test', (req, res) => res.render('test'))
 
 module.exports = router
