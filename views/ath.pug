@@ -14,7 +14,7 @@ block content
     main.d-flex.flex-column.p-4
         div.d-flex.flex-column.align-items-center
             form.needs-validation.input-group.mb-3.w-50(id='symbol-form').d-none
-                input.form-control(id='symbol' type='text' name='symbol' placeholder='Symbol' pattern="[a-zA-Z]{1,4}((\.){1}[aA|bB]{1}){0,1}$" minlength="1" maxlength="5" required oninvalid="this.setCustomValidity('Invalid stock symbol 📈')"
+                input.form-control(id='symbol-input' type='text' name='symbol' placeholder='Symbol' pattern="[a-zA-Z]{1,4}((\.){1}[aA|bB]{1}){0,1}$" minlength="1" maxlength="5" required oninvalid="this.setCustomValidity('Invalid stock symbol 📈')"
   oninput="this.setCustomValidity('')")
                 .input-group-append
                     button.btn.btn-outline-secondary(type='submit' name='submit') Select

@@ -3,7 +3,7 @@ export default class Utils {
 
     // Network
 
-    static request(url, done, fail) {
+    static request(url, done, fail = console.log) {
         const errorHandling = response => {
             if (!response.ok) throw Error(`${url} - ${response.status} (${response.statusText})`)
             return response

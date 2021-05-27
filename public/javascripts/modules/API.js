@@ -23,7 +23,7 @@ export default class API {
                 if (fetch == symbols.length) callback(data)
             }
 
-            $.getJSON({ url, success })
+            Utils.request(url, success)
         }
     }
 }

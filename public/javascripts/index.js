@@ -10,18 +10,18 @@ const run = () => {
     subscription.success()
     // subscription.hide()
 
-    // if(! $('#welcome').is(":hidden")) {
+    // if (!UIUtils.isHidden('#welcome')) {
     //     typewrite('Do not miss any updates. Join now!', 'join')
     // }
 }
 
-const typewrite = (text, id) => {
-    const textElement = document.getElementById(id)
+// const typewrite = (text, id) => {
+//     const textElement = document.getElementById(id)
 
-    if (textElement) {
-        const typewriter = new Typewriter(textElement, { delay: 0.05 * 1000, cursor: null })
-        typewriter.typeString(text).start()
-    }
-}
+//     if (textElement) {
+//         const typewriter = new Typewriter(textElement, { delay: 0.05 * 1000, cursor: null })
+//         typewriter.typeString(text).start()
+//     }
+// }
 
 UIUtils.ready(run)

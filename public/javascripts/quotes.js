@@ -2,14 +2,12 @@ const api_token = document.getElementById('quotesjs').getAttribute('data-api-tok
 
 import API from './modules/API.js'
 
+import UIUtils from './modules/UI/UIUtils.js'
+
 const run = () => {
-    fetch()
-}
+    const symbols = ['SPY', 'QQQ', 'AAPL', 'TSLA']
 
-const fetch = () => {
-    const symbols = ['SPY','QQQ','AAPL','TSLA']
-
-    const responsive_md = ['QQQ','AAPL'] // show only on medium+ screen
+    const responsive_md = ['QQQ', 'AAPL'] // show only on medium+ screen
 
     const urls = {
         SPY: 'https://www.ssga.com/us/en/individual/etfs/funds/spdr-sp-500-etf-trust-spy',
@@ -19,10 +17,10 @@ const fetch = () => {
     }
 
     const done = result => {
-        $("#quotes").empty()
+        UIUtils.empty("#quotes")
 
         const symbols = Object.keys(result)
-        for(let i = 0; i < symbols.length; i++) {
+        for (let i = 0; i < symbols.length; i++) {
             const symbol = symbols[i]
 
             const latestPrice = result[symbol].price
@@ -30,7 +28,9 @@ const fetch = () => {
 
             const colorClass = changePercent < 0 ? 'red-300' : (changePercent > 0 ? 'green-300' : 'grey-100')
             let CSSClasses = `quote ${colorClass}`
-            if(responsive_md.includes(symbol)) CSSClasses = `${CSSClasses} d-none d-md-block`
+            if (responsive_md.includes(symbol)) CSSClasses = `${CSSClasses} d-none d-md-block`
+
+            const element = document.querySelector("#quotes")
 
             let HTML = ''
             HTML += '<li class="' + CSSClasses + '">'
@@ -41,7 +41,7 @@ const fetch = () => {
             HTML += '</a>'
             HTML += '</li>'
 
-            $("#quotes").append(HTML)
+            element.innerHTML = HTML
         }
     }
 
@@ -51,4 +51,4 @@ const fetch = () => {
     setTimeout(fetch, 1000 * 20)
 }
 
-$(run())
+UIUtils.ready(run)
