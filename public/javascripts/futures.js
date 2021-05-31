@@ -8,17 +8,26 @@ import FuturesKraken from './modules/Futures/FuturesKraken.js'
 const UI = new UIManager("#spinner", "#error")
 const futures = new FuturesKraken()
 const table = '#table-futures'
+const status = '#websocket-status'
+let statusTimeout = null
+
+let interval = null
 
 const run = () => {
     UI.loading()
 
     UIUtils.hide(table)
+    UIUtils.hide(status)
 
     const done = data => {
         UI.ready()
 
-        initializeTable(table, data)
+        initTable(table, data)
         socket()
+
+        UIUtils.show(status)
+
+        statusListener()
     }
 
     const fail = error => UI.error(error)
@@ -26,9 +35,27 @@ const run = () => {
     futures.init(done, fail)
 }
 
+const statusListener = () => {
+    // status listener
+    UIUtils.addListener(`${status} button`, 'click', () => {
+        clearTimeout(statusTimeout)
+
+        const ul = document.querySelector(`${status} ul`)
+        UIUtils.empty(`${status} ul`)
+
+        futures.status().forEach(s => {
+            const li = document.createElement('li')
+            li.textContent = s
+            ul.appendChild(li)
+        })
+
+        statusTimeout = setTimeout(() => UIUtils.empty(`${status} ul`), 5000)
+    })
+}
+
 const socket = () => {
-    const subscribed = symbol => {
-        symbol = symbol.toLowerCase()
+    const tickerSubscribed = data => {
+        const symbol = data.product_ids[0].toLowerCase()
 
         const header = UITableUtils.headerList(table)
 
@@ -45,40 +72,63 @@ const socket = () => {
         UIUtils.addClass(selector, 'status-on')
     }
 
-    const update = data => {
+    const tickerUpdated = data => {
         const symbol = data['product_id'].toLowerCase()
 
         const perpetual = 'funding_rate' in data
         const fixed = !perpetual
 
-        const header = UITableUtils.headerList(table)
-
         // update mark price
         const markPrice = data['markPrice']
         const markPriceString = numeral(markPrice).format('$0,0')
-        const rowIndex = UITableUtils.findRowIndex(table, header.indexOf('symbol'), symbol)
-        const columnIndex = header.indexOf('price')
-        UITableUtils.updateValue(table, rowIndex, columnIndex, markPriceString, UITextUtils.blinkText)
+        updateTableValue(table, symbol, 'price', markPriceString)
 
         // fixed contract, update premium and annualized
         if (fixed) {
             const premium = data['premium']
-            const annualized = premium / FuturesKraken.days(symbol) * 365
             const premiumString = numeral(premium / 100).format('0.0%')
-            const annualizedString = numeral(annualized / 100).format('0.0%')
 
-            UITableUtils.updateValue(table, rowIndex, header.indexOf('premium'), premiumString, UITextUtils.blinkText)
-            UITableUtils.updateValue(table, rowIndex, header.indexOf('annualized'), annualizedString, UITextUtils.blinkText)
+            const days = FuturesKraken.daysUntilSettlement(symbol)
+            const annualized = days ? premium / days * 365 : null
+            const annualizedString = days ? numeral(annualized / 100).format('0.0%') : '-'
+
+            updateTableValue(table, symbol, 'premium', premiumString)
+            updateTableValue(table, symbol, 'annualized', annualizedString)
         }
     }
 
-    futures.initSocket(subscribed, update)
+    const bookSnapshot = data => {
+        const symbol = data['product_id'].toLowerCase()
+        // console.log(`book_snapshot - symbol: ${symbol} spread: ${data.spread.pct}%`)
+        updateTableValue(table, symbol, 'spread', `${data.spread.pct}%`)
+    }
+
+    const ticker_feed = 'ticker_lite'
+    const book_feed = 'book_snapshot'
+    document.addEventListener('subscribed', e => { if(e.data.feed == ticker_feed) { tickerSubscribed(e.data) } })
+    document.addEventListener(ticker_feed, e => { tickerUpdated(e.data) })
+    document.addEventListener(book_feed, e => { bookSnapshot(e.data) })
+
+    futures.initTickerSocket()
+    futures.initBookSocket()
 
     UITextUtils.text('#socket', 'futures.kraken.com WebSocket')
+
+    const settlementUpdate = () => UITextUtils.text('#settlement', `Next settlement in ${futures.nextSettlementDays()}d ${FuturesKraken.timeUntilSettlement()}`)
+    settlementUpdate()
+    if (interval) clearInterval(interval)
+    interval = setInterval(settlementUpdate, 1000)
 }
 
-const initializeTable = (table, data) => {
-    const header = ['pair', 'pair_data', 'period', 'symbol', 'expiration', 'days', 'price', 'premium', 'annualized', 'status']
+const updateTableValue = (table, symbol, property, value) => {
+    const header = UITableUtils.headerList(table)
+    const rowIndex = UITableUtils.findRowIndex(table, header.indexOf('symbol'), symbol)
+    const columnIndex = header.indexOf(property)
+    UITableUtils.updateValue(table, rowIndex, columnIndex, value, UITextUtils.blinkText)
+}
+
+const initTable = (table, data) => {
+    const header = ['pair', 'pair_data', 'period', 'symbol', 'price', 'premium', 'annualized', 'spread', 'maturity', 'days', 'status']
     UITableUtils.addHeader(table, header)
 
     const rows = []
@@ -90,14 +140,17 @@ const initializeTable = (table, data) => {
             const crypto = pair.substr(0, 3)
             const symbol = pairSymbols[period]
 
-            const expiration = FuturesKraken.expiration(symbol)
-            const expiration_string = expiration ? expiration.format("DD MMM 'YY") : '-'
-            const days_string = expiration ? `${FuturesKraken.days(symbol)}d` : '-'
+            const maturity = FuturesKraken.maturity(symbol)
+            const maturity_string = maturity ? maturity.format("DD MMM 'YY") : '-'
+            const days_string = maturity ? `${FuturesKraken.daysUntilSettlement(symbol)}d` : '-'
 
             const status = '<svg viewBox="0 0 20 20" class="status status-off"><circle cx="10" cy="10" r="10"/></svg>'
-            const logo_pair = `<img class="logo" src="https://www.fundalytica.com/images/logos/crypto/${crypto}.svg" /> <span>${pair.toUpperCase()}</span>`
+            const logo_pair = `<img class= "logo" src = "https://www.fundalytica.com/images/logos/crypto/${crypto}.svg" alt = "${crypto} logo" /> <span>${pair.toUpperCase()}</span>`
 
-            const row = [logo_pair, pair, period, symbol, expiration_string, days_string, '-', '-', '-', status]
+            const row = [logo_pair, pair, period, symbol, '-', '-', '-', '-', maturity_string, days_string, status]
+            // console.table(row)
+            // console.trace()
+
             rows.push(row)
         }
     }
@@ -129,6 +182,12 @@ const initializeTable = (table, data) => {
 
     // fade out text
     UIUtils.addClass(`${table} tbody tr`, 'text-secondary')
+
+    // bold premium and annualized
+    const bold = ['premium','annualized']
+    bold.forEach(p => {
+        UIUtils.addClass(`${table} > tbody > tr > td:nth-child(${header.indexOf(p) + 1})`, 'fw-bolder')
+    })
 
     UIUtils.show(table)
 }
