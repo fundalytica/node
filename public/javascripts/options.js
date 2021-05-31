@@ -93,11 +93,11 @@ const updateTables = data => {
                     // logo
                     if (key == 'logo') {
                         const logoFile = (symbol, extension = 'svg') => `https://www.fundalytica.com/images/logos/stocks/${symbol.toLowerCase()}.${extension}`
-                        value = `<img onerror="this.src='${logoFile(option.symbol, 'png')}'" src="${logoFile(option.symbol)}" />`
+                        value = `<img onerror="this.src='${logoFile(option.symbol, 'png')}'" src="${logoFile(option.symbol)}" alt="${option.symbol} logo"/>`
                     }
                     // symbol
                     else if (key == 'symbol') {
-                        value = `<a href='https://www.tradingview.com/symbols/${value}' target='_blank'>\$${value}</a>`
+                        value = `<a href='https://www.tradingview.com/symbols/${value}' target='_blank' rel='noopener'>\$${value}</a>`
                     }
                     // expiration
                     else if (key == 'expiration') {
