@@ -40,7 +40,7 @@ block content
                     .p-4
                         p
                             span.hashtag.text-white.bg-dark.rounded.small.p-1= topic.hashtag
-                        img.mb-2(src='images/topics/' + topic.image)
+                        img.mb-2(src='images/topics/'+topic.image alt=topic.id+' icon')
                         h2= topic.title
                         p.lead= topic.description
                         - var href = (! topic.action) ? '#' : ((topic.action == 'route') ? topic.id : topic.action)
