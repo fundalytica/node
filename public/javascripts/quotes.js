@@ -34,7 +34,7 @@ const run = () => {
 
             let HTML = ''
             HTML += '<li class="' + CSSClasses + '">'
-            HTML += '<a href="' + urls[symbol] + '" target="_blank">'
+            HTML += '<a href="' + urls[symbol] + '" target="_blank" rel="noopener">'
             HTML += '<span class="symbol">' + symbol + '</span>'
             HTML += '<span class="price">' + numeral(latestPrice).format('$0,0.0') + '</span>'
             HTML += '<span class="change">' + numeral(changePercent).format('%0.0') + '</span>'
