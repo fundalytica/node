@@ -91,8 +91,9 @@ export default class FuturesKraken {
                     this.initBookSocket()
                 }, 2000)
             }
-            else {
-                console.log(e)
+
+            if(e.currentTarget.id == 'ticker') {
+                this.initTickerSocket()
             }
         }
 
