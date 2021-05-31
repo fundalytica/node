@@ -47,7 +47,7 @@ export default class FuturesKraken {
 
         // socket states
         const states = ['CONNECTING', 'OPEN', 'CLOSING', 'CLOSED']
-        Object.keys(this.sockets).forEach(id => strings.push(`🔌 Socket:${id} ➡ ${states[this.sockets[id].readyState]}`))
+        Object.keys(this.sockets).forEach(id => strings.push(`🔌 ${id} ➡ ${states[this.sockets[id].readyState]}`))
 
         // heartbeats
         Object.keys(this.heartbeats).forEach(id => {
@@ -56,11 +56,11 @@ export default class FuturesKraken {
 
             const fmt = 'HH:mm:ss'
 
-            let str = `💗 Heartbeat:${id} ➡ ${start.format(fmt)}`
+            let str = `💗 ${id} ➡ ${start.format(fmt)}`
 
             if(last) {
                 const minutes = moment.duration(last - start).asMinutes().toFixed(0)
-                str += ` - ${last.format(fmt)} (+${minutes}m)`
+                str += ` to ${last.format(fmt)} (+${minutes}m)`
             }
 
             strings.push(str)
@@ -153,7 +153,7 @@ export default class FuturesKraken {
     }
 
     initTickerSocket() {
-        const id = "ticker_lite"
+        const id = "ticker"
         const threshold = 200
 
         const subscription = `{ "event": "subscribe", "feed": "${id}", "product_ids": ${FuturesKraken.productIdsString(this.symbols)}}`
