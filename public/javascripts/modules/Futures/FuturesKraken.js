@@ -47,7 +47,7 @@ export default class FuturesKraken {
 
         // socket states
         const states = ['CONNECTING', 'OPEN', 'CLOSING', 'CLOSED']
-        Object.keys(this.sockets).forEach(id => strings.push(`🔌 ${id} ➡ ${states[this.sockets[id].readyState]}`))
+        Object.keys(this.sockets).forEach(id => strings.push(`🔌 ${id} ${states[this.sockets[id].readyState]}`))
 
         // heartbeats
         Object.keys(this.heartbeats).forEach(id => {
@@ -56,7 +56,7 @@ export default class FuturesKraken {
 
             const fmt = 'HH:mm:ss'
 
-            let str = `💗 ${id} ➡ ${start.format(fmt)}`
+            let str = `💗 ${id} ${start.format(fmt)}`
 
             if(last) {
                 const minutes = moment.duration(last - start).asMinutes().toFixed(0)

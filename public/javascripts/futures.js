@@ -119,7 +119,7 @@ const socket = () => {
         updateTableValue(table, symbol, 'spread', `${data.spread.pct}%`)
     }
 
-    const ticker_feed = 'ticker_lite'
+    const ticker_feed = 'ticker'
     const book_feed = 'book_snapshot'
     document.addEventListener('subscribed', e => { if(e.data.feed == ticker_feed) { tickerSubscribed(e.data) } })
     document.addEventListener(ticker_feed, e => { tickerUpdated(e.data) })
