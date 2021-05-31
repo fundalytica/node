@@ -5,11 +5,11 @@ import UIUtils from './modules/UI/UIUtils.js'
 
 import FuturesKraken from './modules/Futures/FuturesKraken.js'
 
-const UI = new UIManager("#spinner", "#error")
 const futures = new FuturesKraken()
+
+const UI = new UIManager("#spinner", "#error")
 const table = '#table-futures'
 const status = '#websocket-status'
-let statusTimeout = null
 
 let interval = null
 
@@ -25,32 +25,14 @@ const run = () => {
         initTable(table, data)
         socket()
 
-        UIUtils.show(status)
+        // UIUtils.addListener(`${status} button`, 'click', () => {})
 
-        statusListener()
+        UIUtils.show(status)
     }
 
     const fail = error => UI.error(error)
 
     futures.init(done, fail)
-}
-
-const statusListener = () => {
-    // status listener
-    UIUtils.addListener(`${status} button`, 'click', () => {
-        clearTimeout(statusTimeout)
-
-        const ul = document.querySelector(`${status} ul`)
-        UIUtils.empty(`${status} ul`)
-
-        futures.status().forEach(s => {
-            const li = document.createElement('li')
-            li.textContent = s
-            ul.appendChild(li)
-        })
-
-        statusTimeout = setTimeout(() => UIUtils.empty(`${status} ul`), 5000)
-    })
 }
 
 const socket = () => {
@@ -113,6 +95,17 @@ const socket = () => {
         }
     }
 
+    const heartbeatUpdated = () => {
+        const ul = document.querySelector(`${status} ul`)
+        UIUtils.empty(`${status} ul`)
+
+        futures.status().forEach(s => {
+            const li = document.createElement('li')
+            li.textContent = s
+            ul.appendChild(li)
+        })
+    }
+
     const bookSnapshot = data => {
         const symbol = data['product_id'].toLowerCase()
         // console.log(`book_snapshot - symbol: ${symbol} spread: ${data.spread.pct}%`)
@@ -120,15 +113,13 @@ const socket = () => {
     }
 
     const ticker_feed = 'ticker'
-    const book_feed = 'book_snapshot'
     document.addEventListener('subscribed', e => { if(e.data.feed == ticker_feed) { tickerSubscribed(e.data) } })
     document.addEventListener(ticker_feed, e => { tickerUpdated(e.data) })
-    document.addEventListener(book_feed, e => { bookSnapshot(e.data) })
+    document.addEventListener('book_snapshot', e => { bookSnapshot(e.data) })
+    document.addEventListener('heartbeat', e => { heartbeatUpdated() })
 
     futures.initTickerSocket()
     futures.initBookSocket()
-
-    // UITextUtils.text('#socket', 'futures.kraken.com WebSocket')
 
     const settlementUpdate = () => UITextUtils.text('#settlement', `Next settlement in ${futures.nextSettlementDays()}d ${FuturesKraken.timeUntilSettlement()}`)
     settlementUpdate()
@@ -164,8 +155,6 @@ const initTable = (table, data) => {
             const logo_pair = `<img class= "logo" src = "https://www.fundalytica.com/images/logos/crypto/${crypto}.svg" alt = "${crypto} logo" /> <span>${pair.toUpperCase()}</span>`
 
             const row = [logo_pair, pair, period, symbol, '-', '-', '-', '-', maturity_string, days_string, status]
-            // console.table(row)
-            // console.trace()
 
             rows.push(row)
         }

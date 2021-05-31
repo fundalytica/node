@@ -7,11 +7,12 @@ export default class FuturesKraken {
 
         this.sockets = {}
 
-        this.bookSnapshotsSent = []     // [ product_id, ..., product_id ]
-
-        this.messages = {}              // { product_id: { last:, accepted:, rejected: } }
-
-        this.heartbeats = {}                 // { feed: { last:,  } }
+        // [ product_id, ..., product_id ]
+        this.bookSnapshotsSent = []
+        // { product_id: { last:, accepted:, rejected: } }
+        this.messages = {}
+        // { feed: { start:, last:  } }
+        this.heartbeats = {}
     }
 
     init(done, fail) {
@@ -47,20 +48,23 @@ export default class FuturesKraken {
 
         // socket states
         const states = ['CONNECTING', 'OPEN', 'CLOSING', 'CLOSED']
-        Object.keys(this.sockets).forEach(id => strings.push(`🔌 ${id} ${states[this.sockets[id].readyState]}`))
 
         // heartbeats
         Object.keys(this.heartbeats).forEach(id => {
+            const state = states[this.sockets[id].readyState].toLowerCase()
+
             const start = moment(this.heartbeats[id].start)
             const last = this.heartbeats[id].last ? moment(this.heartbeats[id].last) : null
 
             const fmt = 'HH:mm:ss'
 
-            let str = `💗 ${id} ${start.format(fmt)}`
+            let str = `[ ${id}:${state} ]`
 
             if(last) {
+                // str += ` ${start.format(fmt)}`
                 const minutes = moment.duration(last - start).asMinutes().toFixed(0)
-                str += ` to ${last.format(fmt)} (+${minutes}m)`
+                // str += ` to ${last.format(fmt)} ( +${minutes}m )`
+                str += ` ${last.format(fmt)} ( ${minutes}m )`
             }
 
             strings.push(str)
@@ -112,17 +116,6 @@ export default class FuturesKraken {
             if (!data.event) {
                 const socketId = e.currentTarget.id
 
-                // update heartbeat and return
-                if(data.feed == 'heartbeat') {
-                    this.heartbeats[socketId].last = data.time
-                    return
-                }
-
-                // book socket repeatedly connecting, so use dummy heartbeat and do not return
-                if(data.feed == 'book_snapshot') {
-                    this.heartbeats[socketId].last = new Date().getTime()
-                }
-
                 // get id
                 const id = `${data.feed}.${data.product_id}`
 
@@ -144,6 +137,16 @@ export default class FuturesKraken {
 
                 // const colors = { ticker: 'green', book: 'blue' }
                 // console.log(`%c⏱ ${id} +${ms}ms = ${moment(now).format('HH:mm:ss:SSS')} 🙂${this.messages[id]['accepted']} 😡${this.messages[id]['rejected']} 🏃‍♂️${moment.duration(now - start).asSeconds()}s`, `color:${colors[feed]}`)
+
+                // update heartbeat
+                if(data.feed == 'heartbeat') {
+                    this.heartbeats[socketId].last = data.time
+                }
+                // book socket repeatedly connecting, use dummy heartbeat
+                if(data.feed == 'book_snapshot') {
+                    this.heartbeats[socketId].last = new Date().getTime()
+                    document.dispatchEvent(new Event('heartbeat'))
+                }
 
                 this.emitEvent(data.feed, data)
             }
@@ -187,9 +190,6 @@ export default class FuturesKraken {
         const e = new Event(event)
         e.data = data
         document.dispatchEvent(e)
-
-        // console.log('emit')
-        // console.log(e)
 
         // restart book socket
         if(data.feed == 'book_snapshot') {
