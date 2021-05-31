@@ -20,6 +20,14 @@ table img {
     margin-right: 8px;
 }
 
+th, td {
+    text-align: left;
+}
+
+td:last-child {
+    text-align: center;
+}
+
 td img, td span {
     vertical-align: top;
 }
@@ -29,6 +37,11 @@ td img, td span {
     /* change top and bottom cell padding to 16x */
     .no-more-tables td {
         /* bootstrap default padding is 8px */
-        padding: 16px 16px 16px 16px;
+        padding-top: 16px;
+        padding-bottom: 16px;
+    }
+    .no-more-tables th, .no-more-tables td {
+        padding-left: 8px;
+        padding-right: 8px;
     }
 }
