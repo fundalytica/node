@@ -94,6 +94,22 @@ const socket = () => {
 
             updateTableValue(table, symbol, 'premium', premiumString)
             updateTableValue(table, symbol, 'annualized', annualizedString)
+
+            // bold annualized
+            if(data.tag == 'semiannual') {
+                const properties = ['pair', 'period', 'annualized']
+                const header = UITableUtils.headerList(table)
+                properties.forEach(p => {
+                    const rowIndex = UITableUtils.findRowIndex(table, header.indexOf('symbol'), symbol)
+                    const columnIndex = header.indexOf(p)
+                    const selector = `${table} > tbody > tr:nth-child(${rowIndex + 1}) > td:nth-child(${columnIndex + 1})`
+                    const elements = document.querySelectorAll(selector)
+                    elements.forEach(el => {
+                        // const pct = parseFloat(el.textContent)
+                        el.classList.add('fw-bolder')
+                    })
+                })
+            }
         }
     }
 
@@ -112,7 +128,7 @@ const socket = () => {
     futures.initTickerSocket()
     futures.initBookSocket()
 
-    UITextUtils.text('#socket', 'futures.kraken.com WebSocket')
+    // UITextUtils.text('#socket', 'futures.kraken.com WebSocket')
 
     const settlementUpdate = () => UITextUtils.text('#settlement', `Next settlement in ${futures.nextSettlementDays()}d ${FuturesKraken.timeUntilSettlement()}`)
     settlementUpdate()
@@ -182,12 +198,6 @@ const initTable = (table, data) => {
 
     // fade out text
     UIUtils.addClass(`${table} tbody tr`, 'text-secondary')
-
-    // bold premium and annualized
-    const bold = ['premium','annualized']
-    bold.forEach(p => {
-        UIUtils.addClass(`${table} > tbody > tr > td:nth-child(${header.indexOf(p) + 1})`, 'fw-bolder')
-    })
 
     UIUtils.show(table)
 }
