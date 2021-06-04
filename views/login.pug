@@ -6,13 +6,17 @@ block style
 block content
     main.d-flex.flex-column.justify-content-center.text-center.p-4
         div.align-self-center.p-2
-            h3.text-dark.p-0.m-0.mb-3 Please Login
+            h3(id="header").text-dark.p-0.m-0.mb-3 Please Log In
 
-            form(method="POST" action="/login")
+            form(id="form" method="POST" action="/login")
                 input(type="email" name="email" placeholder="Email Address" required autofocus).form-control.form-control-lg.mb-3
                 input(type="password" name="password" placeholder="Password" required).form-control.form-control-lg.mb-3
 
-                button(type="submit").btn.btn-lg.btn-primary Login
+                button(id="submit" type="submit").btn.btn-lg.btn-primary Log In
+
+                p.m-3
+                    a(href="#" id="show-signup") Create New Account?
+                    a(href="#" id="show-login").d-none Have Account Already?
 
             //- error handling
             //- if error
