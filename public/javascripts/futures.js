@@ -65,6 +65,11 @@ const socket = () => {
         const markPriceString = numeral(markPrice).format('$0,0')
         updateTableValue(table, symbol, 'price', markPriceString)
 
+        // update spread
+        const amount = (data.ask - data.bid).toFixed(2)
+        const pct = (amount / data.ask * 100).toFixed(2)
+        updateTableValue(table, symbol, 'spread', `${pct}%`)
+
         // fixed contract, update premium and annualized
         if (fixed) {
             const premium = data['premium']
@@ -106,20 +111,20 @@ const socket = () => {
         })
     }
 
-    const bookSnapshot = data => {
-        const symbol = data['product_id'].toLowerCase()
-        // console.log(`book_snapshot - symbol: ${symbol} spread: ${data.spread.pct}%`)
-        updateTableValue(table, symbol, 'spread', `${data.spread.pct}%`)
-    }
+    // const bookSnapshot = data => {
+    //     const symbol = data['product_id'].toLowerCase()
+        // console.log(`symbol: ${symbol} spread: ${data.spread.pct}% [s]`)
+        // updateTableValue(table, symbol, 'spread', `${data.spread.pct}%`)
+    // }
 
     const ticker_feed = 'ticker'
     document.addEventListener('subscribed', e => { if(e.data.feed == ticker_feed) { tickerSubscribed(e.data) } })
     document.addEventListener(ticker_feed, e => { tickerUpdated(e.data) })
-    document.addEventListener('book_snapshot', e => { bookSnapshot(e.data) })
+    // document.addEventListener('book_snapshot', e => { bookSnapshot(e.data) })
     document.addEventListener('heartbeat', e => { heartbeatUpdated() })
 
     futures.initTickerSocket()
-    futures.initBookSocket()
+    // futures.initBookSocket()
 
     const settlementUpdate = () => UITextUtils.text('#settlement', `Next settlement in ${futures.nextSettlementDays()}d ${FuturesKraken.timeUntilSettlement()}`)
     settlementUpdate()

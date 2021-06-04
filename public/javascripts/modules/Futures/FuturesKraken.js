@@ -8,7 +8,8 @@ export default class FuturesKraken {
         this.sockets = {}
 
         // [ product_id, ..., product_id ]
-        this.bookSnapshotsSent = []
+        // this.bookSnapshotsSent = []
+
         // { product_id: { last:, accepted:, rejected: } }
         this.messages = {}
         // { feed: { start:, last:  } }
@@ -85,12 +86,12 @@ export default class FuturesKraken {
         }
         ws.onerror = console.log
         ws.onclose = e => {
-            // start over book
-            if(e.currentTarget.id == 'book') {
-                setTimeout(() => {
-                    this.initBookSocket()
-                }, 2000)
-            }
+            // // start over book
+            // if(e.currentTarget.id == 'book') {
+            //     setTimeout(() => {
+            //         this.initBookSocket()
+            //     }, 2000)
+            // }
 
             if(e.currentTarget.id == 'ticker') {
                 this.initTickerSocket()
@@ -143,11 +144,11 @@ export default class FuturesKraken {
                 if(data.feed == 'heartbeat') {
                     this.heartbeats[socketId].last = data.time
                 }
-                // book socket repeatedly connecting, use dummy heartbeat
-                if(data.feed == 'book_snapshot') {
-                    this.heartbeats[socketId].last = new Date().getTime()
-                    document.dispatchEvent(new Event('heartbeat'))
-                }
+                // // book socket repeatedly connecting, use dummy heartbeat
+                // if(data.feed == 'book_snapshot') {
+                //     this.heartbeats[socketId].last = new Date().getTime()
+                //     document.dispatchEvent(new Event('heartbeat'))
+                // }
 
                 this.emitEvent(data.feed, data)
             }
@@ -166,47 +167,47 @@ export default class FuturesKraken {
         if(! this.heartbeats[id]) this.heartbeats[id] = { start: new Date().getTime() }
     }
 
-    initBookSocket() {
-        const id = "book"
-        const threshold = 1000
+    // initBookSocket() {
+    //     const id = "book"
+    //     const threshold = 1000
 
-        const subscription = `{ "event": "subscribe", "feed": "${id}", "product_ids": ${FuturesKraken.productIdsString(this.symbols)}}`
-        this.initSocket(id, subscription, threshold)
+    //     const subscription = `{ "event": "subscribe", "feed": "${id}", "product_ids": ${FuturesKraken.productIdsString(this.symbols)}}`
+    //     this.initSocket(id, subscription, threshold)
 
-        if(! this.heartbeats[id]) this.heartbeats[id] = { start: new Date().getTime() }
-    }
+    //     if(! this.heartbeats[id]) this.heartbeats[id] = { start: new Date().getTime() }
+    // }
 
     emitEvent(event, data) {
-        // not using book updates (inconsistent)
-        if(data.feed == 'book') return
+        // // not using book updates (inconsistent)
+        // if(data.feed == 'book') return
 
-        // add spread when book snapshot received
-        if(data.feed == 'book_snapshot') {
-            // add spread to data
-            const book = new FuturesOrderBook(data.bids, data.asks)
-            data.spread = book.spread()
-        }
+        // // add spread when book snapshot received
+        // if(data.feed == 'book_snapshot') {
+        //     // add spread to data
+        //     const book = new FuturesOrderBook(data.bids, data.asks)
+        //     data.spread = book.spread()
+        // }
 
         // dispatch any event
         const e = new Event(event)
         e.data = data
         document.dispatchEvent(e)
 
-        // restart book socket
-        if(data.feed == 'book_snapshot') {
-            // register snapshot flag
-            this.bookSnapshotsSent.push(data.product_id)
-            // unique
-            this.bookSnapshotsSent = [...new Set(this.bookSnapshotsSent)]
+        // // restart book socket
+        // if(data.feed == 'book_snapshot') {
+        //     // register snapshot flag
+        //     this.bookSnapshotsSent.push(data.product_id)
+        //     // unique
+        //     this.bookSnapshotsSent = [...new Set(this.bookSnapshotsSent)]
 
-            // all snapshots received
-            if(this.bookSnapshotsSent.length == FuturesKraken.symbolsArray(this.symbols).length) {
-                // close socket
-                this.sockets['book'].close()
-                // reset flags
-                this.bookSnapshotsSent = []
-            }
-        }
+        //     // all snapshots received
+        //     if(this.bookSnapshotsSent.length == FuturesKraken.symbolsArray(this.symbols).length) {
+        //         // close socket
+        //         this.sockets['book'].close()
+        //         // reset flags
+        //         this.bookSnapshotsSent = []
+        //     }
+        // }
     }
 
     nextSettlementDays() {
