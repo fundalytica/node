@@ -5,7 +5,8 @@ const path = require('path')
 
 const session = require('express-session')          // http://expressjs.com/en/resources/middleware/session.html
 const MemoryStore = require('memorystore')(session) // https://www.npmjs.com/package/memorystore
-const flash = require('express-flash')
+const cookieParser = require('cookie-parser')
+const flash = require('connect-flash')
 
 const vhost = require('vhost')                      // https://expressjs.com/en/resources/middleware/vhost.html
 const cors = require('cors')                        // https://expressjs.com/en/resources/middleware/cors.html
@@ -29,6 +30,7 @@ app.use(express.urlencoded({ extended: true }))
 app.use(express.static(path.join(__dirname, 'public')))
 
 app.use(session({ cookie: { sameSite: 'strict', maxAge: 86400000 }, store: new MemoryStore({ checkPeriod: 86400000 }), secret: process.env.SESSION_SECRET, saveUninitialized: false, resave: false }))
+app.use(cookieParser())
 app.use(flash())
 
 app.use(cors({ origin: 'https://www.fundalytica.com' }))
@@ -55,7 +57,8 @@ app.use((error, req, res, next) => {
     res.render('error')
 })
 
-// universal description
+// app locals
+app.locals.flash_subscription_key = 'subscription'
 app.locals.description = 'Searching for the best performing assets and building great investing tools.'
 
 module.exports = app
