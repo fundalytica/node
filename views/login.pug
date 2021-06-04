@@ -9,8 +9,9 @@ block content
             h3(id="header").text-dark.p-0.m-0.mb-3 Please Log In
 
             form(id="form" method="POST" action="/login")
-                input(type="email" name="email" placeholder="Email Address" required autofocus).form-control.form-control-lg.mb-3
+                input(id="email" type="email" name="email" placeholder="Email Address" required autofocus).form-control.form-control-lg.mb-3
                 input(type="password" name="password" placeholder="Password" required).form-control.form-control-lg.mb-3
+                input(id="name" type="name" name="name" placeholder="Name" required).form-control.form-control-lg.mb-3.d-none
 
                 button(id="submit" type="submit").btn.btn-lg.btn-primary Log In
 
