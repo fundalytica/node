@@ -35,7 +35,10 @@ passport.use('login',
     })
 )
 
-passport.use(new JWTstrategy({ secretOrKey: process.env.TOKEN_SIGN_SECRET, jwtFromRequest: ExtractJWT.fromUrlQueryParameter(process.env.JWT_TOKEN_QUERY_PARAMETER) },
+const extractJWT = req => req.cookies.token
+
+// passport.use(new JWTstrategy({ secretOrKey: process.env.TOKEN_SIGN_SECRET, jwtFromRequest: ExtractJWT.fromUrlQueryParameter(process.env.JWT_TOKEN_QUERY_PARAMETER) },
+passport.use(new JWTstrategy({ secretOrKey: process.env.TOKEN_SIGN_SECRET, jwtFromRequest: extractJWT },
     async (token, done) => {
         try {
             return done(null, token.user)
