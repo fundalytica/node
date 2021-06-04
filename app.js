@@ -29,7 +29,9 @@ app.use(express.urlencoded({ extended: true }))
 
 app.use(express.static(path.join(__dirname, 'public')))
 
-app.use(session({ cookie: { sameSite: 'strict', maxAge: 86400000 }, store: new MemoryStore({ checkPeriod: 86400000 }), secret: process.env.SESSION_SECRET, saveUninitialized: false, resave: false }))
+const cookie = { sameSite: 'strict', maxAge: 86400000 }
+const store = new MemoryStore( { checkPeriod: 86400000 } )
+app.use(session({ secret: process.env.SESSION_SECRET, cookie: cookie, store: store, resave: false, saveUninitialized: false }))
 app.use(cookieParser())
 app.use(flash())
 
