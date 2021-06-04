@@ -2,6 +2,8 @@ const express = require('express')
 
 const router = express.Router()
 
+const passport = require('passport')
+
 const topics = [
     {
         id: 'futures',
@@ -128,13 +130,26 @@ const topics = [
     // }
 ]
 
-router.get('/', (req, res) => {
+const auth = (req, res, next) => {
+    passport.authenticate('jwt', (err, user, info) => {
+        req.user = user
+        next()
+    })(req, res, next)
+}
+router.use(auth)
+
+router.get('/', (req, res, next) => {
+    const color = '\x1b[36m%s\x1b[0m'
+    console.log(color, `token: ${req.cookies.token ? req.cookies.token : '-'}`)
+    console.log(color, `email: ${req.user.email ? req.user.email : '-'}`)
+
+    const user = req.user
     const subscription = req.flash(req.app.locals.flash_subscription_key)[0] // get single value
     const description = req.app.locals.description
 
     const subscribed_key = 'subscribed'
 
-    res.render('index', { description, topics, subscription, subscribed_key })
+    res.render('index', { description, topics, subscription, user, subscribed_key })
 })
 
 const flashSubscriptionURL = (req, res) => {
@@ -152,7 +167,7 @@ const topicRoute = topic => {
     const title = topic['title']
     const description = topic['description']
 
-    router.get(`/${id}`, (req, res) => res.render(id, { title, description }))
+    router.get(`/${id}`, (req, res) => res.render(id, { title: title, description: description, user: req.user }))
 }
 
 topics.forEach(t => topicRoute(t))
