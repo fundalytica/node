@@ -1,4 +1,5 @@
 const express = require('express')
+
 const router = express.Router()
 
 const topics = [
@@ -8,7 +9,7 @@ const topics = [
         image: 'crypto.svg',
         color: 'bg-deep-purple-a100',
         title: 'Crypto Futures',
-        description: 'Contango or backwardation? Go long or go short? We track premiums on Kraken, BitMEX & Deribit.',
+        description: 'Contango or backwardation? Go long or go short? We track premiums on Kraken & Deribit.',
         button: 'Show Premiums 👀',
         action: 'route'
     },
@@ -128,21 +129,23 @@ const topics = [
 ]
 
 router.get('/', (req, res) => {
+    const subscription = req.flash(req.app.locals.flash_subscription_key)[0] // get single value
     const description = req.app.locals.description
-    const subscription = req.flash('subscription')[0]
+
     const subscribed_key = 'subscribed'
 
     res.render('index', { description, topics, subscription, subscribed_key })
 })
 
-router.get('/subscription-pending', (req, res) => {
-    req.flash('subscription', 'pending')
+const flashSubscriptionURL = (req, res) => {
+    const key = req.app.locals.flash_subscription_key
+    const value = req.url.split('-').pop().replace('/','')
+    req.flash(key, value)
     res.redirect('/')
-})
-router.get('/subscription-success', (req, res) => {
-    req.flash('subscription', 'success')
-    res.redirect('/')
-})
+}
+
+router.get('/subscription-pending', flashSubscriptionURL)
+router.get('/subscription-success', flashSubscriptionURL)
 
 const topicRoute = topic => {
     const id = topic['id']
