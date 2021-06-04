@@ -17,10 +17,10 @@ block content
 
                     if(subscription)
                         .mb-3
-                            if(subscription == 'success')
-                                p.lead.text-white= 'Thank you for subscribing to Fundalytica 🤝'
-                            if(subscription == 'pending')
-                                p.lead.text-white.pending= 'Please check your mail and confirm the subscription 👀'
+                        if(subscription == 'success')
+                            p.lead.text-white= 'Thank you for subscribing to Fundalytica 🤝'
+                        if(subscription == 'pending')
+                            p.lead.text-white.pending= 'Please check your mail and confirm the subscription 👀'
                     else
                         p.mb-2.ms-1
                             span.fas.fa-envelope.pe-1
@@ -64,4 +64,5 @@ block content
 block scripts
     //- script( id='quotesjs' data-api-token=api_token src='/javascripts/quotes.js' type='module')
     //- script(src='https://cdnjs.cloudflare.com/ajax/libs/TypewriterJS/2.13.1/core.min.js')
+
     script(id='indexjs' src='/javascripts/index.js' data-subscription=subscription data-subscribed-key=subscribed_key type='module')
