@@ -4,65 +4,63 @@ const jwt = require('jsonwebtoken')
 
 const router = express.Router()
 
-// Custom Callback Template
-// router.post('/abc', async (req, res, next) => {
-//     passport.authenticate('abc', async (err, user, info) => {
-//     })(req, res, next)
-// })
+// A. Custom Callback: router.post('/abc', async (req, res, next) => { passport.authenticate('abc', async (err, user, info) => { ... })(req, res, next) })
+// B. No Custom Callback: router.post('/abc', passport.authenticate('abc', { session: false }), async (req, res, next) => { res.json({ ... }) })
+
+const authenticated = (req, res, user) => {
+    // create token (contains all user values)
+    const body = { _id: user._id, email: user.email, name: user.name }
+    const token = jwt.sign({ user: body }, process.env.TOKEN_SIGN_SECRET)
+
+    req.flash('logged', 'in')
+
+    const age = 1000 * 60 * 10 // 10m
+    res.cookie('token', token, { httpOnly: true, secure: true, sameSite: true, maxAge: age })
+    res.json( { success: { code: 'LOGIN_SUCCESS', message: 'Logged In' } } )
+}
 
 router.post('/signup', async (req, res, next) => {
-    passport.authenticate('signup', async (err, user, info) => {
-        if (err || !user) {
-            // { MongoError: E11000 duplicate key error collection: fundalytica.users index: email_1 dup key: { email: "abc@xyz.com" }
-            if (err && err.name == 'MongoError' && err.code == 11000) {
-                return res.json({ error: 'Email already taken' })
-            }
+    passport.authenticate('signup', async (error, user, info) => {
+        if(error) return res.json({ error: { code: 'SIGNUP_FAIL', message: error.message } } )
+        if(! user) return res.json({ error: { code: 'SIGNUP_FAIL', message: info.message } } )
 
-            // { message: 'Missing credentials' }
-            if (info) {
-                console.log(info)
-                return res.json({ error: info.message })
-            }
-        }
-
-        return res.json({
-            message: 'Signup successful',
-            email: user.email
-        })
+        authenticated(req, res, user)
     })(req, res, next)
 })
 
-// No Custom Callback
-// router.post('/signup', passport.authenticate('signup', { session: false }), async (req, res, next) => {
-//     res.json({
-//         message: 'Signup successful',
-//         email: req.user.email
-//         // user: req.user,
-//     })
-// })
-
 router.post('/login', async (req, res, next) => {
-    passport.authenticate('login', async (err, user, info) => {
+    console.log('[ POST - /login ]')
+    console.log(req.body)
+
+    passport.authenticate('login', async (error, user, info) => {
+        console.log('[ authenticate - info ]') // from localStrategy
+        console.log(info)
+
+        const handleError = error => {
+            console.log('[ authenticate - error ]')
+            console.log(error)
+            return res.json( { error: { code: 'LOGIN_FAIL', message: 'Login Error' } } )
+        }
+
         try {
-            if (err || !user) {
-                const error = new Error('Incorrect login')
-                return res.json({ error: error.message })
-            }
+            if (error) return handleError(error)
+            if (!user) return res.json( { error: { code: 'CREDENTIALS_FAIL', message: 'Incorrect Login' } } ) // do not use info.message ("User not found", "Wrong Password", ...)
 
             req.login(user, { session: false }, async error => {
-                if (error) {
-                    return res.json({ error: error.message })
-                }
-
-                const body = { _id: user._id, email: user.email }
-                const token = jwt.sign({ user: body }, process.env.TOKEN_SIGN_SECRET)
-
-                return res.json({ token })
+                if (error) return handleError(error)
+                authenticated(req, res, user)
             })
         } catch (error) {
-            return res.json({ error: error.message })
+            return res.json( { error: { message: error.message } } )
         }
     })(req, res, next)
+})
+
+router.get('/logout', (req, res) => {
+    req.flash('logged', 'out')
+
+    res.clearCookie('token')
+    res.redirect('/')
 })
 
 module.exports = router
