@@ -149,7 +149,10 @@ router.get('/', (req, res, next) => {
 
     const subscribed_key = 'subscribed'
 
-    res.render('index', { description, topics, subscription, user, subscribed_key })
+    const just_logged = req.flash('logged')[0]
+    // console.log(req.isAuthenticated())
+
+    res.render('index', { description, topics, subscription, user, just_logged, subscribed_key })
 })
 
 const flashSubscriptionURL = (req, res) => {
@@ -169,11 +172,17 @@ const topicRoute = topic => {
 
     router.get(`/${id}`, (req, res) => res.render(id, { title: title, description: description, user: req.user }))
 }
-
 topics.forEach(t => topicRoute(t))
 
-router.get('/login', (req, res) => res.render('login'))
-router.get('/wip', (req, res) => res.render('wip'))
+const authRoutes = ['login','signup']
+authRoutes.forEach(route => {
+    router.get(`/${route}`, (req, res) => {
+        if(req.isAuthenticated()) res.redirect('/')
+        res.render(route)
+    })
+})
+
+router.get('/wip', (req, res) => res.render('wip', { user: req.user}))
 
 router.get('/test', (req, res) => res.render('test'))
 
