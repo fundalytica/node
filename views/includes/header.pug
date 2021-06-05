@@ -15,12 +15,14 @@ header.sticky-top.bg-grey-800
             //-         i.me-2.fas.fa-pen
             //-         p.m-0 Blog
             - var href = user ? '/logout' : '/login'
-            - var cl = user ? 'text-info' : 'text-warning'
+            - var cl = user ? '' : 'text-warning'
+            - var name = (user && user.name) ? (' ' + user.name) : ''
             a(href=href).ms-3
                 .d-flex.align-items-center(class=cl)
                     if(user)
                         i.me-2.fas.fa-door-open
                         p.m-0 Logout
+                            span= name
                     else
                         i.me-2.fas.fa-door-closed
                         p.m-0 Login
