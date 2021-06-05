@@ -8,32 +8,35 @@ block content
     //-     ul.container.list-unstyled.d-flex.flex-row.flex-wrap.flex-equal.p-1.text-center.text-nowrap.small#quotes
 
     main#container.container-xl.p-0
+        if(just_logged)
+            - var text = (just_logged == 'in') ? '🔑 Logged In: Welcome to Fundalytica' : (just_logged == 'out') ? '👋 Logged Out: See you soon' : '?'
+            p.p-2.text-center.bg-light-blue-700.text-white= text
+
         .flex-equal.d-md-flex.flex-md-row.flex-md-wrap.m-md-3
+            //- .topic#welcome.m-3.bg-blue-grey-200
+            //-     .p-4
+            //-         h2 Fundalytica
+            //-         p.lead#description= description
 
-            .topic#welcome.m-3.bg-blue-grey-200
-                .p-4
-                    h2 Fundalytica
-                    p.lead#description= description
-
-                    if(subscription)
-                        .mb-3
-                        if(subscription == 'success')
-                            p.lead.text-white= 'Thank you for subscribing to Fundalytica 🤝'
-                        if(subscription == 'pending')
-                            p.lead.text-white.pending= 'Please check your mail and confirm the subscription 👀'
-                    else
-                        p.mb-2.ms-1
-                            span.fas.fa-envelope.pe-1
-                            span#join Do not miss any updates. Join now!
-                        div
-                            form(action='https://sendy.fundalytica.com/subscribe' method='POST' accept-charset='utf-8')
-                                .input-group
-                                    input.form-control(type='text' name='email' placeholder='Enter your email')
-                                    input(type='hidden' name='list' value='YeHtmGHSnDiXFSxu24X9dA')
-                                    input(type='hidden' name='api_key' value='wCVlWNlmf3YBshY4ek8y')
-                                    input(type='text' name='hp').d-none
-                                    .input-group-append
-                                        button.btn.btn-outline-secondary.rounded-right(type='submit' name='submit') Subscribe
+            //-         if(subscription)
+            //-             .mb-3
+            //-             if(subscription == 'success')
+            //-                 p.lead.text-white= 'Thank you for subscribing to Fundalytica 🤝'
+            //-             if(subscription == 'pending')
+            //-                 p.lead.text-white.pending= 'Please check your mail and confirm the subscription 👀'
+            //-         else
+            //-             p.mb-2.ms-1
+            //-                 span.fas.fa-envelope.pe-1
+            //-                 span#join Do not miss any updates. Join now!
+            //-             div
+            //-                 form(action='https://sendy.fundalytica.com/subscribe' method='POST' accept-charset='utf-8')
+            //-                     .input-group
+            //-                         input.form-control(type='text' name='email' placeholder='Enter your email')
+            //-                         input(type='hidden' name='list' value='YeHtmGHSnDiXFSxu24X9dA')
+            //-                         input(type='hidden' name='api_key' value='wCVlWNlmf3YBshY4ek8y')
+            //-                         input(type='text' name='hp').d-none
+            //-                         .input-group-append
+            //-                             button.btn.btn-outline-secondary.rounded-right(type='submit' name='submit') Subscribe
 
             each topic, index in topics
                 .topic.m-3(class=topic.color)
@@ -65,4 +68,4 @@ block scripts
     //- script( id='quotesjs' data-api-token=api_token src='/javascripts/quotes.js' type='module')
     //- script(src='https://cdnjs.cloudflare.com/ajax/libs/TypewriterJS/2.13.1/core.min.js')
 
-    script(id='indexjs' src='/javascripts/index.js' data-subscription=subscription data-subscribed-key=subscribed_key type='module')
+    //- script(id='indexjs' src='/javascripts/index.js' data-subscription=subscription data-subscribed-key=subscribed_key type='module')
