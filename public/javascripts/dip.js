@@ -48,7 +48,7 @@ const run = () => {
         }
     }
 
-    Utils.request(url, done, fail)
+    Utils.request(url, null, done, fail)
 }
 
 UIUtils.ready(run)

@@ -3,13 +3,13 @@ export default class Utils {
 
     // Network
 
-    static request(url, done, fail = console.log) {
+    static request(url, options, done, fail = console.log) {
         const errorHandling = response => {
             if (!response.ok) throw Error(`${url} - ${response.status} (${response.statusText})`)
             return response
         }
 
-        fetch(url)
+        fetch(url, options)
             .then(errorHandling)
             .catch(fail)
             .then(response => response.json().then(done))

@@ -37,7 +37,7 @@ export default class FuturesKraken {
             done(data)
         }
 
-        Utils.request(symbolsURL, doneCallback, fail)
+        Utils.request(symbolsURL, null, doneCallback, fail)
     }
 
     terminate() {

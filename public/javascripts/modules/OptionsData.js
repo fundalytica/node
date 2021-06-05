@@ -41,7 +41,7 @@ export default class OptionsData {
             done()
         }
 
-        Utils.request(url, doneCallback, fail)
+        Utils.request(url, null, doneCallback, fail)
     }
 
     enrichPositions() {

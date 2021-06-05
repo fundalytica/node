@@ -23,7 +23,7 @@ export default class API {
                 if (fetch == symbols.length) callback(data)
             }
 
-            Utils.request(url, success)
+            Utils.request(url, null, success)
         }
     }
 }

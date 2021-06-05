@@ -30,7 +30,7 @@ export default class IEX {
                 if (fetch == chunks.length) callback(data)
             }
 
-            Utils.request(url, success)
+            Utils.request(url, null, success)
         }
     }
 }

@@ -86,7 +86,7 @@ const fetch = options => {
     const done = data => UISuccess(options, data)
     const fail = error => UI.error(error)
 
-    Utils.request(url, done, fail)
+    Utils.request(url, null, done, fail)
 }
 
 const run = () => {
