@@ -156,10 +156,28 @@ const initTable = (table, data) => {
             const maturity_string = maturity ? maturity.format("DD MMM 'YY") : '-'
             const days_string = maturity ? `${FuturesKraken.daysUntilSettlement(symbol)}d` : '-'
 
-            const status = '<svg viewBox="0 0 20 20" class="status status-off"><circle cx="10" cy="10" r="10"/></svg>'
-            const logo_pair = `<img class= "logo" src = "https://www.fundalytica.com/images/logos/crypto/${crypto}.svg" alt = "${crypto} logo" /> <span>${pair.toUpperCase()}</span>`
+            // const status = '<svg viewBox="0 0 20 20" class="status status-off"><circle cx="10" cy="10" r="10"/></svg>'
+            const status = document.createElementNS('http://www.w3.org/2000/svg', 'svg')
+            status.setAttribute('viewBox', '0 0 20 20')
+            status.setAttribute('class', 'status status-off')
+            const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle')
+            circle.setAttribute('cx', '10')
+            circle.setAttribute('cy', '10')
+            circle.setAttribute('r', '10')
+            status.appendChild(circle)
 
-            const row = [logo_pair, pair, period, symbol, '-', '-', '-', '-', maturity_string, days_string, status]
+            // const logo_pair = `<img class= "logo" src = "https://www.fundalytica.com/images/logos/crypto/${crypto}.svg" alt = "${crypto} logo" /> <span>${pair.toUpperCase()}</span>`
+            const logo_pair_div = document.createElement('div')
+            const img = document.createElement('img')
+            img.classList.add('logo')
+            img.setAttribute('src', `https://www.fundalytica.com/images/logos/crypto/${crypto}.svg`)
+            img.setAttribute('alt', `${crypto} logo`)
+            logo_pair_div.appendChild(img)
+            const span = document.createElement('span')
+            span.innerText = pair.toUpperCase()
+            logo_pair_div.appendChild(span)
+
+            const row = [logo_pair_div, pair, period, symbol, '-', '-', '-', '-', maturity_string, days_string, status]
 
             rows.push(row)
         }

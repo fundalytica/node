@@ -32,16 +32,33 @@ const run = () => {
 
             const element = document.querySelector("#quotes")
 
-            let HTML = ''
-            HTML += '<li class="' + CSSClasses + '">'
-            HTML += '<a href="' + urls[symbol] + '" target="_blank" rel="noopener">'
-            HTML += '<span class="symbol">' + symbol + '</span>'
-            HTML += '<span class="price">' + numeral(latestPrice).format('$0,0.0') + '</span>'
-            HTML += '<span class="change">' + numeral(changePercent).format('%0.0') + '</span>'
-            HTML += '</a>'
-            HTML += '</li>'
+            const li = document.createElement('li')
+            li.setAttribute('class', CSSClasses)
 
-            element.innerHTML = HTML
+            const a = document.createElement('a')
+            a.setAttribute('href', urls[symbol])
+            a.setAttribute('target', '_blank')
+            a.setAttribute('rel', 'noopener')
+
+            const spanSymbol = document.createElement('span')
+            spanSymbol.classList.add('symbol')
+            spanSymbol.innerText = symbol
+            a.appendChild(spanSymbol)
+
+            const spanPrice = document.createElement('span')
+            spanPrice.classList.add('price')
+            spanPrice.innerText = numeral(latestPrice).format('$0,0.0')
+            a.appendChild(spanPrice)
+
+            const spanChange = document.createElement('span')
+            spanChange.classList.add('change')
+            spanChange.innerText = numeral(changePercent).format('%0.0')
+
+            a.appendChild(spanChange)
+
+            li.appendChild(a)
+
+            element.appendChild(li)
         }
     }
 
