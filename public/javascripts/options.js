@@ -93,11 +93,23 @@ const updateTables = data => {
                     // logo
                     if (key == 'logo') {
                         const logoFile = (symbol, extension = 'svg') => `https://www.fundalytica.com/images/logos/stocks/${symbol.toLowerCase()}.${extension}`
-                        value = `<img onerror="this.src='${logoFile(option.symbol, 'png')}'" src="${logoFile(option.symbol)}" alt="${option.symbol} logo"/>`
+
+                        const img = document.createElement('img')
+                        img.setAttribute('onerror', `this.src='${logoFile(option.symbol, 'png')}`)
+                        img.setAttribute('src', logoFile(option.symbol))
+                        img.setAttribute('alt', `${option.symbol} logo`)
+                        // value = `<img onerror="this.src='${logoFile(option.symbol, 'png')}'" src="${logoFile(option.symbol)}" alt="${option.symbol} logo"/>`
+                        value = img
                     }
                     // symbol
                     else if (key == 'symbol') {
-                        value = `<a href='https://www.tradingview.com/symbols/${value}' target='_blank' rel='noopener'>\$${value}</a>`
+                        const a = document.createElement('a')
+                        a.setAttribute('href', 'https://www.tradingview.com/symbols/${value}')
+                        a.setAttribute('target', '_blank')
+                        a.setAttribute('rel', 'noopener')
+                        a.innerText = `\$${value}`
+                        // value = `<a href='https://www.tradingview.com/symbols/${value}' target='_blank' rel='noopener'>\$${value}</a>`
+                        value = a
                     }
                     // expiration
                     else if (key == 'expiration') {
@@ -134,7 +146,6 @@ const updateTables = data => {
 }
 
 const updateTableSummary = (right, positions) => {
-
     UITextUtils.text(`#count-${right}`, `${positions.length} ${StringUtils.capitalize(right)}`)
     UITextUtils.text(`#basis-${right}`, `Basis ${numeral(Utils.propertyTotal(positions, 'basis')).format(currencyFormat)}`)
     UITextUtils.text(`#value-${right}`, `Value ${numeral(Utils.propertyTotal(positions, 'value')).format(currencyFormat)}`)
