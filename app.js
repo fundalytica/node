@@ -31,6 +31,8 @@ app.use(express.urlencoded({ extended: true }))
 
 app.use(express.static(path.join(__dirname, 'public')))
 
+app.enable('trust proxy')
+const cookie = { httpOnly: true, secure: true, sameSite: 'strict' }
 // const store = new MemoryStore()
 const store = MongoStore.create({ mongoUrl: database })
 app.use(session({ secret: process.env.SESSION_SECRET, cookie: cookie, store: store, resave: false, saveUninitialized: false }))
