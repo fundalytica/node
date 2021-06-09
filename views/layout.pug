@@ -11,7 +11,9 @@ html(lang="en")
         else
             title= 'Fundalytica - ' + title
 
-        include includes/matomo.pug
+        - if(process.env.NODE_ENV == 'production')
+            include includes/matomo.pug
+
         include includes/social.pug
         include includes/favicon.pug
 

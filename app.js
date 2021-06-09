@@ -66,5 +66,6 @@ app.use((error, req, res, next) => {
 // app locals
 app.locals.flash_subscription_key = 'subscription'
 app.locals.description = 'Searching for the best performing assets and building great investing tools.'
+app.locals.api_origin = `${process.env.SCHEME}://${process.env.API_DOMAIN}${process.env.PROXY ? ':' + process.env.PORT : ''}`
 
 module.exports = app
