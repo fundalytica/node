@@ -3,8 +3,8 @@ require('dotenv').config()
 const express = require('express')
 const path = require('path')
 
-const session = require('express-session')          // http://expressjs.com/en/resources/middleware/session.html
-// const MemoryStore = require('memorystore')(session) // https://www.npmjs.com/package/memorystore
+const session = require('express-session')              // http://expressjs.com/en/resources/middleware/session.html
+// const MemoryStore = require('memorystore')(session)  // https://www.npmjs.com/package/memorystore
 const MongoStore = require('connect-mongo')
 const cookieParser = require('cookie-parser')
 const flash = require('connect-flash')
@@ -39,7 +39,8 @@ app.use(session({ secret: process.env.SESSION_SECRET, cookie: cookie, store: sto
 app.use(cookieParser())
 app.use(flash())
 
-app.use(cors({ origin: 'https://www.fundalytica.com' }))
+const origin = `${process.env.SCHEME}://${process.env.DOMAIN}${process.env.PROXY ? ':' + process.env.PORT : ''}`
+app.use(cors({ origin: origin }))
 
 app.use(vhost('www.fundalytica.com', require('./routes/www')))
 app.use(vhost('www.fundalytica.com', require('./routes/user')))
