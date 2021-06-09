@@ -41,4 +41,9 @@ html(lang="en")
 
         include includes/footer.pug
 
+        script.
+            const api_origin = !{JSON.stringify(locals.api_origin)}
+            window.api_origin = api_origin
+            //- console.log(`✓ api_origin ${api_origin}`)
+
         block scripts

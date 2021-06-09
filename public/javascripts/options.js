@@ -9,7 +9,7 @@ import StringUtils from './modules/StringUtils.js'
 import OptionsData from './modules/OptionsData.js'
 
 const UI = new UIManager("#spinner", "#error")
-const options = new OptionsData()
+const options = new OptionsData(window.api_origin)
 
 const dateSelector = '#date'
 const tableOrdering = ['#dropdown-sort', '#btn-group-order']

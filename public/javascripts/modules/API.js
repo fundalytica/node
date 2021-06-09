@@ -3,7 +3,7 @@ import Utils from './Utils.js'
 export default class API {
     constructor(token) {
         this.token = token
-        this.quoteURI = 'https://api.fundalytica.com/v1/quote'
+        this.quoteURI = `${window.api_origin}/v1/quote`
     }
 
     getPrices(symbols, callback) {

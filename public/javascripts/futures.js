@@ -5,7 +5,7 @@ import UIUtils from './modules/UI/UIUtils.js'
 
 import FuturesKraken from './modules/Futures/FuturesKraken.js'
 
-const futures = new FuturesKraken()
+const futures = new FuturesKraken(window.api_origin)
 
 const UI = new UIManager("#spinner", "#error")
 const table = '#table-futures'

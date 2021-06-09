@@ -1,7 +1,9 @@
 import Utils from './Utils.js'
 
 export default class OptionsData {
-    constructor() {
+    constructor(api) {
+        this.api_origin = api_origin
+
         this.sortKeys = ['symbol', 'expiration', 'basis', 'value', 'profit']
         this.orderKeys = ['asc', 'desc']
         this.expirationDisplayFormat = "DD MMM 'YY"
@@ -27,7 +29,7 @@ export default class OptionsData {
     }
 
     init(done, fail) {
-        const url = 'https://api.fundalytica.com/v1/options/portfolio'
+        const url = `${this.api_origin}/v1/options/portfolio`
 
         const doneCallback = data => {
             if (data.error) return fail(data.error)

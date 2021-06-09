@@ -2,7 +2,9 @@ import FuturesOrderBook from './FuturesOrderBook.js'
 import Utils from '../Utils.js'
 
 export default class FuturesKraken {
-    constructor() {
+    constructor(api_origin) {
+        this.api_origin = api_origin
+
         this.socketURL = 'wss://futures.kraken.com/ws/v1'
 
         this.sockets = {}
@@ -17,7 +19,7 @@ export default class FuturesKraken {
     }
 
     init(done, fail) {
-        const symbolsURL = 'https://api.fundalytica.com/v1/crypto/futures/tickers/symbols/kraken'
+        const symbolsURL = `${this.api_origin}/v1/crypto/futures/tickers/symbols/kraken`
 
         const doneCallback = data => {
             // OVERRIDE

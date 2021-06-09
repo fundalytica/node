@@ -12,7 +12,7 @@ const UI = new UIManager('#spinner', '#error')
 
 const run = () => {
     const options = { symbol: 'SNAP', minimumDip: 5, defaultDip: 10 }
-    const url = `https://api.fundalytica.com/v1/historical/dip/${options.symbol}-${options.minimumDip}`
+    const url = `${window.api_origin}/v1/historical/dip/${options.symbol}-${options.minimumDip}`
 
     UI.loading()
     UITextUtils.text('#title', `${options.symbol} - Dips`)

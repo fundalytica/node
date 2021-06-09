@@ -82,7 +82,7 @@ const updateTable = close => {
 const fetch = options => {
     UILoading(options)
 
-    const url = `https://api.fundalytica.com/v1/historical/dip/${options.symbol}-${options.minimumDip}`
+    const url = `${window.api_origin}/v1/historical/dip/${options.symbol}-${options.minimumDip}`
     const done = data => UISuccess(options, data)
     const fail = error => UI.error(error)
 
