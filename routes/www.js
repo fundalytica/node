@@ -145,14 +145,15 @@ router.get('/', (req, res, next) => {
 
     const user = req.user
     const subscription = req.flash(req.app.locals.flash_subscription_key)[0] // get single value
-    const description = req.app.locals.description
+    // const description = req.app.locals.description
 
     const subscribed_key = 'subscribed'
 
     const just_logged = req.flash('logged')[0]
+
     // console.log(req.isAuthenticated())
 
-    res.render('index', { description, topics, subscription, user, just_logged, subscribed_key })
+    res.render('index', { topics, subscription, user, just_logged, subscribed_key })
 })
 
 const flashSubscriptionURL = (req, res) => {
