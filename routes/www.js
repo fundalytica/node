@@ -1,7 +1,5 @@
 const express = require('express')
-
 const router = express.Router()
-
 const passport = require('passport')
 const colors = require('colors')
 
@@ -141,7 +139,7 @@ const auth = (req, res, next) => {
 router.use(auth)
 
 router.get('/', (req, res, next) => {
-    console.log(color, `email: ${req.user.email ? req.user.email : '-'}`)
+    console.log(`[ email: ${req.user.email ? req.user.email : 'x'} ] [ token: ${req.cookies.token ? req.cookies.token : 'x'} ]`.green)
 
     const user = req.user
     const subscription = req.flash(req.app.locals.flash_subscription_key)[0] // get single value
@@ -171,7 +169,10 @@ const topicRoute = topic => {
     const title = topic['title']
     const description = topic['description']
 
-    router.get(`/${id}`, (req, res) => res.render(id, { title: title, description: description, user: req.user }))
+    router.get(`/${id}`, (req, res) => {
+        const parameters = { title: title, description: description, user: req.user }
+        res.render(id, parameters)
+    })
 }
 topics.forEach(t => topicRoute(t))
 
