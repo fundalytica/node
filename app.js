@@ -42,25 +42,23 @@ app.use(flash())
 const origin = `${process.env.SCHEME}://${process.env.DOMAIN}${process.env.PROXY ? ':' + process.env.PORT : ''}`
 app.use(cors({ origin: origin }))
 
-app.use(vhost('www.fundalytica.com', require('./routes/www')))
-app.use(vhost('www.fundalytica.com', require('./routes/user')))
-app.use(vhost('www.fundalytica.com', require('./routes/secure')))
-
-app.use(vhost('api.fundalytica.com', require('./routes/api')))
-app.use(vhost('api.fundalytica.com', require('./routes/api/options')))
-app.use(vhost('api.fundalytica.com', require('./routes/api/crypto')))
+// use routes
+const domain = process.env.DOMAIN
+const wwwRoutes = ['www', 'user', 'secure']
+const apiRoutes = ['api', 'api/options', 'api/crypto']
+// accept both naked domain and www
+wwwRoutes.forEach(route => app.use(vhost(`${domain}`, require(`./routes/${route}`))))
+wwwRoutes.forEach(route => app.use(vhost(`www.${domain}`, require(`./routes/${route}`))))
+apiRoutes.forEach(route => app.use(vhost(`api.${domain}`, require(`./routes/${route}`))))
 
 // 404 handler
-app.use((req, res, next) => {
-    const errors = require('http-errors')
-    next(errors(404))
-})
+app.use((req, res, next) => next(require('http-errors')(404)))
 
 // error handler
 app.use((error, req, res, next) => {
     res.status(error.status || 500)
     res.locals.message = error.message
-    res.locals.error = (process.env.NODE_ENV === 'development') ? error : {}
+    res.locals.error = (process.env.NODE_ENV == 'development') ? error : {}
     res.render('error')
 })
 
