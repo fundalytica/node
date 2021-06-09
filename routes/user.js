@@ -15,7 +15,7 @@ const authenticated = (req, res, user) => {
     req.flash('logged', 'in')
 
     const age = 1000 * 60 * 10 // 10m
-    res.cookie('token', token, { httpOnly: true, secure: true, sameSite: true, maxAge: age })
+    res.cookie('token', token, { httpOnly: true, secure: (process.env.SCHEME != 'http'), sameSite: true, maxAge: age })
     res.json( { success: { code: 'LOGIN_SUCCESS', message: 'Logged In' } } )
 }
 
