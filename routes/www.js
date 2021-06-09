@@ -3,6 +3,7 @@ const express = require('express')
 const router = express.Router()
 
 const passport = require('passport')
+const colors = require('colors')
 
 const topics = [
     {
@@ -130,6 +131,7 @@ const topics = [
     // }
 ]
 
+// add user info to all requests
 const auth = (req, res, next) => {
     passport.authenticate('jwt', (err, user, info) => {
         req.user = user
@@ -139,8 +141,6 @@ const auth = (req, res, next) => {
 router.use(auth)
 
 router.get('/', (req, res, next) => {
-    const color = '\x1b[36m%s\x1b[0m'
-    console.log(color, `token: ${req.cookies.token ? req.cookies.token : '-'}`)
     console.log(color, `email: ${req.user.email ? req.user.email : '-'}`)
 
     const user = req.user
