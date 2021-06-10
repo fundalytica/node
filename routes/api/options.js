@@ -1,7 +1,7 @@
-const express = require('express')
-const router = express.Router()
+const router = require('express').Router()
+const colors = require('colors')
 
-const utils = require('./utils.js')
+const utils = require('../utils.js')
 
 router.get('/v1/options/portfolio', async (req, res) => {
     console.log(`path: ${req.path}`.cyan)
