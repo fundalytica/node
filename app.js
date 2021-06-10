@@ -1,5 +1,7 @@
 require('dotenv').config()
 
+const fs = require('fs')
+
 const express = require('express')
 const path = require('path')
 
@@ -45,7 +47,10 @@ app.use(cors({ origin: origin }))
 // use routes
 const domain = process.env.DOMAIN
 const wwwRoutes = ['www', 'user', 'secure']
-const apiRoutes = ['api', 'api/options', 'api/crypto']
+const apiRoutes = ['api']
+// add all routes in api subfolder
+fs.readdirSync('./routes/api').forEach(f => apiRoutes.push(`api/${f.replace('.js', '')}`))
+
 // accept both naked domain and www
 wwwRoutes.forEach(route => app.use(vhost(`${domain}`, require(`./routes/${route}`))))
 wwwRoutes.forEach(route => app.use(vhost(`www.${domain}`, require(`./routes/${route}`))))
