@@ -1,0 +1,25 @@
+appdirs==1.4.4
+certifi==2021.5.30
+chardet==4.0.0
+cycler==0.10.0
+distlib==0.3.2
+filelock==3.0.12
+# Editable install with no version control (fundalytica==0.1)
+-e /Users/fotios/Documents/GitHub/fundalytica/scripts
+gevent==21.1.2
+greenlet==1.1.0
+idna==2.10
+kiwisolver==1.3.1
+pbr==5.6.0
+Pillow==8.2.0
+pyparsing==2.4.7
+six==1.15.0
+stevedore==3.3.0
+tabulate==0.8.9
+urllib3==1.26.5
+utils @ file:///Users/fotios/Documents/GitHub/fundalytica/scripts/utils/dist/utils-0.1-py3-none-any.whl
+virtualenv==20.4.7
+virtualenv-clone==0.5.4
+virtualenvwrapper==4.8.4
+zope.event==4.5.0
+zope.interface==5.4.0
