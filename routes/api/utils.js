@@ -3,7 +3,7 @@ const { PythonShell } = require('python-shell')
 const shellHandler = (script, args, res) => {
     console.log(`script: ${script}`.cyan)
 
-    const options = { args: args, mode: 'json', pythonPath: process.env.PYTHON_PATH }
+    const options = { args: args, mode: 'json', pythonPath: process.env.SCRIPTS_PYTHON_PATH }
 
     PythonShell.run(script, options, (error, results) => {
         if (results && results.length > 1) {
