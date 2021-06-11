@@ -73,4 +73,3 @@ app.locals.description = 'Searching for the best performing assets and building 
 app.locals.api_origin = `${process.env.SCHEME}://${process.env.API_DOMAIN}${process.env.PROXY ? ':' + process.env.PORT : ''}`
 
 module.exports = app
-// finally
