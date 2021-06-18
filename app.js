@@ -54,6 +54,7 @@ fs.readdirSync('./routes/api').forEach(f => apiRoutes.push(`api/${f.replace('.js
 // accept both naked domain and www
 wwwRoutes.forEach(route => app.use(vhost(`${domain}`, require(`./routes/${route}`))))
 wwwRoutes.forEach(route => app.use(vhost(`www.${domain}`, require(`./routes/${route}`))))
+wwwRoutes.forEach(route => app.use(vhost(`test.${domain}`, require(`./routes/${route}`))))
 apiRoutes.forEach(route => app.use(vhost(`api.${domain}`, require(`./routes/${route}`))))
 
 // 404 handler
@@ -73,4 +74,3 @@ app.locals.description = 'Searching for the best performing assets and building 
 app.locals.api_origin = `${process.env.SCHEME}://${process.env.API_DOMAIN}${process.env.PROXY ? ':' + process.env.PORT : ''}`
 
 module.exports = app
-// bingo
