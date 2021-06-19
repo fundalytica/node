@@ -46,16 +46,16 @@ app.use(session({ secret: process.env.SESSION_SECRET, cookie: cookie, store: sto
 app.use(cookieParser())
 app.use(flash())
 
-// process env
-const PORT = process.env.PROXY ? (':' + process.env.PORT) : ''
-console.log(`PORT ${PORT}`)
+// port string
+const PORT_STRING = (process.env.PROXY == 'false') ? (':' + process.env.PORT) : ''
+console.log(`PORT_STRING ${PORT_STRING}`)
 
 // api domain not provided, use domain
 if(! process.env.API_DOMAIN) process.env.API_DOMAIN = process.env.DOMAIN
 // api path not provided, use empty string
 if(! process.env.API_PATH) process.env.API_PATH = ''
 
-const origin = `${process.env.SCHEME}://${process.env.DOMAIN}${PORT}`
+const origin = `${process.env.SCHEME}://${process.env.DOMAIN}${PORT_STRING}`
 app.use(cors({ origin: origin }))
 
 // www routes
@@ -88,6 +88,6 @@ app.use((error, req, res, next) => {
 // app locals
 app.locals.flash_subscription_key = 'subscription'
 app.locals.description = 'Searching for the best performing assets and building great investing tools.'
-app.locals.api_origin = `${process.env.SCHEME}://${process.env.API_DOMAIN}${PORT}${process.env.API_PATH}`
+app.locals.api_origin = `${process.env.SCHEME}://${process.env.API_DOMAIN}${PORT_STRING}${process.env.API_PATH}`
 
 module.exports = app
