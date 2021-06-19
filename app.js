@@ -45,16 +45,20 @@ const origin = `${process.env.SCHEME}://${process.env.DOMAIN}${process.env.PROXY
 app.use(cors({ origin: origin }))
 
 // api domain not provided, use domain
+if(! process.env.API_DOMAIN) process.env.API_DOMAIN = process.env.DOMAIN
+// www routes
 const wwwRoutes = ['www', 'user', 'secure']
+// api routes
 const apiRoutes = ['api']
 // add all routes in api subfolder
 fs.readdirSync('./routes/api').forEach(f => apiRoutes.push(`api/${f.replace('.js', '')}`))
-
-// accept both naked domain and www
-wwwRoutes.forEach(route => app.use(vhost(`${domain}`, require(`./routes/${route}`))))
-wwwRoutes.forEach(route => app.use(vhost(`www.${domain}`, require(`./routes/${route}`))))
-wwwRoutes.forEach(route => app.use(vhost(`test.${domain}`, require(`./routes/${route}`))))
-apiRoutes.forEach(route => app.use(vhost(`api.${domain}`, require(`./routes/${route}`))))
+// set routes
+wwwRoutes.forEach(route => app.use(vhost(process.env.DOMAIN, require(`./routes/${route}`))))
+apiRoutes.forEach(route => app.use(vhost(process.env.API_DOMAIN, require(`./routes/${route}`))))
+// support www subdomain if domain is naked
+if(process.env.DOMAIN.split('.').length == 2) {
+    wwwRoutes.forEach(route => app.use(vhost(`www.${process.env.DOMAIN}`, require(`./routes/${route}`))))
+}
 
 // 404 handler
 app.use((req, res, next) => next(require('http-errors')(404)))
@@ -70,6 +74,7 @@ app.use((error, req, res, next) => {
 // app locals
 app.locals.flash_subscription_key = 'subscription'
 app.locals.description = 'Searching for the best performing assets and building great investing tools.'
-app.locals.api_origin = `${process.env.SCHEME}://${process.env.API_DOMAIN}${process.env.PROXY ? ':' + process.env.PORT : ''}`
+app.locals.api_origin = `${process.env.SCHEME}://${process.env.API_DOMAIN}${process.env.PROXY ? (':' + process.env.PORT) : ''}${process.env.API_PATH ? process.env.API_PATH : ''}`
+console.log(app.locals.api_origin)
 
 module.exports = app
