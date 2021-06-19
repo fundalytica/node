@@ -1,6 +1,7 @@
-const router = require('express').Router()
+const express = require('express')
+const router = express.Router()
 
-router.get('/', (req, res, next) => {
+const handler = (req, res, next) => {
     res.render('api', {
         text: 'Fundalytica API',
 
@@ -16,6 +17,8 @@ router.get('/', (req, res, next) => {
             '/v1/quote/:symbol',
         ]
     })
-})
+}
+
+router.get(process.env.API_PATH, handler)
 
 module.exports = router
