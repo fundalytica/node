@@ -48,6 +48,8 @@ app.use(flash())
 
 // process env
 const PORT = process.env.PROXY ? (':' + process.env.PORT) : ''
+console.log(`PORT ${PORT}`)
+
 // api domain not provided, use domain
 if(! process.env.API_DOMAIN) process.env.API_DOMAIN = process.env.DOMAIN
 // api path not provided, use empty string
