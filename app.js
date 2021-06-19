@@ -41,24 +41,31 @@ app.use(session({ secret: process.env.SESSION_SECRET, cookie: cookie, store: sto
 app.use(cookieParser())
 app.use(flash())
 
-const origin = `${process.env.SCHEME}://${process.env.DOMAIN}${process.env.PROXY ? ':' + process.env.PORT : ''}`
-app.use(cors({ origin: origin }))
-
+// process env
+const PORT = process.env.PROXY ? (':' + process.env.PORT) : ''
 // api domain not provided, use domain
 if(! process.env.API_DOMAIN) process.env.API_DOMAIN = process.env.DOMAIN
+// api path not provided, use empty string
+if(! process.env.API_PATH) process.env.API_PATH = ''
+
+const origin = `${process.env.SCHEME}://${process.env.DOMAIN}${PORT}`
+app.use(cors({ origin: origin }))
+
 // www routes
 const wwwRoutes = ['www', 'user', 'secure']
-// api routes
-const apiRoutes = ['api']
-// add all routes in api subfolder
-fs.readdirSync('./routes/api').forEach(f => apiRoutes.push(`api/${f.replace('.js', '')}`))
-// set routes
+// set www routes
 wwwRoutes.forEach(route => app.use(vhost(process.env.DOMAIN, require(`./routes/${route}`))))
-apiRoutes.forEach(route => app.use(vhost(process.env.API_DOMAIN, require(`./routes/${route}`))))
 // support www subdomain if domain is naked
 if(process.env.DOMAIN.split('.').length == 2) {
     wwwRoutes.forEach(route => app.use(vhost(`www.${process.env.DOMAIN}`, require(`./routes/${route}`))))
 }
+
+// api routes
+const apiRoutes = ['api']
+// add all routes in api subfolder
+fs.readdirSync('./routes/api').forEach(f => apiRoutes.push(`api/${f.replace('.js', '')}`))
+// set api routes
+apiRoutes.forEach(route => app.use(vhost(process.env.API_DOMAIN, require(`./routes/${route}`))))
 
 // 404 handler
 app.use((req, res, next) => next(require('http-errors')(404)))
@@ -74,7 +81,6 @@ app.use((error, req, res, next) => {
 // app locals
 app.locals.flash_subscription_key = 'subscription'
 app.locals.description = 'Searching for the best performing assets and building great investing tools.'
-app.locals.api_origin = `${process.env.SCHEME}://${process.env.API_DOMAIN}${process.env.PROXY ? (':' + process.env.PORT) : ''}${process.env.API_PATH ? process.env.API_PATH : ''}`
-console.log(app.locals.api_origin)
+app.locals.api_origin = `${process.env.SCHEME}://${process.env.API_DOMAIN}${PORT}${process.env.API_PATH}`
 
 module.exports = app
