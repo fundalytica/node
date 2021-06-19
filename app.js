@@ -44,8 +44,7 @@ app.use(flash())
 const origin = `${process.env.SCHEME}://${process.env.DOMAIN}${process.env.PROXY ? ':' + process.env.PORT : ''}`
 app.use(cors({ origin: origin }))
 
-// use routes
-const domain = process.env.DOMAIN
+// api domain not provided, use domain
 const wwwRoutes = ['www', 'user', 'secure']
 const apiRoutes = ['api']
 // add all routes in api subfolder
