@@ -3,7 +3,7 @@ const colors = require('colors')
 
 const utils = require('../utils.js')
 
-router.get('/v1/quote/:symbol', async (req, res) => {
+router.get(`${process.env.API_PATH}/v1/quote/:symbol`, async (req, res) => {
     const symbol = req.params.symbol
 
     console.log('/v1/quote/' + symbol)
