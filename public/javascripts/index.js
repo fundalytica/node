@@ -1,13 +1,13 @@
 import UIUtils from './modules/UI/UIUtils.js'
 
-import Subscription from './modules/Subscription.js'
+// import Subscription from './modules/Subscription.js'
 
 const run = () => {
-    UIUtils.show('.topic')
+    // UIUtils.show('.topic')
 
-    const subscription = new Subscription('#indexjs', '#welcome')
+    // const subscription = new Subscription('#indexjs', '#welcome')
 
-    subscription.success()
+    // subscription.success()
     // subscription.hide()
 
     // if (!UIUtils.isHidden('#welcome')) {
