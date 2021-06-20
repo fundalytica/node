@@ -91,5 +91,3 @@ app.locals.description = 'Searching for the best performing assets and building 
 app.locals.api_origin = `${process.env.SCHEME}://${process.env.API_DOMAIN}${PORT_STRING}${process.env.API_PATH}`
 
 module.exports = app
-
-//test
