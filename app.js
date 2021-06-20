@@ -55,8 +55,8 @@ if(! process.env.API_DOMAIN) process.env.API_DOMAIN = process.env.DOMAIN
 // api path not provided, use empty string
 if(! process.env.API_PATH) process.env.API_PATH = ''
 
-const origin = `${process.env.SCHEME}://${process.env.DOMAIN}${PORT_STRING}`
-app.use(cors({ origin: origin }))
+// cors
+app.use(cors({ origin: `${process.env.SCHEME}://${process.env.DOMAIN}${PORT_STRING}` }))
 
 // www routes
 const wwwRoutes = ['www', 'user', 'secure']
@@ -65,6 +65,7 @@ wwwRoutes.forEach(route => app.use(vhost(process.env.DOMAIN, require(`./routes/$
 // support www subdomain if domain is naked
 if(process.env.DOMAIN.split('.').length == 2) {
     wwwRoutes.forEach(route => app.use(vhost(`www.${process.env.DOMAIN}`, require(`./routes/${route}`))))
+    app.use(cors({ origin: `${process.env.SCHEME}://www.${process.env.DOMAIN}${PORT_STRING}` }))
 }
 
 // api routes
