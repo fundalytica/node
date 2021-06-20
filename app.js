@@ -62,11 +62,12 @@ app.use(cors({ origin: `${process.env.SCHEME}://${process.env.DOMAIN}${PORT_STRI
 const wwwRoutes = ['www', 'user', 'secure']
 // set www routes
 wwwRoutes.forEach(route => app.use(vhost(process.env.DOMAIN, require(`./routes/${route}`))))
+
 // support www subdomain if domain is naked
-if(process.env.DOMAIN.split('.').length == 2) {
-    wwwRoutes.forEach(route => app.use(vhost(`www.${process.env.DOMAIN}`, require(`./routes/${route}`))))
-    app.use(cors({ origin: `${process.env.SCHEME}://www.${process.env.DOMAIN}${PORT_STRING}` }))
-}
+// if(process.env.DOMAIN.split('.').length == 2) {
+    // wwwRoutes.forEach(route => app.use(vhost(`www.${process.env.DOMAIN}`, require(`./routes/${route}`))))
+    // app.use(cors({ origin: `${process.env.SCHEME}://www.${process.env.DOMAIN}${PORT_STRING}` }))
+// }
 
 // api routes
 const apiRoutes = ['api']
