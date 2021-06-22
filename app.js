@@ -7,8 +7,8 @@ for(const key in dotenv.parse(fs.readFileSync('.env'))) {
     console.log(`${key}: ${process.env[key]}`)
 }
 
-const express = require('express')
 const path = require('path')
+const express = require('express')
 
 const session = require('express-session')              // http://expressjs.com/en/resources/middleware/session.html
 // const MemoryStore = require('memorystore')(session)  // https://www.npmjs.com/package/memorystore
@@ -37,6 +37,25 @@ app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 
 app.use(express.static(path.join(__dirname, 'public')))
+
+// live reload
+if(process.env.NODE_ENV == 'development') {
+    // watches directory
+    const livereload = require('livereload')
+    const liveReloadServer = livereload.createServer( { delay: 100 } )
+    liveReloadServer.watch(path.join(__dirname, 'public'))
+
+    // injects reload js into every page
+    const connectLivereload = require("connect-livereload")
+    app.use(connectLivereload())
+
+    // signal browser when the server just got up
+    liveReloadServer.server.once('connection', () => {
+        setTimeout(() => {
+            liveReloadServer.refresh("/")
+        }, 100)
+    })
+}
 
 app.enable('trust proxy')
 const cookie = { httpOnly: true, secure: (process.env.SCHEME != 'http'), sameSite: 'strict' }

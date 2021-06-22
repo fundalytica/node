@@ -25,5 +25,9 @@
         "pug": "^3.0.2",
         "python-shell": "^3.0.0",
         "vhost": "^3.0.2"
+    },
+    "devDependencies": {
+        "connect-livereload": "^0.6.1",
+        "livereload": "^0.9.3"
     }
 }
