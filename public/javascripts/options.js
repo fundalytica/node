@@ -55,7 +55,6 @@ const updateDropdown = () => {
     UITextUtils.text('#dropdown-sort', `Sorted by ${options.sort}`)
 
     UIUtils.populateDropdown('#dropdown-menu-sort', options.sortKeys)
-    UIUtils.addClass('.dropdown-menu > li > button', 'dropdown-item')
     UIUtils.addClass('.dropdown-menu > li > button', 'btn-sm')
 
     registerClickEventSort()
@@ -92,7 +91,7 @@ const updateTables = data => {
 
                     // logo
                     if (key == 'logo') {
-                        const logoFile = (symbol, extension = 'svg') => `https://www.fundalytica.com/images/logos/stocks/${symbol.toLowerCase()}.${extension}`
+                        const logoFile = (symbol, extension = 'svg') => `/images/logos/stocks/${symbol.toLowerCase()}.${extension}`
 
                         const img = document.createElement('img')
                         img.setAttribute('onerror', `this.src='${logoFile(option.symbol, 'png')}`)
@@ -179,3 +178,4 @@ const registerClickEventOrder = () => {
 }
 
 UIUtils.ready(run)
+
