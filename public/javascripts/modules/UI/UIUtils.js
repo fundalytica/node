@@ -76,11 +76,12 @@ export default class UIUtils {
             const button = document.createElement('button')
             const text = document.createTextNode(value)
 
-            button.appendChild(text)
-            li.appendChild(button)
-            dropdown.appendChild(li)
-
             button.setAttribute('type', 'button')
+            button.classList.add('dropdown-item')
+
+            dropdown.appendChild(li)
+            li.appendChild(button)
+            button.appendChild(text)
         }
     }
 }
