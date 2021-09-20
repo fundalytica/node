@@ -6,6 +6,7 @@ const handler = (req, res, next) => {
         text: 'Fundalytica API',
 
         urls: [
+            '/v1/crypto/portfolio',
             '/v1/crypto/futures/tickers/symbols/kraken',
 
             '/v1/options/portfolio',

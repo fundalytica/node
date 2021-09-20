@@ -1,0 +1,54 @@
+extends layout
+
+block style
+    link(href='/stylesheets/crypto.css' rel='stylesheet')
+    link(href='/stylesheets/animation.css' rel='stylesheet')
+    link(href='/stylesheets/no_more_tables.css' rel='stylesheet')
+
+block scripts
+    script(src='https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js')
+    script(src='https://cdnjs.cloudflare.com/ajax/libs/numeral.js/2.0.6/numeral.min.js')
+
+    script(src='/javascripts/crypto.js' type='module')
+
+block content
+    main.d-flex.flex-column.justify-content-center.text-center.p-4
+        div.align-self-center.p-2
+            h3.text-dark.p-0.m-0 Digital Assets Portfolio
+
+            p.m-0 #underconstruction #mongodb
+
+            div.mt-5#list
+                //- div.asset.p-2
+                //-     h4.m-0 Bitcoin
+                //-     //- p.m-0 $50,000
+                //-     a(href="" target="_blank" rel="noopener")
+                //-         img(class="logo" src="/images/logos/crypto/xbt.svg" alt="xbt logo").m-2.p-1
+                //-     p.m-0 5.5 BTC
+                //-     //-  - $275,000
+                //- div.asset.p-2.mt-4
+                //-     h4.m-0 Ethereum
+                //-     //- p.m-0 $4,000
+                //-     a(href="" target="_blank" rel="noopener")
+                //-         img(class="logo" src="/images/logos/crypto/eth.svg" alt="eth logo").m-2.p-1
+                //-     p.m-0 42.9 ETH
+                //-     //-  - $171,600
+                //-     //- p.m-0 42.21726 + 0.7227 ETH
+                //-     //- p.m-0 36.0735 ETH2 (Staked)
+                //-     //- p.m-0 5 ETH (Collateral)
+                //-     //- p.m-0 1.14376 ETH2 (Rewards)
+                //-     //- p.m-0 0.7227 (Liquidity)
+                //- div.asset.p-2.mt-4
+                //-     h4.m-0 Polkadot
+                //-     //- p.m-0 $35
+                //-     a(href="" target="_blank" rel="noopener")
+                //-         img(class="logo" src="/images/logos/crypto/dot.svg" alt="dot logo").m-2.p-1
+                //-     p.m-0 515.3 DOT
+                //-     //- 515.31744712 (Total) - 15.31822837 (Just Rewards) + 0.00078125 (Not Staked)
+
+        div.d-flex.flex-grow-1.justify-content-center
+            div.align-self-center
+                .spinner-border.text-success(id="spinner" role="status")
+
+            div.align-self-center
+                p.text-danger(id="error").d-none

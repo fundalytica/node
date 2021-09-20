@@ -5,12 +5,23 @@ const colors = require('colors')
 
 const topics = [
     {
+        id: 'crypto',
+        hashtag: 'portfolio',
+        image: 'crypto.svg',
+        color: 'bg-purple-a100',
+        title: 'Our Crypto Fund',
+        description: 'BTC, ETH, Altcoins, NFTs. Check out our diversified digital assets portfolio.',
+        button: 'To The Moon 🚀',
+        action: 'route'
+    },
+
+    {
         id: 'futures',
         hashtag: 'data',
         image: 'crypto.svg',
-        color: 'bg-deep-purple-a100',
+        color: 'bg-light-blue-400',
         title: 'Crypto Futures',
-        description: 'Contango or backwardation? Go long or go short? We track premiums on Kraken & Deribit.',
+        description: 'Contango or backwardation? Go long or go short? We track futures premiums on Kraken.',
         button: 'Show Premiums 👀',
         action: 'route'
     },
@@ -92,15 +103,6 @@ const topics = [
         action: 'wip'
     },
 
-    //     id: 'crypto',
-    //     hashtag: 'portfolio',
-    //     image: 'crypto.svg',
-    //     color: 'bg-deep-purple-a100',
-    //     title: 'Bullish Crypto Fund',
-    //     description: 'BTC, ETH, Altcoins, NFTs, Futures, Options',
-    //     button: 'Check It Out 🪙',
-    //     action: 'route'
-    // },
     // {
     //     // id: 'norway',
     //     id: 'wip',
