@@ -92,17 +92,17 @@ const topics = [
         action: 'wip'
     },
 
-    {
-        id: 'qqq',
-        hashtag: 'data',
-        color: 'bg-light-blue-400',
-        image: 'invesco.svg',
-        title: 'QQQ ETF Holdings',
-        description: 'All the great companies included in the Invesco QQQ ETF (NASDAQ 100).',
-        button: 'View Stocks 🔍',
-        action: 'wip'
-    },
-
+    // {
+    //     id: 'qqq',
+    //     hashtag: 'data',
+    //     color: 'bg-light-blue-400',
+    //     image: 'invesco.svg',
+    //     title: 'QQQ ETF Holdings',
+    //     description: 'All the great companies included in the Invesco QQQ ETF (NASDAQ 100).',
+    //     button: 'View Stocks 🔍',
+    //     action: 'wip'
+    // },
+    //
     // {
     //     // id: 'norway',
     //     id: 'wip',
