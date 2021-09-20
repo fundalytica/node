@@ -1,9 +1,8 @@
 import Utils from './Utils.js'
 
 export default class OptionsData {
-    constructor(api) {
+    constructor(api_origin) {
         this.api_origin = api_origin
-
         this.sortKeys = ['symbol', 'expiration', 'basis', 'value', 'profit']
         this.orderKeys = ['asc', 'desc']
         this.expirationDisplayFormat = "DD MMM 'YY"
