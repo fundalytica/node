@@ -9,6 +9,7 @@ const futures = new FuturesKraken(window.api_origin)
 
 const UI = new UIManager("#spinner", "#error")
 const table = '#table-futures'
+const alerts = '#alerts'
 const status = '#websocket-status'
 
 let interval = null
@@ -27,6 +28,7 @@ const run = () => {
 
         // UIUtils.addListener(`${status} button`, 'click', () => {})
 
+        UIUtils.show(alerts)
         UIUtils.show(status)
     }
 
@@ -166,11 +168,11 @@ const initTable = (table, data) => {
             circle.setAttribute('r', '10')
             status.appendChild(circle)
 
-            // const logo_pair = `<img class= "logo" src = "https://www.fundalytica.com/images/logos/crypto/${crypto}.svg" alt = "${crypto} logo" /> <span>${pair.toUpperCase()}</span>`
+            // const logo_pair = `<img class= "logo" src = "/images/logos/crypto/${crypto}.svg" alt = "${crypto} logo" /> <span>${pair.toUpperCase()}</span>`
             const logo_pair_div = document.createElement('div')
             const img = document.createElement('img')
             img.classList.add('logo')
-            img.setAttribute('src', `https://www.fundalytica.com/images/logos/crypto/${crypto}.svg`)
+            img.setAttribute('src', `/images/logos/crypto/${crypto}.svg`)
             img.setAttribute('alt', `${crypto} logo`)
             logo_pair_div.appendChild(img)
             const span = document.createElement('span')
