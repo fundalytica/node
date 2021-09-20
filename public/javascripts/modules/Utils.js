@@ -5,14 +5,17 @@ export default class Utils {
 
     static request(url, options, done, fail = console.log) {
         const errorHandling = response => {
-            if (!response.ok) throw Error(`${url} - ${response.status} (${response.statusText})`)
+            if (! response.ok) {
+                throw Error(`${url} - ${response.status} (${response.statusText})`)
+            }
+
             return response
         }
 
         fetch(url, options)
             .then(errorHandling)
-            .catch(fail)
             .then(response => response.json().then(done))
+            .catch(fail)
     }
 
     // Array Utils
