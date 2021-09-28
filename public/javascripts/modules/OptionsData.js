@@ -30,7 +30,7 @@ export default class OptionsData {
     init(done, fail) {
         const url = `${this.api_origin}/v1/options/portfolio`
 
-        const doneCallback = data => {
+        const requestCallback = data => {
             if (data.error) return fail(data.error)
 
             this.generated = data.generated
@@ -42,7 +42,7 @@ export default class OptionsData {
             done()
         }
 
-        Utils.request(url, null, doneCallback, fail)
+        Utils.request(url, null, requestCallback, fail)
     }
 
     enrichPositions() {
