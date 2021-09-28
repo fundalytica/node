@@ -1,6 +1,6 @@
 const { PythonShell } = require('python-shell')
 
-const shellHandler = (script, args, res) => {
+const shellHandler = (script, args, callback) => {
     console.log(`script: ${script}`.cyan)
 
     const options = { args: args, mode: 'json', pythonPath: process.env.SCRIPTS_PYTHON_PATH }
@@ -10,14 +10,9 @@ const shellHandler = (script, args, res) => {
             error = `results length: ${results.length}`
         }
 
-        if (error) {
-            res.json({ error: error.message })
-            console.error(error)
-        }
-        else {
-            res.json(results[0])
-            // console.log(results)
-        }
+        const json = error ? { error: error.message } : results[0]
+
+        callback(json)
     })
 }
 
