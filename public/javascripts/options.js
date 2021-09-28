@@ -94,7 +94,7 @@ const updateTables = data => {
                         const logoFile = (symbol, extension = 'svg') => `/images/logos/stocks/${symbol.toLowerCase()}.${extension}`
 
                         const img = document.createElement('img')
-                        img.setAttribute('onerror', `this.src='${logoFile(option.symbol, 'png')}`)
+                        img.setAttribute('onerror', `this.src="${logoFile(option.symbol, 'png')}"`)
                         img.setAttribute('src', logoFile(option.symbol))
                         img.setAttribute('alt', `${option.symbol} logo`)
                         // value = `<img onerror="this.src='${logoFile(option.symbol, 'png')}'" src="${logoFile(option.symbol)}" alt="${option.symbol} logo"/>`
