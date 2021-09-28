@@ -7,6 +7,8 @@ const handler = (req, res, next) => {
 
         urls: [
             '/v1/crypto/portfolio',
+            '/v1/crypto/portfolio/update',
+
             '/v1/crypto/futures/tickers/symbols/kraken',
 
             '/v1/options/portfolio',
