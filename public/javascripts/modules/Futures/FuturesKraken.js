@@ -1,4 +1,3 @@
-import FuturesOrderBook from './FuturesOrderBook.js'
 import Utils from '../Utils.js'
 
 export default class FuturesKraken {
@@ -21,7 +20,7 @@ export default class FuturesKraken {
     init(done, fail) {
         const symbolsURL = `${this.api_origin}/v1/crypto/futures/tickers/symbols/kraken`
 
-        const doneCallback = data => {
+        const requestCallback = data => {
             // OVERRIDE
             // const pair = 'bchusd'
             // const period = 'quarter'
@@ -39,7 +38,7 @@ export default class FuturesKraken {
             done(data)
         }
 
-        Utils.request(symbolsURL, null, doneCallback, fail)
+        Utils.request(symbolsURL, null, requestCallback, fail)
     }
 
     terminate() {
