@@ -8,8 +8,8 @@ router.get(`${process.env.API_PATH}/v1/quote/:symbol`, async (req, res) => {
 
     console.log('/v1/quote/' + symbol)
 
-    // utils.shellHandler('/scripts/iex/iex-quote.py', ['-s', symbol], res)
-    utils.shellHandler('/scripts/yahoo/yahoo-quote.py', ['-s', symbol], res)
+    const callback = json => res.json(json)
+    utils.shellHandler('/scripts/yahoo/yahoo-quote.py', ['-s', symbol], callback)
 })
 
 module.exports = router

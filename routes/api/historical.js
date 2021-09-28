@@ -10,7 +10,8 @@ router.get(`${process.env.API_PATH}/v1/historical/:symbol`, async (req, res) => 
     console.log(`/v1/historical/${symbol} (${provider})`)
 
     // utils.shellHandler(`${process.env.SCRIPTS_PATH}/yahoo/yahoo-historical.py`, ['-s', symbol], res)
-    utils.shellHandler(`${process.env.SCRIPTS_PATH}/py-historical/historical.py`, ['-s', symbol, '-p', provider], res)
+    const callback = json => res.json(json)
+    utils.shellHandler(`${process.env.SCRIPTS_PATH}/py-historical/historical.py`, ['-s', symbol, '-p', provider], callback)
 })
 
 router.get(`${process.env.API_PATH}/v1/historical/ath/:symbol`, async (req, res) => {
@@ -19,7 +20,8 @@ router.get(`${process.env.API_PATH}/v1/historical/ath/:symbol`, async (req, res)
 
     console.log(`/v1/ath/${symbol} (${provider})`)
 
-    utils.shellHandler(`${process.env.SCRIPTS_PATH}/py-historical/historical.py`, ['-s', symbol, '-p', provider, '--ath'], res)
+    const callback = json => res.json(json)
+    utils.shellHandler(`${process.env.SCRIPTS_PATH}/py-historical/historical.py`, ['-s', symbol, '-p', provider, '--ath'], callback)
 })
 
 router.get(`${process.env.API_PATH}/v1/historical/dip/:symbol-:dip`, async (req, res) => {
@@ -29,7 +31,8 @@ router.get(`${process.env.API_PATH}/v1/historical/dip/:symbol-:dip`, async (req,
 
     console.log(`/v1/dip/${symbol}-${dip} (${provider})`)
 
-    utils.shellHandler(`${process.env.SCRIPTS_PATH}/py-historical/historical.py`, ['-s', symbol, '-p', provider, '--dip', dip], res)
+    const callback = json => res.json(json)
+    utils.shellHandler(`${process.env.SCRIPTS_PATH}/py-historical/historical.py`, ['-s', symbol, '-p', provider, '--dip', dip], callback)
 })
 
 module.exports = router
