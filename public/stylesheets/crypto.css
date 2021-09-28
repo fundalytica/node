@@ -3,7 +3,15 @@ img.logo {
     width: 50px;
 }
 
-.asset {
-    border: 1px solid black;
-    border-radius: 10px;
+#provider img {
+    height: 20px;
+}
+
+.position {
+    /* border: 1px solid black;
+    border-radius: 10px; */
+}
+
+.position p {
+    margin: 0;
 }
