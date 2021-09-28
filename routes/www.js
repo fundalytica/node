@@ -10,7 +10,7 @@ const topics = [
         image: 'crypto.svg',
         color: 'bg-purple-a100',
         title: 'Our Crypto Fund',
-        description: 'BTC, ETH, Altcoins, NFTs. Check out our diversified digital assets portfolio.',
+        description: 'BTC, ETH, DOT, Altcoins. Check out our diversified digital assets portfolio.',
         button: 'To The Moon 🚀',
         action: 'route'
     },
