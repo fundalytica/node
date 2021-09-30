@@ -11,23 +11,32 @@ const authenticate = (req, res, next) => passport.authenticate('jwt', { session:
 router.get(`${process.env.API_PATH}/v1/crypto/portfolio`, authenticate, async (req, res) => {
     console.log(`path: ${req.path}`.cyan)
 
-    let email = req.user.email
-    let demo = false
+    const path = `${process.env.SCRIPTS_PATH}/crypto/portfolio.py`
+    const db = `fundalytica_${process.env.NODE_ENV}`
 
-    if(! email) {
-        email = 'dummy@fundalytica.com'
-        demo = true
+    const email = req.user.email
+    const DEMO_EMAIL = 'dummy@fundalytica.com'
+
+    if (email) { // user logged in
+        utils.shellHandler(path, ['-db', db, '-user', email], json => {
+            if(json['assets'].length) { // not empty
+                res.json(json)
+            }
+            else { // empty, fetch demo portfolio
+                utils.shellHandler(path, ['-db', db, '-user', DEMO_EMAIL], json => {
+                    json['empty'] = true
+                    json['demo'] = true
+                    res.json(json)
+                })
+            }
+        })
     }
-
-    const callback = json => {
-        const empty = (json['assets'].length == 0)
-        demo = demo || empty
-        if(demo) json['demo'] = true
-
-        res.json(json)
+    else { // no user logged in, fetch demo portfolio
+        utils.shellHandler(path, ['-db', db, '-user', DEMO_EMAIL], json => {
+            json['demo'] = true
+            res.json(json)
+        })
     }
-
-    utils.shellHandler(`${process.env.SCRIPTS_PATH}/crypto/portfolio.py`, ['-db', `fundalytica_${process.env.NODE_ENV}`, '-user', email], callback)
 })
 
 router.post(`${process.env.API_PATH}/v1/crypto/portfolio/update`, authenticate, async (req, res) => {
