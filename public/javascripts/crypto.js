@@ -1,6 +1,6 @@
 import UIManager from './modules/UI/UIManager.js'
 import UIUtils from './modules/UI/UIUtils.js'
-import Utils from './modules/Utils.js'
+// import UITextUtils from './modules/UI/UITextUtils.js'
 
 import CryptoPortfolio from './modules/CryptoPortfolio.js'
 import CryptoBinance from './modules/Crypto/CryptoBinance.js'
@@ -16,6 +16,25 @@ const listSelector = '#list'
 
 const updateButtonSelector = "#updateButton"
 const updateFormSelector = "#updateForm"
+const demoTextSelector = '#demoText'
+const createButtonSelector = "#createButton"
+
+const demoElements = [demoTextSelector, createButtonSelector, listSelector]
+
+let demo = false
+let empty = false
+
+UIUtils.addListener(createButtonSelector, 'click', e => {
+    if(demo && ! empty) {
+        location.href = "/login"
+    }
+
+    if(demo && empty) {
+        demoElements.forEach(el => UIUtils.hide(el))
+
+        UIUtils.show(updateFormSelector)
+    }
+})
 
 UIUtils.addListener(updateButtonSelector, 'click', e => {
     document.querySelector("#updateForm").reset()
@@ -33,12 +52,23 @@ UIUtils.addListener("#submitButton", 'click', e => {
     // const fail = error => UI.error(error)
     // Utils.request(url, null, done, fail)
 
+    // do not forget these after submission success
+    // demo = false
+    // empty = false
+
     console.log(`${symbol} ${amount} ${cost}`)
 })
 
 UIUtils.addListener("#cancelButton", 'click', e => {
-    UIUtils.show(updateButtonSelector)
     UIUtils.hide(updateFormSelector)
+
+    if(demo) {
+        demoElements.forEach(el => UIUtils.show(el))
+    }
+    else {
+        UIUtils.show(updateButtonSelector)
+    }
+
     e.preventDefault()
 })
 
@@ -118,6 +148,7 @@ const populate = (assetsData, tickerData) => {
             // p
             const p = document.createElement('p')
             p.classList.add(colorClass)
+            p.classList.add('text-nowrap')
 
             // small
             const smallUnit = document.createElement('small')
@@ -170,13 +201,11 @@ const run = () => {
     const fail = error => UI.error(error)
 
     const done = data => {
-        assetsData = data.assets
-        console.log(assetsData)
+        demo = data.demo
+        empty = data.empty
 
-        if(data.demo) {
-            UIUtils.show('#demoText')
-            UIUtils.show('#createButton')
-        }
+        assetsData = data.assets
+        console.log(data)
 
         const done = data => {
             tickerData = data
@@ -184,9 +213,20 @@ const run = () => {
 
             populate(assetsData, tickerData)
 
-            UI.ready()
-            UIUtils.show(updateButtonSelector)
+            if(demo) {
+                UIUtils.show(demoTextSelector)
+                UIUtils.show(createButtonSelector)
+
+                // if(! empty) {
+                //     UITextUtils.text(createButtonSelector, 'Please Log In/Sign Up')
+                // }
+            }
+            else {
+                UIUtils.show(updateButtonSelector)
+            }
+``
             UIUtils.show(listSelector)
+            UI.ready()
         }
         binance.init(done, fail)
     }
