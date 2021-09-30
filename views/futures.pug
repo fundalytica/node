@@ -17,10 +17,66 @@ block content
             h3.text-dark.p-0.m-0 Crypto Futures Premiums
 
             a(href="https://futures.kraken.com" target="_blank" rel="noopener")
-                img(class="exchange" src="https://www.fundalytica.com/images/logos/crypto/kraken.svg" alt="kraken logo")
+                img(class="exchange" src="/images/logos/crypto/kraken.svg" alt="kraken logo")
 
-            //- p.small.text-primary(id="socket")
-            p.small.text-success(id="settlement")
+            //- button.btn.btn-sm.btn-primary.text-nowrap.p-2.mb-3.d-none Create New Alert
+            //-     i.fas.fa-bell.ms-2
+
+            //- .d-flex.flex-row.align-items-start.justify-content-center.mb-3
+            //-     .dropdown.mx-1
+            //-         button.btn.btn-sm.btn-secondary.dropdown-toggle(type="button" id="dropdown-sort" data-bs-toggle="dropdown" aria-expanded="false").mb-2 XBTUSD
+            //-         ul.dropdown-menu(id="dropdown-menu-sort" aria-labelledby="dropdown-sort")
+            //-             li
+            //-                 button(type="button").dropdown-item.btn-sm XBTUSD
+            //-             li
+            //-                 button(type="button").dropdown-item.btn-sm ETHUSD
+            //-     .dropdown.mx-1
+            //-         button.btn.btn-sm.btn-secondary.dropdown-toggle(type="button" id="dropdown-sort" data-bs-toggle="dropdown" aria-expanded="false").mb-2 semiannual
+            //-         ul.dropdown-menu(id="dropdown-menu-sort" aria-labelledby="dropdown-sort")
+            //-             li
+            //-                 button(type="button").dropdown-item.btn-sm perpetual
+            //-             li
+            //-                 button(type="button").dropdown-item.btn-sm semiannual
+            //-             li
+            //-                 button(type="button").dropdown-item.btn-sm quarter
+            //-             li
+            //-                 button(type="button").dropdown-item.btn-sm month
+            //-     .dropdown.mx-1
+            //-         button.btn.btn-sm.btn-secondary.dropdown-toggle(type="button" id="dropdown-sort" data-bs-toggle="dropdown" aria-expanded="false").mb-2 price
+            //-         ul.dropdown-menu(id="dropdown-menu-sort" aria-labelledby="dropdown-sort")
+            //-             li
+            //-                 button(type="button").dropdown-item.btn-sm price
+            //-             li
+            //-                 button(type="button").dropdown-item.btn-sm premium
+            //-             li
+            //-                 button(type="button").dropdown-item.btn-sm annualized
+            //-             //- li
+            //-                 //- button(type="button").dropdown-item.btn-sm days
+
+            //-     .btn-group(id="btn-group-value" role="group" aria-label="toggle button group").mx-1
+            //-         input.btn-check(type="radio" name="btnradiovalue" id="btn-radio-greater" checked)
+            //-         label.btn.btn-outline-secondary.btn-sm(for="btn-radio-greater") >
+            //-         input.btn-check(type="radio" name="btnradiovalue" id="btn-radio-less" autocomplete="off")
+            //-         label.btn.btn-outline-secondary.btn-sm(for="btn-radio-less") <
+
+            //-     div.input-group.input-group-sm.mx-1
+            //-         input(type="text" id="formGroupExampleInput" placeholder="enter price" aria-describedby="basic-addon1").form-control
+
+            //-     .btn-group(id="btn-group-alert" role="group" aria-label="toggle button group").mx-1
+            //-         input.btn-check(type="radio" name="btnradioalert" id="btn-radio-email" checked)
+            //-         label.btn.btn-outline-secondary.btn-sm(for="btn-radio-email") email
+            //-         input.btn-check(type="radio" name="btnradioalert" id="btn-radio-sms")
+            //-         label.btn.btn-outline-secondary.btn-sm(for="btn-radio-sms") sms
+
+            //-     button.btn.btn-sm.btn-success.text-nowrap.mx-1 Add Alert
+            //-         i.fas.fa-plus.ms-2
+            //-     button.btn.btn-sm.btn-danger.text-nowrap.mx-1
+            //-         i.fas.fa-times
+
+                //- need table with add / delete option for rows
+
+                //- 'pair': 'XBT:USD', 'period': 'semiannual', 'property': 'markPrice', 'operator': '>', 'value': 5
+                //- email / sms
 
             .no-more-tables.pt-2
                 table.table.small(id="table-futures").d-none
@@ -43,6 +99,8 @@ block content
                         //-     td(data-title="first") Elon
                         //-     td(data-title="last") Musk
 
+            p.small.text-success(id="settlement")
+
             //- #new-alert.mt-4
             //-     button(type="button" class="btn btn-warning") Exchange
             //-     button(type="button" class="btn btn-warning") Create Alert
@@ -52,8 +110,6 @@ block content
 
             //-     <input type="checkbox" class="btn-check" id="btn-check-outlined" autocomplete="off">
             //-     <label class="btn btn-outline-primary" for="btn-check-outlined">SMS</label><br>
-
-            #alerts
 
             #websocket-status.d-none
                 p.m-0.mt-3.small.text-info futures.kraken.com WebSocket
