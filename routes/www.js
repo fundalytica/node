@@ -9,9 +9,9 @@ const topics = [
         hashtag: 'portfolio',
         image: 'crypto.svg',
         color: 'bg-purple-a100',
-        title: 'Our Crypto Fund',
-        description: 'BTC, ETH, DOT, Altcoins. Check out our diversified digital assets portfolio.',
-        button: 'To The Moon 🚀',
+        title: 'The Crypto Fund',
+        description: 'BTC, ETH, DOT, Altcoins. Check out our diversified digital assets portfolio and create your own.',
+        button: 'To The Moon',
         action: 'route'
     },
 
@@ -22,7 +22,7 @@ const topics = [
         color: 'bg-light-blue-400',
         title: 'Crypto Futures',
         description: 'Contango or backwardation? Go long or go short? We track futures premiums on Kraken.',
-        button: 'Show Premiums 👀',
+        button: 'Show Premiums',
         action: 'route'
     },
 
@@ -33,7 +33,7 @@ const topics = [
         color: 'bg-deep-purple-a100',
         title: 'Option Writing',
         description: 'When volatility goes up, we will sell options to capture the higher premium. We share our open positions.',
-        button: 'See Portfolio 💼',
+        button: 'See Portfolio',
         action: 'route'
     },
 
@@ -44,7 +44,7 @@ const topics = [
         image: 'ath.svg',
         title: 'All Time Highs',
         description: 'We analyze the historical data of any stock and show you the all time high prices throughout its history.',
-        button: 'Charts 📈',
+        button: 'Charts',
         action: 'route'
     },
 
@@ -55,7 +55,7 @@ const topics = [
         image: 'dip.svg',
         title: 'Buy The Dip',
         description: 'We are looking out for the next stock price dips because we love investing at low prices. Do not miss the opportunity!',
-        button: 'Charts 📉',
+        button: 'Charts',
         action: 'route'
     },
 
@@ -66,7 +66,7 @@ const topics = [
         color: 'bg-light-blue-400',
         title: 'IPO Datastore',
         description: 'We collected and enriched all the IPO data of the last 10 years so you can use it too.',
-        button: 'Preview Data 👾',
+        button: 'Preview Data',
         action: 'wip'
     },
 
@@ -77,7 +77,7 @@ const topics = [
         image: 'reports.svg',
         title: 'Brokerage Reports',
         description: 'Brokerage reports are not always easy to read, try out a richer experience.',
-        button: 'Upload Report 📋',
+        button: 'Upload Report',
         action: 'wip'
     },
 
@@ -88,7 +88,7 @@ const topics = [
         image: 'benchmark.svg',
         title: 'The Benchmark',
         description: 'Every investment should be compared to the broader market. Do you know what your alpha is?',
-        button: 'Find Out 🔬',
+        button: 'Find Out',
         action: 'wip'
     },
 
