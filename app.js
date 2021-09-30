@@ -28,7 +28,7 @@ const passport = require('passport')
 require('./auth/auth')
 
 const database = `mongodb://localhost/fundalytica_${process.env.NODE_ENV}`
-mongoose.connect(database, { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true })
+mongoose.connect(database, { useNewUrlParser: true, useUnifiedTopology: true })
 mongoose.connection.on('error', error => console.log(error))
 
 app.set('view engine', 'pug')
