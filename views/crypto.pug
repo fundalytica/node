@@ -19,7 +19,7 @@ block content
             p.text-primary.m-0.d-none#demoText #demo
 
             button.btn.btn-primary.text-nowrap.mt-4.d-none#createButton Create Your Own Portfolio
-            //- button.btn.btn-success.text-nowrap.mt-4.d-none#updateButton Update Portfolio
+            button.btn.btn-success.text-nowrap.mt-4.d-none#updateButton Update Portfolio
 
             - var url = `${locals.api_origin}/v1/crypto/portfolio/update`
             form(id="updateForm" method="POST" action=url).mt-4.d-flex.flex-row.mx-auto.w-75.d-none
@@ -36,7 +36,7 @@ block content
                 button.btn.btn-danger.text-nowrap.mx-1#cancelButton
                     i.fas.fa-times
 
-            div.mt-4#list
+            div.mt-4.d-none.d-flex.flex-wrap.justify-content-center#list
 
         div.d-flex.flex-grow-1.justify-content-center
             div.align-self-center
