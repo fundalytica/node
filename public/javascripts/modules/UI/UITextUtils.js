@@ -1,5 +1,4 @@
 export default class UITextUtils {
-
     static text(selector, string) {
         document.querySelector(selector).textContent = string
     }
