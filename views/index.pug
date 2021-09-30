@@ -38,9 +38,9 @@ block content
             //-                         .input-group-append
             //-                             button.btn.btn-outline-secondary.rounded-right(type='submit' name='submit') Subscribe
 
-
             each topic, index in topics
-                .topic.m-3(class=topic.color).p-4
+                - css = topic.color + ' ' + (topic.id == "crypto" ? 'ps-4 py-4' : 'p-4')
+                .topic.m-3(class=css)
                     .d-flex.flex-row
                         //- left segment
                         div
@@ -62,7 +62,7 @@ block content
                         //- right segment
                         if(topic.id=="crypto")
                             <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
-                            <lottie-player src="https://assets6.lottiefiles.com/packages/lf20_ZUd5j6.json"  background="transparent"  speed="1"  style="width: 100px; height: 100px;"  loop autoplay></lottie-player>
+                            <lottie-player src="https://assets6.lottiefiles.com/packages/lf20_ZUd5j6.json" background="transparent" speed="1" style="width: 100px" loop autoplay></lottie-player>
 
 
         div.d-flex.flex-row.flex-wrap.justify-content-center.text-secondary.small
