@@ -36,3 +36,9 @@ body { min-height: 100vh; min-height: -webkit-fill-available; }
 /* center */
 
 main { flex: 1; }
+
+/* lottie */
+lottie-player {
+    margin: 0; padding: 0;
+    align-self: center;
+}
