@@ -151,8 +151,6 @@ router.get('/', (req, res, next) => {
 
     const just_logged = req.flash('logged')[0]
 
-    // console.log(req.isAuthenticated())
-
     res.render('index', { topics, subscription, user, just_logged, subscribed_key })
 })
 
