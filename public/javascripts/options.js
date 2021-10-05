@@ -94,10 +94,9 @@ const updateTables = data => {
                         const logoFile = (symbol, extension = 'svg') => `/images/logos/stocks/${symbol.toLowerCase()}.${extension}`
 
                         const img = document.createElement('img')
-                        img.setAttribute('onerror', `this.src="${logoFile(option.symbol, 'png')}"`)
+                        img.setAttribute('onerror', `this.onerror=null;this.src="${logoFile(option.symbol, 'png')}";`)
                         img.setAttribute('src', logoFile(option.symbol))
                         img.setAttribute('alt', `${option.symbol} logo`)
-                        // value = `<img onerror="this.src='${logoFile(option.symbol, 'png')}'" src="${logoFile(option.symbol)}" alt="${option.symbol} logo"/>`
                         value = img
                     }
                     // symbol
@@ -107,7 +106,6 @@ const updateTables = data => {
                         a.setAttribute('target', '_blank')
                         a.setAttribute('rel', 'noopener')
                         a.innerText = `\$${value}`
-                        // value = `<a href='https://www.tradingview.com/symbols/${value}' target='_blank' rel='noopener'>\$${value}</a>`
                         value = a
                     }
                     // expiration
