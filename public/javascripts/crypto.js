@@ -1,6 +1,6 @@
 import UIManager from './modules/UI/UIManager.js'
 import UIUtils from './modules/UI/UIUtils.js'
-// import UITextUtils from './modules/UI/UITextUtils.js'
+import UITextUtils from './modules/UI/UITextUtils.js'
 
 import CryptoPortfolio from './modules/CryptoPortfolio.js'
 import CryptoBinance from './modules/Crypto/CryptoBinance.js'
@@ -14,6 +14,7 @@ let tickerData = null
 
 const listSelector = '#list'
 
+const messageSelector = "#message"
 const updateButtonSelector = "#updateButton"
 const updateFormSelector = "#updateForm"
 const demoTextSelector = '#demoText'
@@ -37,26 +38,36 @@ UIUtils.addListener(createButtonSelector, 'click', e => {
 })
 
 UIUtils.addListener(updateButtonSelector, 'click', e => {
+    UIUtils.hide(messageSelector)
+
     document.querySelector("#updateForm").reset()
     UIUtils.hide(updateButtonSelector)
     UIUtils.show(updateFormSelector)
 })
 
 UIUtils.addListener("#submitButton", 'click', e => {
+    UIUtils.hide(messageSelector)
+
     const symbol = document.querySelector("#symbolInput").value
     const amount = document.querySelector("#amountInput").value
     const cost = document.querySelector("#costInput").value
 
-    // const url = `${window.api_origin}/v1/crypto/update/${options.symbol}-${options.minimumDip}`
-    // const done = data => UISuccess(options, data)
-    // const fail = error => UI.error(error)
-    // Utils.request(url, null, done, fail)
+    e.preventDefault()
 
-    // do not forget these after submission success
-    // demo = false
-    // empty = false
+    const callback = () => {
+        demo = false
+        empty = false
 
-    console.log(`${symbol} ${amount} ${cost}`)
+        UIUtils.hide(updateFormSelector)
+
+        fetch(() => {
+            UIUtils.show(updateButtonSelector)
+            UIUtils.show(messageSelector)
+            UITextUtils.text(messageSelector, `✓ Portfolio Updated: ${numeral(amount).format('0,0.[0])')} ${symbol} @ ${numeral(cost).format('$0,0.[0])')}`)
+        })
+    }
+
+    crypto.update(symbol, amount, cost, callback)
 })
 
 UIUtils.addListener("#cancelButton", 'click', e => {
@@ -86,6 +97,13 @@ const getPrice = (symbol, tickerData) => {
         // if(row['symbol'].includes(symbol.toUpperCase())) {
         //     console.log(row)
         // }
+    }
+}
+
+const clear = () => {
+    const list = document.querySelector(listSelector)
+    while (list.firstChild) {
+        list.removeChild(list.firstChild)
     }
 }
 
@@ -193,7 +211,9 @@ const populate = (assetsData, tickerData) => {
     }
 }
 
-const run = () => {
+const fetch = (callback = null) => {
+    clear()
+
     UI.loading()
 
     UIUtils.hide(listSelector)
@@ -216,22 +236,19 @@ const run = () => {
             if(demo) {
                 UIUtils.show(demoTextSelector)
                 UIUtils.show(createButtonSelector)
-
-                // if(! empty) {
-                //     UITextUtils.text(createButtonSelector, 'Please Log In/Sign Up')
-                // }
             }
             else {
                 UIUtils.show(updateButtonSelector)
             }
-``
+
             UIUtils.show(listSelector)
             UI.ready()
+
+            if(callback) callback()
         }
         binance.init(done, fail)
     }
     crypto.init(done, fail)
 }
 
-UIUtils.ready(run)
-
+UIUtils.ready(fetch)
