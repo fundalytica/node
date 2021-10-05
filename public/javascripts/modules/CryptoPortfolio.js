@@ -20,4 +20,24 @@ export default class CryptoData {
 
         Utils.request(url, null, requestCallback, fail)
     }
+
+    update(symbol, amount, cost, callback) {
+        const url = `${this.api_origin}/v1/crypto/portfolio/update`
+
+        const fail = error => {
+            console.log(error)
+        }
+
+        console.log(`${url} ${symbol} ${amount} ${cost}`)
+
+        const options = { method: 'POST' }
+
+        const body = new URLSearchParams()
+        body.append('symbol', symbol)
+        body.append('amount', amount)
+        body.append('cost', cost)
+        options.body = body
+
+        Utils.request(url, options, callback, fail)
+    }
 }
