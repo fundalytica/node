@@ -33,11 +33,11 @@ export default class UITableUtils {
         for (let i = 0; i < values.length; i++) {
             const newCell = newRow.insertCell()
 
-            if(typeof(values[i])== 'string') {
+            if(typeof(values[i]) != 'object') {
                 newCell.innerText = values[i]
             }
 
-            if(typeof(values[i])== 'object') {
+            if(typeof(values[i]) == 'object') {
                 newCell.appendChild(values[i])
             }
         }

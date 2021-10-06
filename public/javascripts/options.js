@@ -110,11 +110,13 @@ const updateTables = data => {
                     }
                     // expiration
                     else if (key == 'expiration') {
-                        value = moment(value, 'DDMMMYY',).format(options.expirationDisplayFormat)
+                        value = moment(value, 'DDMMMYY').format(options.expirationDisplayFormat)
                     }
 
                     // format
-                    if (formats[key]) value = numeral(value).format(formats[key])
+                    if (formats[key]) {
+                        value = numeral(value).format(formats[key])
+                    }
 
                     row.push(value)
                 }
