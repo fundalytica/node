@@ -8,6 +8,12 @@ block content
     //-     ul.container.list-unstyled.d-flex.flex-row.flex-wrap.p-1.text-center.text-nowrap.small#quotes
 
     main#container.p-0
+        - var text = 'Join our community on Discord'
+        - var url = 'https://discord.gg/WmbyWHxyH6'
+        p.p-2.text-center.bg-purple-300.text-white
+            a.text-white.text-decoration-underline(href=url)= text
+            i.fab.fa-discord.ps-2
+
         if(just_logged)
             - var text = (just_logged == 'in') ? '🔑 Logged In: Welcome to Fundalytica' : (just_logged == 'out') ? '👋 Logged Out: See you soon' : '?'
             p.p-2.text-center.bg-light-blue-700.text-white= text
