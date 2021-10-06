@@ -92,11 +92,31 @@ export default class OptionsData {
         return positions.reduce((acc, val) => acc += parseFloat(val.strike * val.quantity * 100), 0)
     }
 
+    static nearestExpiration(positions) {
+        // update remaining, time has passed since initialization
+        const array = positions.map(p => OptionsData.remaining(p['expiration']))
+
+        const remaining = Math.min(...array)
+
+        // indices sharing the same expiration date
+        const indices = []
+        let idx = array.indexOf(remaining)
+        while(idx != -1) {
+            indices.push(idx)
+            idx = array.indexOf(remaining, idx + 1)
+        }
+
+        const symbols = positions.map(p => p['symbol']).filter((s, index) => indices.includes(index))
+
+        return { remaining, symbols }
+    }
+
     static remaining(expiration) {
         // set default time zone to NY
         moment.tz.setDefault("America/New_York")
 
         const newYorkNow = moment()
+
         const newYorkExpiration = moment(expiration, 'DDMMMYY')
 
         // restore time zone

@@ -19,6 +19,8 @@ const tablesAccessories = ['#toggle-puts', '#toggle-calls', '#info-puts', '#info
 const currencyFormat = '$0,0'
 const formats = { strike: '0,0.0', basis: currencyFormat, value: currencyFormat, profit: currencyFormat }
 
+const intervals = {}
+
 const run = () => {
     UI.loading()
 
@@ -66,6 +68,15 @@ const updateTables = data => {
 
     // header
     const header = Object.keys(data[0])
+    // console.log(header)
+    // console.log(header.indexOf('expiration'))
+    // console.log(header.indexOf('remaining'))
+
+    // move remaining next to expiration
+    const remainingIndex = header.indexOf('remaining')
+    const expirationIndex = header.indexOf('expiration')
+    header.splice(expirationIndex + 1, 0, header.splice(remainingIndex)[0])
+
     // add logo
     header.unshift('logo')
 
@@ -112,6 +123,21 @@ const updateTables = data => {
                     else if (key == 'expiration') {
                         value = moment(value, 'DDMMMYY').format(options.expirationDisplayFormat)
                     }
+                    else if (key == 'remaining') {
+                        const localExpiration = moment().add(value, 's')
+                        const localNow = moment()
+                        const days = localExpiration.diff(localNow, 'days')
+
+                        // if zero days, show hours and minutes
+                        if(days > 0) {
+                            value = `${days}d`
+                        }
+                        else {
+                            const format = "H[h] m[m]" // "H[h] m[m] s[s]"
+                            const time = moment(localExpiration.diff(localNow)).format(format)
+                            value = `${time}`
+                        }
+                    }
 
                     // format
                     if (formats[key]) {
@@ -140,7 +166,7 @@ const updateTables = data => {
     }
 
     // visibility, common ordering
-    const hide = !(options.puts(data).length || options.calls(data).length)
+    const hide = ! (options.puts(data).length || options.calls(data).length)
     UIUtils.hide(tableOrdering, hide)
 }
 
@@ -150,6 +176,35 @@ const updateTableSummary = (right, positions) => {
     UITextUtils.text(`#value-${right}`, `Value ${numeral(Utils.propertyTotal(positions, 'value')).format(currencyFormat)}`)
     UITextUtils.text(`#profit-${right}`, `Profit ${numeral(Utils.propertyTotal(positions, 'profit')).format(currencyFormat)}`)
     UITextUtils.text(`#assignment-${right}`, `Assignment ${numeral(OptionsData.assignmentTotal(positions)).format(currencyFormat)}`)
+
+    updateNearestExpiration(right, positions)
+}
+
+const updateNearestExpiration = (right, positions) => {
+    const selector = `#expiration-${right}`
+    UIUtils.hide(selector, (positions.length == 0))
+
+    if(positions.length == 0) return
+
+    const elementUpdate = () => {
+        // nearest expiration
+        const nearest = OptionsData.nearestExpiration(positions)
+        // days
+        const localExpiration = moment().add(nearest.remaining, 's')
+        const localNow = moment()
+        const days = localExpiration.diff(localNow, 'days')
+        // time
+        const format = "H[h] m[m] s[s]"
+        const time = moment(localExpiration.diff(localNow)).format(format)
+        // symbols
+        const symbols = nearest.symbols.join(' ')
+
+        UITextUtils.text(selector, `Next Expiration in ${days}d ${time} [ ${symbols} ]`)
+    }
+    elementUpdate()
+
+    if (intervals[selector]) clearInterval(intervals[selector])
+    intervals[selector] = setInterval(elementUpdate, 1000)
 }
 
 const registerClickEventSort = () => {
