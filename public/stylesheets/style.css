@@ -16,7 +16,7 @@ header img      { width: auto; height: 30px; }
 
 footer a        { color: #000; transition: ease-in-out color .15s; }
 footer a:hover  { color: rgb(230, 72, 106); }
-footer img      { width: auto; height: 20px; }
+footer img      { width: auto; height: 16px; }
 
 /* topics */
 
