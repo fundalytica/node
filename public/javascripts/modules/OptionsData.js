@@ -52,6 +52,9 @@ export default class OptionsData {
 
             // add profit
             option.profit = option.value - option.basis
+
+            // add remaining
+            option.remaining = OptionsData.remaining(option.expiration)
         }
     }
 
@@ -87,5 +90,26 @@ export default class OptionsData {
 
     static assignmentTotal(positions) {
         return positions.reduce((acc, val) => acc += parseFloat(val.strike * val.quantity * 100), 0)
+    }
+
+    static remaining(expiration) {
+        // set default time zone to NY
+        moment.tz.setDefault("America/New_York")
+
+        const newYorkNow = moment()
+        const newYorkExpiration = moment(expiration, 'DDMMMYY')
+
+        // restore time zone
+        moment.tz.setDefault()
+
+        // trading hours, 9:30 a.m. to 4 p.m. ET
+        newYorkExpiration.set('hour', 16)
+        newYorkExpiration.set('minute', 0)
+        newYorkExpiration.set('second', 0)
+
+        // remaining in seconds
+        const remaining = moment(newYorkExpiration).diff(newYorkNow, 'seconds')
+
+        return remaining
     }
 }
