@@ -39,6 +39,8 @@ main { flex: 1; }
 
 /* lottie */
 lottie-player {
+    width: 100px;
     margin: 0; padding: 0;
     align-self: center;
+    /* border: 1px solid black; */
 }

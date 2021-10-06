@@ -12,6 +12,7 @@ const topics = [
         title: 'The Crypto Fund',
         description: 'BTC, ETH, DOT, Altcoins. Check out our diversified digital assets portfolio and create your own.',
         button: 'To The Moon',
+        lottie: 'https://assets6.lottiefiles.com/packages/lf20_ZUd5j6.json',
         action: 'route'
     },
 
@@ -34,6 +35,7 @@ const topics = [
         title: 'Option Writing',
         description: 'When volatility goes up, we will sell options to capture the higher premium. We share our open positions.',
         button: 'See Portfolio',
+        lottie: 'https://assets10.lottiefiles.com/datafiles/lwjM2vQf6cSbmAu/data.json',
         action: 'route'
     },
 

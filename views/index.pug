@@ -39,7 +39,7 @@ block content
             //-                             button.btn.btn-outline-secondary.rounded-right(type='submit' name='submit') Subscribe
 
             each topic, index in topics
-                - css = topic.color + ' ' + (topic.id == "crypto" ? 'ps-4 py-4' : 'p-4')
+                - css = topic.color + ' ' + (topic.lottie ? 'ps-4 pe-1 py-4' : 'p-4')
                 .topic.m-3(class=css)
                     .d-flex.flex-row
                         //- left segment
@@ -60,14 +60,14 @@ block content
                                 i.bi.bi-chevron-right.ms-2
 
                         //- right segment
-                        if(topic.id=="crypto")
-                            <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
-                            <lottie-player src="https://assets6.lottiefiles.com/packages/lf20_ZUd5j6.json" background="transparent" speed="1" style="width: 100px" loop autoplay></lottie-player>
+                        if(topic.lottie)
+                            <lottie-player src=#{topic.lottie} background='transparent' speed='1' loop autoplay></lottie-player>
 
-
-        div.d-flex.flex-row.flex-wrap.justify-content-center.text-secondary.small
-            p
-                | Icons from the #[a( href='https://thenounproject.com' ) Noun Project]
+        div.d-flex.flex-column.flex-wrap.justify-content-center.text-center.text-secondary.small.p-1
+            p.m-0
+                | Icons • #[a( href='https://thenounproject.com' ) The Noun Project]
+            p.m-0
+                | Animations • #[a( href='https://lottiefiles.com' ) LottieFiles]
             //- ul
             //-     li Rocket by Adrien Coquet
             //-     li Contract by Alice Design
@@ -81,4 +81,5 @@ block scripts
     //- script( id='quotesjs' data-api-token=api_token src='/javascripts/quotes.js' type='module')
     //- script(src='https://cdnjs.cloudflare.com/ajax/libs/TypewriterJS/2.13.1/core.min.js')
 
+    <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
     script(id='indexjs' src='/javascripts/index.js' data-subscription=subscription data-subscribed-key=subscribed_key type='module')
