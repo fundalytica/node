@@ -8,7 +8,7 @@ const topics = [
         id: 'crypto',
         hashtag: 'portfolio',
         image: 'crypto.svg',
-        color: 'bg-purple-a100',
+        color: 'bg-deep-purple-a100',
         title: 'The Crypto Fund',
         description: 'BTC, ETH, DOT, Altcoins. Check out our diversified digital assets portfolio and create your own.',
         button: 'To The Moon',
