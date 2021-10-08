@@ -197,9 +197,9 @@ const updateNearestExpiration = (right, positions) => {
         const format = "H[h] m[m] s[s]"
         const time = moment(localExpiration.diff(localNow)).format(format)
         // symbols
-        const symbols = nearest.symbols.join(' ')
+        const symbols = nearest.symbols.join('•')
 
-        UITextUtils.text(selector, `Next Expiration in ${days}d ${time} [ ${symbols} ]`)
+        UITextUtils.text(selector, `Next Expiration in ${days}d ${time} ${symbols}`)
     }
     elementUpdate()
 
