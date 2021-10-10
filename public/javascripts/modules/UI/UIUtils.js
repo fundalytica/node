@@ -84,4 +84,13 @@ export default class UIUtils {
             button.appendChild(text)
         }
     }
+
+    static selectedRadioButtonValue(name) {
+        const buttons = document.querySelectorAll(`input[name=${name}]`)
+        for (const button of buttons) {
+            if(button.checked) {
+                return button.value
+            }
+        }
+    }
 }

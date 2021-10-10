@@ -46,15 +46,28 @@ UIUtils.addListener(updateButtonSelector, 'click', e => {
 })
 
 UIUtils.addListener("#submitButton", 'click', e => {
+    e.preventDefault()
+
+    document.querySelector(updateFormSelector).reportValidity()
+
+    const valid = document.querySelector(updateFormSelector).checkValidity()
+    if(! valid) return
+
     UIUtils.hide(messageSelector)
 
+    const action = UIUtils.selectedRadioButtonValue('action')
     const symbol = document.querySelector("#symbolInput").value
     const amount = document.querySelector("#amountInput").value
     const cost = document.querySelector("#costInput").value
 
-    e.preventDefault()
+    const callback = data => {
+        if(data.error) {
+            const message = (data.error == 'no_user') ? 'Please login first' : data.error
+            UITextUtils.text(messageSelector, `✋ ${message}`)
+            UIUtils.show(messageSelector)
+            return
+        }
 
-    const callback = () => {
         demo = false
         empty = false
 
@@ -67,11 +80,12 @@ UIUtils.addListener("#submitButton", 'click', e => {
         })
     }
 
-    crypto.update(symbol, amount, cost, callback)
+    crypto.update(action, symbol, amount, cost, callback)
 })
 
 UIUtils.addListener("#cancelButton", 'click', e => {
     UIUtils.hide(updateFormSelector)
+    UIUtils.hide(messageSelector)
 
     if(demo) {
         demoElements.forEach(el => UIUtils.show(el))
@@ -83,9 +97,10 @@ UIUtils.addListener("#cancelButton", 'click', e => {
     e.preventDefault()
 })
 
-document.querySelector('#symbolInput').oninvalid = e => {
-	e.target.setCustomValidity('Please enter a valid cryptocurrency symbol (e.g. btc). No numbers allowed.');
-}
+// document.querySelector('#symbolInput').oninvalid = e => {
+//     e.target.setCustomValidity('Please enter a valid cryptocurrency symbol (e.g. btc). No numbers allowed.');
+
+// }
 
 const getPrice = (symbol, tickerData) => {
     for(const row of tickerData) {
