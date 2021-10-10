@@ -49,10 +49,24 @@ router.post(`${process.env.API_PATH}/v1/crypto/portfolio/update`, authenticate, 
         return res.json({ 'error': 'no_user' })
     }
 
+    // properties received check
+    if(! req.body.symbol) return res.json({ 'error': `symbol is missing` })
+    if(! req.body.action) return res.json({ 'error': `action is missing` })
+    if(! req.body.amount) return res.json({ 'error': `amount is missing` })
+    if(! req.body.cost) return res.json({ 'error': `cost is missing` })
+
     const symbol = (req.body.symbol).toLowerCase()
-    const action = req.body.action
+    const action = req.body.action.toLowerCase()
     const amount = parseFloat(req.body.amount)
     const cost = parseFloat(req.body.cost)
+
+    // error handling
+    const supportedSymbols = ['btc', 'eth', 'dot', 'doge']
+    const validActions = ['buy', 'sell']
+    if(! supportedSymbols.includes(symbol)) return res.json({ 'error': `invalid symbol: ${symbol}, not supported` })
+    if(! validActions.includes(action))     return res.json({ 'error': `invalid action: ${action}, must be buy or sell` })
+    if(amount <= 0)                         return res.json({ 'error': `invalid amount: ${amount}, must be positive` })
+    if(cost <= 0)                           return res.json({ 'error': `invalid cost: ${cost}, must be positive` })
 
     let portfolio = await CryptoPortfolioModel.findOne({ email }).exec()
 
