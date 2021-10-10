@@ -22,19 +22,34 @@ block content
             button.btn.btn-success.text-nowrap.mt-4.d-none#updateButton Update Portfolio
 
             - var url = `${locals.api_origin}/v1/crypto/portfolio/update`
-            form(id="updateForm" method="POST" action=url).mt-4.d-flex.flex-row.mx-auto.w-75.d-none
-                input(type="number" id="amountInput" name="amount" step="any" min="0" value="1" placeholder="amount" required).form-control.mx-1.w-75
+            form(id="updateForm" method="POST" action=url).container.mt-4.d-none
+                .row.g-2.my-2.justify-content-center
+                    .col
+                        .btn-group(id="btn-group-alert" role="group")
+                            input.btn-check(type="radio" name="btnradioalert" id="btn-radio-buy" checked)
+                            label.btn.btn-outline-secondary(for="btn-radio-buy") Buy
+                            input.btn-check(type="radio" name="btnradioalert" id="btn-radio-sell")
+                            label.btn.btn-outline-secondary(for="btn-radio-sell") Sell
 
-                input(type="text" id="symbolInput" name="symbol" placeholder="symbol" value="BTC" pattern="[a-zA-Z'-'\s]*" required).form-control.mx-1.w-75
+                .row.g-1.my-2.justify-content-center
+                    .col-2
+                        input(type="number" id="amountInput" name="amount" step="any" min="0" value="1" placeholder="amount" required).form-control
 
-                .input-group.mx-1
-                    span.input-group-text $
-                    input(type="number" id="costInput" name="cost" step="any" min="0" value="40000" placeholder="total cost" required).form-control
+                    .col-2
+                        input(type="text" id="symbolInput" name="symbol" placeholder="symbol" value="BTC" pattern="[a-zA-Z'-'\s]*" required).form-control
 
-                button.btn.btn-success.text-nowrap.mx-1#submitButton Submit
+                    .col-4
+                        .input-group
+                            span.input-group-text $
+                            input(type="number" id="costInput" name="cost" step="any" min="0" value="40000" placeholder="total cost" required).form-control
 
-                button.btn.btn-danger.text-nowrap.mx-1#cancelButton
-                    i.fas.fa-times
+                .row.g-2.my-2.justify-content-center
+                    .col-auto
+                        button.btn.btn-success.text-nowrap#submitButton Submit
+
+                    .col-auto
+                        button.btn.btn-danger.text-nowrap#cancelButton
+                            i.fas.fa-times
 
             p#message.pt-2.small.text-primary.d-none
 
