@@ -19,7 +19,9 @@ router.get(`${process.env.API_PATH}/v1/crypto/portfolio`, authenticate, async (r
 
     if (email) { // user logged in
         utils.shellHandler(path, ['-db', db, '-user', email], json => {
-            if(json['assets'].length) { // not empty
+            console.log(json)
+
+            if(json['trades'].length && json['positions'].length) { // not empty
                 res.json(json)
             }
             else { // empty, fetch demo portfolio
@@ -48,6 +50,7 @@ router.post(`${process.env.API_PATH}/v1/crypto/portfolio/update`, authenticate, 
     }
 
     const symbol = (req.body.symbol).toLowerCase()
+    const action = req.body.action
     const amount = parseFloat(req.body.amount)
     const cost = parseFloat(req.body.cost)
 
@@ -56,30 +59,50 @@ router.post(`${process.env.API_PATH}/v1/crypto/portfolio/update`, authenticate, 
     if(! portfolio) { // portfolio does not exist, create
         portfolio = new CryptoPortfolioModel()
         portfolio.email = email
-        portfolio.assets = [{ symbol, amount, cost }]
-
-        await portfolio.save()
-        return res.json({ 'status': 'new_portfolio', 'assets': portfolio.assets })
+        portfolio.trades = [{ symbol, action, amount, cost }]
+    }
+    else { // portfolio exists, create new trade
+        const trades = portfolio.trades.find(trade => trade.symbol == symbol)
+        portfolio.trades.push({ symbol, action, amount, cost })
     }
 
-    if(portfolio) { // portfolio exists
-        const index = portfolio.assets.findIndex(asset => asset.symbol == symbol)
+    const positionsFromTrades = trades => { // calculate positions from trades
+        const groupBy = (array, key) => array.reduce((r, a) => { // group trades by symbol
+            (r[a[key]] = r[a[key]] || []).push(a)
+            return r
+        }, {})
+        const groupedTrades = groupBy(trades, 'symbol')
 
-        if(index == -1) { // position does not exist, create
-            portfolio.assets.push({ symbol, amount, cost })
-
-            await portfolio.save()
-            return res.json({ 'status': 'new_position', 'assets': portfolio.assets })
+        const positions = [] // positions array to return
+        const accumulate = (trades, property) => { // accumulation method to get total amount and cost
+            const total = trades.reduce((r,a) => {
+                if(a.action == 'buy') {
+                    r += a[property]
+                }
+                if(a.action == 'sell') {
+                    r -= a[property]
+                }
+                return r
+            }, 0)
+            return total
         }
 
-        if(index >= 0) { // position exists, increment
-            portfolio.assets[index].amount += amount
-            portfolio.assets[index].cost += cost
-
-            await portfolio.save()
-            return res.json({ 'status': 'updated_position', 'assets': portfolio.assets })
+        for(const symbol in groupedTrades) { // add symbol totals to positions
+            const amount = accumulate(groupedTrades[symbol], 'amount')
+            const cost = accumulate(groupedTrades[symbol], 'cost')
+            positions.push({ symbol, amount, cost })
         }
+
+        return { positions }
     }
+
+    const data = positionsFromTrades(portfolio.trades)
+
+    if(data.error) return res.json({ 'error': data.error })
+    portfolio.positions = data.positions
+
+    await portfolio.save()
+    return res.json({ 'status': 'ok', 'trades': portfolio.trades, 'positions': portfolio.positions })
 })
 
 router.get(`${process.env.API_PATH}/v1/crypto/futures/tickers/symbols/kraken`, async (req, res) => {

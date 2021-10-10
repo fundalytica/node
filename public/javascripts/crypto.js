@@ -9,7 +9,7 @@ const UI = new UIManager("#spinner", "#error")
 const crypto = new CryptoPortfolio(window.api_origin)
 const binance = new CryptoBinance()
 
-let assetsData = null
+let positionsData = null
 let tickerData = null
 
 const listSelector = '#list'
@@ -107,14 +107,14 @@ const clear = () => {
     }
 }
 
-const populate = (assetsData, tickerData) => {
+const populate = (positionsData, tickerData) => {
     const names = { 'btc': 'Bitcoin', 'eth': 'Ethereum', 'dot': 'Polkadot', 'doge': 'Dogecoin' }
 
     const order = ['btc', 'eth', 'dot', 'doge']
-    assetsData.sort((a,b) => order.indexOf(a['symbol']) - order.indexOf(b['symbol']))
+    positionsData.sort((a,b) => order.indexOf(a['symbol']) - order.indexOf(b['symbol']))
 
     const addPosition = (position, list) => {
-        // database
+        // properties
         const symbol = position['symbol']
         const amount = position['amount']
         const cost = position['cost']
@@ -206,8 +206,8 @@ const populate = (assetsData, tickerData) => {
     }
 
     const list = document.querySelector(listSelector)
-    for (let i = 0; i < assetsData.length; i++) {
-        addPosition(assetsData[i], list)
+    for (let i = 0; i < positionsData.length; i++) {
+        addPosition(positionsData[i], list)
     }
 }
 
@@ -224,14 +224,14 @@ const fetch = (callback = null) => {
         demo = data.demo
         empty = data.empty
 
-        assetsData = data.assets
+        positionsData = data.positions
         console.log(data)
 
         const done = data => {
             tickerData = data
             console.log(tickerData)
 
-            populate(assetsData, tickerData)
+            populate(positionsData, tickerData)
 
             if(demo) {
                 UIUtils.show(demoTextSelector)
