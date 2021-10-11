@@ -27,9 +27,9 @@ block content
                     .col
                         .btn-group(id="btn-group-alert" role="group")
                             input.btn-check(type="radio" name="action" id="btn-radio-buy" value="buy" checked)
-                            label.btn.btn-outline-secondary(for="btn-radio-buy") Buy
+                            label.btn.btn-outline-primary(for="btn-radio-buy") Buy
                             input.btn-check(type="radio" name="action" id="btn-radio-sell" value="sell")
-                            label.btn.btn-outline-secondary(for="btn-radio-sell") Sell
+                            label.btn.btn-outline-primary(for="btn-radio-sell") Sell
 
                 .row.g-1.my-2.justify-content-center
                     .col-2
@@ -45,11 +45,13 @@ block content
 
                 .row.g-2.my-2.justify-content-center
                     .col-auto
-                        button.btn.btn-success.text-nowrap#submitButton Submit
+                        button.btn.btn-outline-secondary.text-nowrap#cancelButton Back
+                    //- .col-auto
+                    //-     button.btn.btn-danger.text-nowrap#cancelButton
+                    //-         i.fas.fa-times
 
                     .col-auto
-                        button.btn.btn-danger.text-nowrap#cancelButton
-                            i.fas.fa-times
+                        button.btn.btn-outline-success.text-nowrap#submitButton Submit
 
             p#message.pt-2.small.text-primary.d-none
 

@@ -25,7 +25,35 @@ const demoElements = [demoTextSelector, createButtonSelector, listSelector]
 let demo = false
 let empty = false
 
+let cryptoCallbackMessage = null
+
+const cryptoCallback = data => {
+    if(data.error) {
+        const message = (data.error.code == 'no_user') ? 'Please login first' : data.error.message
+        UITextUtils.text(messageSelector, `✋ ${message}`)
+        UIUtils.show(messageSelector)
+        return
+    }
+
+    demo = false
+    empty = false
+
+    UIUtils.hide(updateButtonSelector)
+    UIUtils.hide(updateFormSelector)
+    UIUtils.hide(messageSelector)
+
+    fetch(() => {
+        if(cryptoCallbackMessage) {
+            UIUtils.show(messageSelector)
+            UITextUtils.text(messageSelector, cryptoCallbackMessage)
+            cryptoCallbackMessage = null
+        }
+    })
+}
+
 UIUtils.addListener(createButtonSelector, 'click', e => {
+    UIUtils.hide(messageSelector)
+
     if(demo && ! empty) {
         location.href = "/login"
     }
@@ -53,34 +81,13 @@ UIUtils.addListener("#submitButton", 'click', e => {
     const valid = document.querySelector(updateFormSelector).checkValidity()
     if(! valid) return
 
-    UIUtils.hide(messageSelector)
-
     const action = UIUtils.selectedRadioButtonValue('action')
     const symbol = document.querySelector("#symbolInput").value
     const amount = document.querySelector("#amountInput").value
     const cost = document.querySelector("#costInput").value
 
-    const callback = data => {
-        if(data.error) {
-            const message = (data.error == 'no_user') ? 'Please login first' : data.error
-            UITextUtils.text(messageSelector, `✋ ${message}`)
-            UIUtils.show(messageSelector)
-            return
-        }
-
-        demo = false
-        empty = false
-
-        UIUtils.hide(updateFormSelector)
-
-        fetch(() => {
-            UIUtils.show(updateButtonSelector)
-            UIUtils.show(messageSelector)
-            UITextUtils.text(messageSelector, `✓ Portfolio Updated: ${numeral(amount).format('0,0.[0])')} ${symbol} @ ${numeral(cost).format('$0,0.[0])')}`)
-        })
-    }
-
-    crypto.update(action, symbol, amount, cost, callback)
+    cryptoCallbackMessage = `✓ Portfolio updated: ${action} ${numeral(amount).format('0,0.[0])')} ${symbol.toUpperCase()} @ ${numeral(cost).format('$0,0.[0])')}`
+    crypto.update(action, symbol, amount, cost, cryptoCallback)
 })
 
 UIUtils.addListener("#cancelButton", 'click', e => {
@@ -96,11 +103,6 @@ UIUtils.addListener("#cancelButton", 'click', e => {
 
     e.preventDefault()
 })
-
-// document.querySelector('#symbolInput').oninvalid = e => {
-//     e.target.setCustomValidity('Please enter a valid cryptocurrency symbol (e.g. btc). No numbers allowed.');
-
-// }
 
 const getPrice = (symbol, tickerData) => {
     for(const row of tickerData) {
@@ -146,9 +148,12 @@ const populate = (positionsData, tickerData) => {
         div.classList.add('m-4')
         div.classList.add('p-2')
 
+        const header = document.createElement('div')
+
         // header - symbol
-        const header = document.createElement('h4')
-        header.appendChild(document.createTextNode(names[symbol]))
+        const h4 = document.createElement('h4')
+        h4.appendChild(document.createTextNode(names[symbol]))
+        header.appendChild(h4)
 
         // img - logo
         const logoFile = (symbol, extension = 'svg') => `/images/logos/crypto/${symbol.toLowerCase()}.${extension}`
@@ -208,7 +213,7 @@ const populate = (positionsData, tickerData) => {
         }
 
         const pUnit = createPElement(basis, price, 'text-muted')
-        const pTotal = createPElement(basis * amount, price * amount, 'text-muted')
+        const pTotal = createPElement(basis * amount, price * amount, 'text-dark')
 
         div.appendChild(header)
         div.appendChild(img)
@@ -217,6 +222,47 @@ const populate = (positionsData, tickerData) => {
         div.appendChild(pAmount)
         div.appendChild(pTotal)
 
+        // controls
+        const divControls = document.createElement('div')
+        divControls.classList.add('mt-2')
+        divControls.setAttribute('id', `${symbol}Controls`)
+        //  details, delete icons
+        const createIcon = (classes, symbol) => {
+            const i = document.createElement('i')
+            i.classList.add('bi', 'fs-5', 'mx-1', 'text-secondary')
+            i.classList.add(...classes)
+            i.setAttribute('symbol', symbol)
+            return i
+        }
+        divControls.appendChild(createIcon(['bi-info-square', 'position-details'], symbol))
+        divControls.appendChild(createIcon(['bi-x-square', 'position-delete'], symbol))
+        div.appendChild(divControls)
+
+        // delete confirm
+        const divDeleteConfirm = document.createElement('div')
+        divDeleteConfirm.classList.add('d-none', 'mt-2')
+        divDeleteConfirm.setAttribute('id', `${symbol}DeleteConfirm`)
+        // btn - delete
+        const btnDelete = document.createElement('button')
+        btnDelete.classList.add('btn', 'btn-outline-danger', 'position-delete-confirm')
+        btnDelete.appendChild(document.createTextNode(`Delete ${symbol.toUpperCase()}`))
+        btnDelete.setAttribute('symbol', symbol)
+        // btn - delete cancel
+        const btnDeleteCancel = document.createElement('button')
+        btnDeleteCancel.classList.add('btn', 'btn-outline-secondary', 'position-delete-cancel', 'mx-2')
+        btnDeleteCancel.setAttribute('symbol', symbol)
+        // cancel icon
+        // const iCancel = document.createElement('i')
+        // iCancel.classList.add('fas', 'fa-undo')
+        // iCancel.style.pointerEvents = 'none'
+        // btnDeleteCancel.appendChild(iCancel)
+        // cancel text
+        btnDeleteCancel.appendChild(document.createTextNode('Back'))
+        // append
+        divDeleteConfirm.appendChild(btnDeleteCancel)
+        divDeleteConfirm.appendChild(btnDelete)
+        div.appendChild(divDeleteConfirm)
+
         list.appendChild(div)
     }
 
@@ -224,6 +270,36 @@ const populate = (positionsData, tickerData) => {
     for (let i = 0; i < positionsData.length; i++) {
         addPosition(positionsData[i], list)
     }
+
+    UIUtils.addListener('.position-details', 'click', e => {
+        const symbol = e.target.getAttribute('symbol')
+        console.log(`details ${symbol}`)
+    })
+
+    UIUtils.addListener('.position-delete', 'click', e => {
+        const symbol = e.target.getAttribute('symbol')
+        UIUtils.hide(`#${symbol}Controls`)
+        UIUtils.show(`#${symbol}DeleteConfirm`)
+        console.log(`confirm delete ${symbol}`)
+    })
+
+    UIUtils.addListener('.position-delete-confirm', 'click', e => {
+        const symbol = e.target.getAttribute('symbol')
+        console.log(`final delete ${symbol}`)
+
+        UIUtils.show(`#${symbol}Controls`)
+        UIUtils.hide(`#${symbol}DeleteConfirm`)
+
+        cryptoCallbackMessage = `✓ ${symbol.toUpperCase()} position deleted`
+        crypto.delete(symbol, cryptoCallback)
+    })
+
+    UIUtils.addListener('.position-delete-cancel', 'click', e => {
+        const symbol = e.target.getAttribute('symbol')
+        UIUtils.show(`#${symbol}Controls`)
+        UIUtils.hide(`#${symbol}DeleteConfirm`)
+        console.log(`cancel delete ${symbol}`)
+    })
 }
 
 const fetch = (callback = null) => {

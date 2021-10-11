@@ -24,9 +24,7 @@ export default class CryptoData {
     update(action, symbol, amount, cost, callback) {
         const url = `${this.api_origin}/v1/crypto/portfolio/update`
 
-        const fail = error => {
-            console.log(error)
-        }
+        const fail = error => { console.log(error) }
 
         console.log(`${url} ${symbol} ${amount} ${cost}`)
 
@@ -37,6 +35,22 @@ export default class CryptoData {
         body.append('symbol', symbol)
         body.append('amount', amount)
         body.append('cost', cost)
+        options.body = body
+
+        Utils.request(url, options, callback, fail)
+    }
+
+    delete(symbol, callback) {
+        const url = `${this.api_origin}/v1/crypto/portfolio/delete`
+
+        const fail = error => { console.log(error) }
+
+        console.log(`${url} ${symbol}`)
+
+        const options = { method: 'POST' }
+
+        const body = new URLSearchParams()
+        body.append('symbol', symbol)
         options.body = body
 
         Utils.request(url, options, callback, fail)

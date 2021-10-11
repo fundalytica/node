@@ -6,7 +6,15 @@ const utils = require('../utils.js')
 
 const CryptoPortfolioModel = require('../../models/crypto_portfolio')
 
+const error = (code, message = '') => { return { 'error': { 'code': code, 'message': message } } }
+
 const authenticate = (req, res, next) => passport.authenticate('jwt', { session: false }, next)(req, res)
+// const authenticate = (req, res, next) => {
+//     passport.authenticate('jwt', { session: false }, (err, user, info) => {
+//         if(! user) return res.json({ 'error': 'no_user' })
+//         next()
+//     })(req, res)
+// }
 
 router.get(`${process.env.API_PATH}/v1/crypto/portfolio`, authenticate, async (req, res) => {
     console.log(`path: ${req.path}`.cyan)
@@ -41,19 +49,36 @@ router.get(`${process.env.API_PATH}/v1/crypto/portfolio`, authenticate, async (r
     }
 })
 
+router.post(`${process.env.API_PATH}/v1/crypto/portfolio/delete`, authenticate, async (req, res) => {
+    console.log(`path: ${req.path}`.cyan)
+
+    if(! req.body.symbol) return res.json(error('missing_symbol', `symbol is missing`))
+    const symbol = (req.body.symbol).toLowerCase()
+
+    const email = req.user.email
+    if(! email) return res.json(error('no_user'))
+
+    let portfolio = await CryptoPortfolioModel.findOne({ email }).exec()
+    if(! portfolio) return res.json(error('no_portfolio', `portfolio not found`))
+
+    portfolio.positions = portfolio.positions.filter(p => p['symbol'] != symbol)
+    portfolio.trades = portfolio.trades.filter(t => t['symbol'] != symbol)
+
+    await portfolio.save()
+    return res.json({ 'status': 'ok', 'trades': portfolio.trades, 'positions': portfolio.positions })
+})
+
 router.post(`${process.env.API_PATH}/v1/crypto/portfolio/update`, authenticate, async (req, res) => {
     console.log(`path: ${req.path}`.cyan)
 
     const email = req.user.email
-    if(! email) {
-        return res.json({ 'error': 'no_user' })
-    }
+    if(! email) return res.json(error('no_user'))
 
     // properties received check
-    if(! req.body.symbol) return res.json({ 'error': `symbol is missing` })
-    if(! req.body.action) return res.json({ 'error': `action is missing` })
-    if(! req.body.amount) return res.json({ 'error': `amount is missing` })
-    if(! req.body.cost) return res.json({ 'error': `cost is missing` })
+    if(! req.body.symbol)   return res.json(error('missing_symbol', `symbol is missing`))
+    if(! req.body.action)   return res.json(error('missing_action', `action is missing`))
+    if(! req.body.amount)   return res.json(error('missing_amount', `amount is missing`))
+    if(! req.body.cost)     return res.json(error('missing_cost', `cost is missing`))
 
     const symbol = (req.body.symbol).toLowerCase()
     const action = req.body.action.toLowerCase()
@@ -63,10 +88,10 @@ router.post(`${process.env.API_PATH}/v1/crypto/portfolio/update`, authenticate, 
     // error handling
     const supportedSymbols = ['btc', 'eth', 'dot', 'doge']
     const validActions = ['buy', 'sell']
-    if(! supportedSymbols.includes(symbol)) return res.json({ 'error': `invalid symbol: ${symbol}, not supported` })
-    if(! validActions.includes(action))     return res.json({ 'error': `invalid action: ${action}, must be buy or sell` })
-    if(amount <= 0)                         return res.json({ 'error': `invalid amount: ${amount}, must be positive` })
-    if(cost <= 0)                           return res.json({ 'error': `invalid cost: ${cost}, must be positive` })
+    if(! supportedSymbols.includes(symbol)) return res.json(error('invalid_symbol', `invalid symbol: ${symbol}, not supported`))
+    if(! validActions.includes(action))     return res.json(error('invalid_action', `invalid action: ${action}, must be buy or sell`))
+    if(amount <= 0)                         return res.json(error('invalid_amount', `invalid amount: ${amount}, must be positive`))
+    if(cost <= 0)                           return res.json(error('invalid_cost', `invalid cost: ${cost}, must be positive`))
 
     let portfolio = await CryptoPortfolioModel.findOne({ email }).exec()
 
@@ -112,7 +137,7 @@ router.post(`${process.env.API_PATH}/v1/crypto/portfolio/update`, authenticate, 
 
     const data = positionsFromTrades(portfolio.trades)
 
-    if(data.error) return res.json({ 'error': data.error })
+    if(data.error) return res.json({ 'error': { 'code': 'update_error', 'message': data.error } })
     portfolio.positions = data.positions
 
     await portfolio.save()
