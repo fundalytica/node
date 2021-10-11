@@ -222,46 +222,48 @@ const populate = (positionsData, tickerData) => {
         div.appendChild(pAmount)
         div.appendChild(pTotal)
 
-        // controls
-        const divControls = document.createElement('div')
-        divControls.classList.add('mt-2')
-        divControls.setAttribute('id', `${symbol}Controls`)
-        //  details, delete icons
-        const createIcon = (classes, symbol) => {
-            const i = document.createElement('i')
-            i.classList.add('bi', 'fs-5', 'mx-1', 'text-secondary')
-            i.classList.add(...classes)
-            i.setAttribute('symbol', symbol)
-            return i
-        }
-        divControls.appendChild(createIcon(['bi-info-square', 'position-details'], symbol))
-        divControls.appendChild(createIcon(['bi-x-square', 'position-delete'], symbol))
-        div.appendChild(divControls)
+        if(! demo) {
+            // controls
+            const divControls = document.createElement('div')
+            divControls.classList.add('mt-2')
+            divControls.setAttribute('id', `${symbol}Controls`)
+            //  details, delete icons
+            const createIcon = (classes, symbol) => {
+                const i = document.createElement('i')
+                i.classList.add('bi', 'fs-5', 'mx-1', 'text-secondary')
+                i.classList.add(...classes)
+                i.setAttribute('symbol', symbol)
+                return i
+            }
+            divControls.appendChild(createIcon(['bi-info-square', 'position-details'], symbol))
+            divControls.appendChild(createIcon(['bi-x-square', 'position-delete'], symbol))
+            div.appendChild(divControls)
 
-        // delete confirm
-        const divDeleteConfirm = document.createElement('div')
-        divDeleteConfirm.classList.add('d-none', 'mt-2')
-        divDeleteConfirm.setAttribute('id', `${symbol}DeleteConfirm`)
-        // btn - delete
-        const btnDelete = document.createElement('button')
-        btnDelete.classList.add('btn', 'btn-outline-danger', 'position-delete-confirm')
-        btnDelete.appendChild(document.createTextNode(`Delete ${symbol.toUpperCase()}`))
-        btnDelete.setAttribute('symbol', symbol)
-        // btn - delete cancel
-        const btnDeleteCancel = document.createElement('button')
-        btnDeleteCancel.classList.add('btn', 'btn-outline-secondary', 'position-delete-cancel', 'mx-2')
-        btnDeleteCancel.setAttribute('symbol', symbol)
-        // cancel icon
-        // const iCancel = document.createElement('i')
-        // iCancel.classList.add('fas', 'fa-undo')
-        // iCancel.style.pointerEvents = 'none'
-        // btnDeleteCancel.appendChild(iCancel)
-        // cancel text
-        btnDeleteCancel.appendChild(document.createTextNode('Back'))
-        // append
-        divDeleteConfirm.appendChild(btnDeleteCancel)
-        divDeleteConfirm.appendChild(btnDelete)
-        div.appendChild(divDeleteConfirm)
+            // delete confirm
+            const divDeleteConfirm = document.createElement('div')
+            divDeleteConfirm.classList.add('d-none', 'mt-2')
+            divDeleteConfirm.setAttribute('id', `${symbol}DeleteConfirm`)
+            // btn - delete
+            const btnDelete = document.createElement('button')
+            btnDelete.classList.add('btn', 'btn-outline-danger', 'position-delete-confirm')
+            btnDelete.appendChild(document.createTextNode(`Delete ${symbol.toUpperCase()}`))
+            btnDelete.setAttribute('symbol', symbol)
+            // btn - delete cancel
+            const btnDeleteCancel = document.createElement('button')
+            btnDeleteCancel.classList.add('btn', 'btn-outline-secondary', 'position-delete-cancel', 'mx-2')
+            btnDeleteCancel.setAttribute('symbol', symbol)
+            // cancel icon
+            // const iCancel = document.createElement('i')
+            // iCancel.classList.add('fas', 'fa-undo')
+            // iCancel.style.pointerEvents = 'none'
+            // btnDeleteCancel.appendChild(iCancel)
+            // cancel text
+            btnDeleteCancel.appendChild(document.createTextNode('Back'))
+            // append
+            divDeleteConfirm.appendChild(btnDeleteCancel)
+            divDeleteConfirm.appendChild(btnDelete)
+            div.appendChild(divDeleteConfirm)
+        }
 
         list.appendChild(div)
     }
