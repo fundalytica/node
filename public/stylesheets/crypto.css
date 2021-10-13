@@ -17,6 +17,7 @@ img.logo {
 }
 
 /* override autocompletejs */
+/* https://cdn.jsdelivr.net/npm/@tarekraafat/autocomplete.js@10.2.6/dist/css/autoComplete.css */
 .autoComplete_wrapper {
     display: block !important;
     /* position: relative; */
@@ -29,4 +30,10 @@ img.logo {
 }
 .autoComplete_wrapper > input::placeholder {
     color:#6c757d !important;
+}
+.autoComplete_wrapper > ul > li mark {
+    color: blue !important;
+}
+mark {
+    padding: 0 !important;
 }
