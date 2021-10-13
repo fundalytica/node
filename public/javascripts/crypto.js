@@ -187,7 +187,7 @@ const addPosition = (position, list, ticker) => {
     // div
     const div = document.createElement('div')
     div.classList.add('position')
-    div.classList.add('px-4')
+    div.classList.add('px-4', 'pb-4')
 
     const header = document.createElement('div')
 
