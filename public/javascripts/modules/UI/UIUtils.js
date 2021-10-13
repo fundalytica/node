@@ -58,7 +58,18 @@ export default class UIUtils {
 
     static empty(selector) {
         const el = document.querySelector(selector)
-        while (el.firstChild) el.removeChild(el.firstChild)
+        if(el) {
+            while (el.firstChild) {
+                el.removeChild(el.firstChild)
+            }
+        }
+    }
+
+    static clearList(selector) {
+        const list = document.querySelector(selector)
+        while (list.firstChild) {
+            list.removeChild(list.firstChild)
+        }
     }
 
     static isHidden(selector) {
