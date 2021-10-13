@@ -41,12 +41,13 @@ const state = {
     delete: null,
 }
 
-const initAutoComplete = src => {
-    const autoCompleteJS = new autoComplete({
+let autoCompleteJS = null
+
+const initAutoComplete = () => {
+    autoCompleteJS = new autoComplete({
         selector: "#symbolInput",
         placeHolder: "symbol",
         data: {
-            src: src,
             cache: true
         },
         resultItem: {
@@ -454,7 +455,7 @@ const fetch = () => {
         const done = result => {
             data.ticker = result
 
-            initAutoComplete(binance.symbols())
+            autoCompleteJS.data.src = binance.symbols()
             populatePositions(data.positions, data.ticker)
 
             UI.ready()
@@ -467,4 +468,7 @@ const fetch = () => {
     crypto.init(done, fail)
 }
 
-UIUtils.ready(fetch)
+UIUtils.ready(() => {
+    initAutoComplete()
+    fetch()
+})
