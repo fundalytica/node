@@ -26,8 +26,13 @@ header.sticky-top.bg-grey-800
                     else
                         i.me-2.fas.fa-door-closed
                         p Login
-        - var text = 'Join our community on Discord'
-        - var url = 'https://discord.gg/WmbyWHxyH6'
+
+    - var text = 'Join our community on Discord'
+    - var url = 'https://discord.gg/WmbyWHxyH6'
     p.p-1.text-center.bg-purple-300.text-white.small
         a.text-white.text-decoration-underline(href=url target='blank')= text
         i.fab.fa-discord.ps-2
+
+if(just_logged)
+    - var text = (just_logged == 'in') ? 'Welcome to Fundalytica 🔑' : (just_logged == 'out') ? 'See you soon 👋' : '?'
+    p.p-1.text-center.bg-light-blue-700.text-white.small= text

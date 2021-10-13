@@ -8,10 +8,6 @@ block content
     //-     ul.container.list-unstyled.d-flex.flex-row.flex-wrap.p-1.text-center.text-nowrap.small#quotes
 
     main#container
-        if(just_logged)
-            - var text = (just_logged == 'in') ? '🔑 Logged In: Welcome to Fundalytica' : (just_logged == 'out') ? '👋 Logged Out: See you soon' : '?'
-            p.p-1.text-center.bg-light-blue-700.text-white.small= text
-
         .d-md-flex.flex-md-row.flex-md-wrap.m-md-3
             //- .topic#welcome.m-3.bg-blue-grey-200
             //-     .p-4
