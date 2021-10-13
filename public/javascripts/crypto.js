@@ -195,6 +195,7 @@ const addPosition = (position, list, ticker) => {
     const h4 = document.createElement('h4')
     h4.appendChild(document.createTextNode(symbolNames[symbol]))
     header.appendChild(h4)
+    div.appendChild(header)
 
     // img - logo
     const logoFile = (symbol, extension = 'svg') => `/images/logos/crypto/${symbol.toLowerCase()}.${extension}`
@@ -205,62 +206,72 @@ const addPosition = (position, list, ticker) => {
     img.setAttribute('src', logoFile(symbol))
     img.setAttribute('alt', `${symbol} logo`)
     img.classList.add('mb-2')
+    div.appendChild(img)
 
     // p - percentage
     const percentage = price / basis - 1
+
     const pPercentage = document.createElement('p')
     const smallPercentage = document.createElement('small')
     pPercentage.appendChild(smallPercentage)
-    smallPercentage.classList.add(percentage > 0 ? 'text-success' : 'text-danger')
-    smallPercentage.appendChild(document.createTextNode(`${numeral(percentage).format('%,')}`))
+    smallPercentage.classList.add((basis <= 0) ? 'text-primary' : (percentage > 0 ? 'text-success' : 'text-danger'))
+
+    if(basis > 0) {
+        const text = `${numeral(percentage).format('%,')}`
+        smallPercentage.appendChild(document.createTextNode(text))
+    }
 
     const iArrow = document.createElement('i')
     iArrow.classList.add('px-1')
-    iArrow.classList.add('fas', percentage > 0 ? 'fa-arrow-up' : 'fa-arrow-down', 'p-1')
+    const icon = (basis <= 0) ? 'fa-infinity' : (percentage > 0 ? 'fa-arrow-up' : 'fa-arrow-down')
+    iArrow.classList.add('fas', icon, 'p-1')
     smallPercentage.appendChild(iArrow)
 
-    // p - amount
-    const pAmount = document.createElement('p')
-    pAmount.appendChild(document.createTextNode(`x ${numeral(amount).format('0,0.[0]')} ${symbol.toUpperCase()}`))
+    div.appendChild(pPercentage)
 
-    const createPElement = (a, b, colorClass) => {
+    const createPElement = (from, to, classes) => {
         // p
         const p = document.createElement('p')
-        p.classList.add(colorClass)
+        p.classList.add(...classes)
         p.classList.add('text-nowrap')
 
         // small
         const smallUnit = document.createElement('small')
 
-        // spanA
-        const spanBasis = document.createElement('span')
-        spanBasis.classList.add('p-1')
-        spanBasis.appendChild(document.createTextNode(`${numeral(a).format(a > 1 ? '$0,0' : '$0,0.[0]')}`))
-        smallUnit.appendChild(spanBasis)
+        if(from > 0) {
+            // spanFrom
+            const spanFrom = document.createElement('span')
+            spanFrom.classList.add('p-1')
+            spanFrom.appendChild(document.createTextNode(`${numeral(from).format(from > 1 ? '$0,0' : '$0,0.[0]')}`))
+            smallUnit.appendChild(spanFrom)
 
-        // i - arrow
-        const iArrow = document.createElement('i')
-        iArrow.classList.add('fas', 'fa-arrow-right', 'p-1')
-        smallUnit.appendChild(iArrow)
+            // i - arrow
+            const iArrow = document.createElement('i')
+            iArrow.classList.add('fas', 'fa-arrow-right', 'p-1')
+            smallUnit.appendChild(iArrow)
+        }
 
-        // spanB
-        const spanPrice = document.createElement('span')
-        spanPrice.classList.add('p-1')
-        spanPrice.appendChild(document.createTextNode(`${numeral(b).format(a > 1 ? '$0,0' : '$0,0.[0]')}`))
-        smallUnit.appendChild(spanPrice)
+        // spanTo
+        const spanTo = document.createElement('span')
+        spanTo.classList.add('p-1')
+        spanTo.appendChild(document.createTextNode(`${numeral(to).format(to > 1 ? '$0,0' : '$0,0.[0]')}`))
+        smallUnit.appendChild(spanTo)
 
         p.appendChild(smallUnit)
         return p
     }
 
-    const pUnit = createPElement(basis, price, 'text-muted')
-    const pTotal = createPElement(basis * amount, price * amount, 'text-dark')
-
-    div.appendChild(header)
-    div.appendChild(img)
-    div.appendChild(pPercentage)
+    // p - unit
+    const pUnit = createPElement(basis, price, ['text-muted'])
     div.appendChild(pUnit)
+
+    // p - amount
+    const pAmount = document.createElement('p')
+    pAmount.appendChild(document.createTextNode(`x ${numeral(amount).format('0,0.[0]')} ${symbol.toUpperCase()}`))
     div.appendChild(pAmount)
+
+    // p - total
+    const pTotal = createPElement(basis * amount, price * amount, ['text-dark', 'fw-bolder'])
     div.appendChild(pTotal)
 
     if(! state.demo) {
@@ -359,8 +370,13 @@ const populateTrades = (trades, symbol) => {
         UITableUtils.addRow(tableTradesSelector, [StringUtils.capitalize(trade.action), `${numeral(trade.amount).format('0,0.[0]')} ${symbol.toUpperCase()}`, numeral(trade.cost).format('$0,0.[0]')], ['col-4'])
     }
 
-    const totalAmount = trades.reduce((acc, trade) => acc += trade.amount, 0)
-    const totalCost = trades.reduce((acc, trade) => acc += trade.cost, 0)
+    const totalAmount = trades.reduce((acc, trade) => {
+        return acc += trade.amount * ((trade.action == 'buy') ? 1 : -1)
+    }, 0)
+    const totalCost = trades.reduce((acc, trade) => {
+        return acc += trade.cost * ((trade.action == 'buy') ? 1 : -1)
+    }, 0)
+
     UITableUtils.addFooter(tableTradesSelector, ['', `${numeral(totalAmount).format('0,0.[0]')} ${symbol.toUpperCase()}`, numeral(totalCost).format('$0,0.[0]')])
 
     state.trades = true
