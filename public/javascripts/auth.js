@@ -23,7 +23,11 @@ const run = () => {
 
             const done = res => {
                 if(res.error) return fail(res.error)
-                location.href = '/'
+
+                const params = new URLSearchParams(document.location.search)
+                const redirect = params.get('redirect')
+
+                location.href = redirect ? `/${redirect}` : '/'
             }
 
             const options = {}
