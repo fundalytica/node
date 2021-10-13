@@ -33,28 +33,26 @@ const state = {
     user: false,
     demo: false,
 
+    message: null,
+
     input: false,
     trades: false,
 
-    message: null,
-
-    error: null,
-
-    delete: false,
-    symbol: null
+    delete: null,
 }
 
 const updateUI = () => {
+    console.log(state)
+
+    UIUtils.hide(messageSelector)
+
     if(state.loading) {
-        UIUtils.hide(updateFormSelector)
+        UIUtils.hide(demoTextSelector)
         UIUtils.hide(createButtonSelector)
         UIUtils.hide(updateButtonSelector)
+        UIUtils.hide(updateFormSelector)
         UIUtils.hide(positionsSelector)
         UIUtils.hide(tradesSelector)
-
-        state.input = false
-        state.trades = false
-        state.delete = false
     }
 
     if(! state.loading) {
@@ -72,9 +70,9 @@ const updateUI = () => {
         if(state.input) {
             UIUtils.show(updateFormSelector)
 
+            UIUtils.hide(demoTextSelector)
             UIUtils.hide(createButtonSelector)
             UIUtils.hide(updateButtonSelector)
-            UIUtils.hide(demoTextSelector)
 
             if(state.demo) {
                 UIUtils.hide(positionsSelector)
@@ -82,7 +80,6 @@ const updateUI = () => {
         }
         else {
             UIUtils.hide(updateFormSelector)
-            UIUtils.hide(messageSelector)
         }
 
         if(state.trades) {
@@ -92,30 +89,25 @@ const updateUI = () => {
             UIUtils.hide(tradesSelector)
         }
 
-        if(state.delete) {
-            UIUtils.hide(`#${state.symbol}Controls`)
-            UIUtils.show(`#${state.symbol}Delete`)
-        }
-        else {
-            if(state.symbol) {
-                UIUtils.show(`#${state.symbol}Controls`)
-                UIUtils.hide(`#${state.symbol}Delete`)
-                state.symbol = null
-            }
+        // reset all position controls
+        UIUtils.show(`.positionControls`)
+        UIUtils.hide(`.positionDelete`)
+
+        if(state.delete) { // position selected for deletion
+            UIUtils.hide(`#${state.delete}Controls`)
+            UIUtils.show(`#${state.delete}Delete`)
         }
 
         if(state.message) {
+            // consume message
             UIUtils.show(messageSelector)
             UITextUtils.text(messageSelector, state.message)
             state.message = null
         }
-        else {
-            UIUtils.hide(messageSelector)
-        }
 
-        if(state.error) {
-            state.error = false
-        }
+        // if(state.error) {
+        //     state.error = false
+        // }
     }
 }
 
@@ -274,7 +266,7 @@ const addPosition = (position, list, ticker) => {
     if(! state.demo) {
         // controls
         const divControls = document.createElement('div')
-        divControls.classList.add('mt-2')
+        divControls.classList.add('mt-2', 'positionControls')
         divControls.setAttribute('id', `${symbol}Controls`)
 
         // trades
@@ -299,7 +291,7 @@ const addPosition = (position, list, ticker) => {
 
         // delete
         const divDelete = document.createElement('div')
-        divDelete.classList.add('d-none', 'mt-2')
+        divDelete.classList.add('d-none', 'mt-2', 'positionDelete')
         divDelete.setAttribute('id', `${symbol}Delete`)
 
         // btn - delete submit
@@ -335,15 +327,12 @@ const addPositionsListeners = () => {
     UIUtils.addListener('.position-delete', 'click', e => { // position delete
         const symbol = e.target.getAttribute('symbol')
 
-        state.delete = true
-        state.symbol = symbol
+        state.delete = symbol
         updateUI()
     })
 
     UIUtils.addListener('.position-delete-cancel', 'click', e => { // position delete cancel
-        const symbol = e.target.getAttribute('symbol')
-
-        state.delete = false
+        state.delete = null
         updateUI()
     })
 
@@ -365,7 +354,8 @@ const populateTrades = (trades, symbol) => {
 
     UITableUtils.addHeader(tableTradesSelector, ['Action', `Amount`, 'USD Total'], ['col-4'])
 
-    for(const trade of trades.filter(t => t.symbol == symbol)) {
+    trades = trades.filter(t => t.symbol == symbol)
+    for(const trade of trades) {
         UITableUtils.addRow(tableTradesSelector, [StringUtils.capitalize(trade.action), `${numeral(trade.amount).format('0,0.[0]')} ${symbol.toUpperCase()}`, numeral(trade.cost).format('$0,0.[0]')], ['col-4'])
     }
 
@@ -399,10 +389,7 @@ const callback = data => {
         }
         else {
             state.loading = false
-
-            state.error = true
             state.message = `✋ ${data.error.message}`
-
             updateUI()
         }
     }
