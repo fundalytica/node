@@ -173,7 +173,9 @@ const topicRoute = topic => {
     const description = topic['description']
 
     router.get(`/${id}`, (req, res) => {
-        const parameters = { title: title, description: description, user: req.user }
+        const user = req.user
+        const just_logged = req.flash('logged')[0]
+        const parameters = { title, description, user, just_logged }
         res.render(id, parameters)
     })
 }
