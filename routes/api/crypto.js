@@ -30,20 +30,22 @@ router.get(`${process.env.API_PATH}/v1/crypto/portfolio`, authenticate, async (r
             console.log(json)
 
             if(json['trades'].length && json['positions'].length) { // not empty
+                json['user'] = true
                 res.json(json)
             }
-            else { // empty, fetch demo portfolio
-                utils.shellHandler(path, ['-db', db, '-user', DEMO_EMAIL], json => {
-                    json['empty'] = true
+            else { // empty
+                utils.shellHandler(path, ['-db', db, '-user', DEMO_EMAIL], json => { // fetch demo portfolio
                     json['demo'] = true
+                    json['user'] = true
                     res.json(json)
                 })
             }
         })
     }
-    else { // no user logged in, fetch demo portfolio
-        utils.shellHandler(path, ['-db', db, '-user', DEMO_EMAIL], json => {
+    else { // no user logged in
+        utils.shellHandler(path, ['-db', db, '-user', DEMO_EMAIL], json => { // fetch demo portfolio
             json['demo'] = true
+            json['user'] = false
             res.json(json)
         })
     }
