@@ -4,16 +4,16 @@ header.sticky-top.bg-grey-800
             a(href='/')
                 .d-flex.align-items-center
                     img.me-2(src='/images/logos/logo-bright.svg' alt='fundalytica logo' width="192" height="220")
-                    p.m-0 Fundalytica
+                    p Fundalytica
         .d-flex.me-3.my-2
             //- a(href='mailto:contact@fundalytica.com')
             //-     .d-flex.align-items-center
             //-         i.me-2.fas.fa-paper-plane
-            //-         p.m-0 Contact
+            //-         p Contact
             //- a(href='https://blog.fundalytica.com' target="_blank").ms-3
             //-     .d-flex.align-items-center
             //-         i.me-2.fas.fa-pen
-            //-         p.m-0 Blog
+            //-         p Blog
             - var href = user ? '/logout' : '/login'
             - var cl = user ? '' : 'text-warning'
             - var name = (user && user.name) ? (' ' + user.name) : ''
@@ -21,8 +21,13 @@ header.sticky-top.bg-grey-800
                 .d-flex.align-items-center(class=cl)
                     if(user)
                         i.me-2.fas.fa-door-open
-                        p.m-0 Logout
+                        p Logout
                             span= name
                     else
                         i.me-2.fas.fa-door-closed
-                        p.m-0 Login
+                        p Login
+        - var text = 'Join our community on Discord'
+        - var url = 'https://discord.gg/WmbyWHxyH6'
+    p.p-1.text-center.bg-purple-300.text-white.small
+        a.text-white.text-decoration-underline(href=url target='blank')= text
+        i.fab.fa-discord.ps-2
