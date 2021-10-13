@@ -4,10 +4,12 @@ block style
     link(href='/stylesheets/crypto.css' rel='stylesheet')
     link(href='/stylesheets/animation.css' rel='stylesheet')
     link(href='/stylesheets/no_more_tables.css' rel='stylesheet')
+    link(href='https://cdnjs.cloudflare.com/ajax/libs/tarekraafat-autocomplete.js/10.2.6/css/autoComplete.02.min.css' rel='stylesheet')
 
 block scripts
     script(src='https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js')
     script(src='https://cdnjs.cloudflare.com/ajax/libs/numeral.js/2.0.6/numeral.min.js')
+    script(src='https://cdnjs.cloudflare.com/ajax/libs/tarekraafat-autocomplete.js/10.2.6/autoComplete.min.js')
 
     script(src='/javascripts/crypto.js' type='module')
 
@@ -32,13 +34,13 @@ block content
                             label.btn.btn-outline-primary(for="btn-radio-sell") Sell
 
                 .row.g-2.mt-2.justify-content-center
-                    .col-2
+                    .col-4.col-md-4
                         input(type="number" id="amountInput" name="amount" step="any" min="0" placeholder="amount" required).form-control
 
-                    .col-2
+                    .col-4.col-md-4
                         input(type="text" id="symbolInput" name="symbol" placeholder="symbol" pattern="[a-zA-Z'-'\s]*" required).form-control
 
-                    .col-4
+                    .col-5.col-md-4
                         .input-group
                             span.input-group-text $
                             input(type="number" id="costInput" name="cost" step="any" min="0" placeholder="total" required).form-control
