@@ -23,7 +23,7 @@ footer img      { width: auto; height: 16px; }
 /* topics */
 
 .topic { flex: 1; min-width: 300px; border-radius: 6px; }
-.topic img { width: auto; height: 30px; }
+/* .topic img { width: auto; height: 30px; } */
 
 /* links */
 
@@ -40,9 +40,5 @@ body { min-height: 100vh; min-height: -webkit-fill-available; }
 main { flex: 1; }
 
 /* lottie */
-lottie-player {
-    width: 100px;
-    margin: 0; padding: 0;
-    align-self: center;
-    /* border: 1px solid black; */
-}
+
+lottie-player { width: 60px; }
