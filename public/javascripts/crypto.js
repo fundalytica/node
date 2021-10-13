@@ -147,7 +147,7 @@ UIUtils.addListener("#formSubmitButton", 'click', e => {
     state.loading = true
     updateUI()
 
-    state.message = `✓ Portfolio updated: ${action} ${numeral(amount).format('0,0.[0]')} ${symbol.toUpperCase()} @ ${numeral(cost).format('$0,0.[0]')}`
+    state.message = `✓ Portfolio Updated: ${StringUtils.capitalize(action)} ${numeral(amount).format('0,0.[0]')} ${symbol.toUpperCase()} @ ${numeral(cost).format('$0,0.[0]')}`
     crypto.update(action, symbol, amount, cost, callback)
 })
 
