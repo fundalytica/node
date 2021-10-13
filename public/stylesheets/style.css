@@ -1,5 +1,7 @@
 * { font-family: avenir, sans-serif; }
 
+div, table, p, h1, h2, h3 { margin: 0; padding: 0; }
+
 /* header */
 
 header a        { color: #999; transition: ease-in-out color .15s; }
