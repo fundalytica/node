@@ -7,16 +7,10 @@ block content
     //- section.bg-grey-700
     //-     ul.container.list-unstyled.d-flex.flex-row.flex-wrap.p-1.text-center.text-nowrap.small#quotes
 
-    main#container.p-0
-        - var text = 'Join our community on Discord'
-        - var url = 'https://discord.gg/WmbyWHxyH6'
-        p.m-0.p-2.text-center.bg-purple-300.text-white
-            a.text-white.text-decoration-underline(href=url)= text
-            i.fab.fa-discord.ps-2
-
+    main#container
         if(just_logged)
             - var text = (just_logged == 'in') ? '🔑 Logged In: Welcome to Fundalytica' : (just_logged == 'out') ? '👋 Logged Out: See you soon' : '?'
-            p.m-0.p-2.text-center.bg-light-blue-700.text-white= text
+            p.p-1.text-center.bg-light-blue-700.text-white.small= text
 
         .d-md-flex.flex-md-row.flex-md-wrap.m-md-3
             //- .topic#welcome.m-3.bg-blue-grey-200
@@ -45,34 +39,36 @@ block content
             //-                             button.btn.btn-outline-secondary.rounded-right(type='submit' name='submit') Subscribe
 
             each topic, index in topics
-                - css = topic.color + ' ' + (topic.lottie ? 'ps-4 pe-1 py-4' : 'p-4')
-                .topic.m-3(class=css)
-                    .d-flex.flex-row
-                        //- left segment
+                - css = topic.color + ' ' + (topic.css ? topic.css : 'pe-4')
+                .topic.m-3.ps-4.py-4(class=css)
+                    .d-flex.flex-column
+                        .d-flex.flex-row.justify-content-between
+                            //- left segment
+                            div
+                                p
+                                    span.hashtag.text-white.bg-dark.rounded.small.p-1= topic.hashtag
+
+                                h2.mt-4= topic.title
+
+                            //- right segment
+                            if(topic.lottie)
+                                div
+                                    lottie-player(src=topic.lottie.src background='transparent' speed='1' loop autoplay)
+                                    //- img.mb-2(src='images/topics/'+topic.image alt=topic.id+' icon')
+
                         div
-                            p
-                                span.hashtag.text-white.bg-dark.rounded.small.p-1= topic.hashtag
-
-                            h2= topic.title
-
-                            //- img.mb-2(src='images/topics/'+topic.image alt=topic.id+' icon')
-
-                            p.lead= topic.description
+                            p.lead.mt-2= topic.description
 
                             - var href = (! topic.action) ? '#' : ((topic.action == 'route') ? topic.id : topic.action)
                             - var target = ['route','wip'].includes(topic.action) ? '_self' : '_blank'
                             - var button_class = (! topic.action) ? 'disabled' : ''
-                            a.btn.btn-outline-light.text-nowrap.py-3.ps-3(class=button_class href=href target=target)= topic.button
+                            a.btn.btn-outline-light.text-nowrap.py-3.ps-3.mt-4(class=button_class href=href target=target)= topic.button
                                 i.bi.bi-chevron-right.ms-2
 
-                        //- right segment
-                        if(topic.lottie)
-                            <lottie-player src=#{topic.lottie} background='transparent' speed='1' loop autoplay></lottie-player>
-
         div.d-flex.flex-column.flex-wrap.justify-content-center.text-center.text-secondary.small.p-1
-            p.m-0
+            p
                 | Icons • #[a( href='https://thenounproject.com' ) The Noun Project]
-            p.m-0
+            p
                 | Animations • #[a( href='https://lottiefiles.com' ) LottieFiles]
             //- ul
             //-     li Rocket by Adrien Coquet
