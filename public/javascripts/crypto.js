@@ -41,6 +41,28 @@ const state = {
     delete: null,
 }
 
+const initAutoComplete = src => {
+    const autoCompleteJS = new autoComplete({
+        selector: "#symbolInput",
+        placeHolder: "symbol",
+        data: {
+            src: src,
+            cache: true
+        },
+        resultItem: {
+            highlight: true
+        },
+        events: {
+            input: {
+                selection: (event) => {
+                    const selection = event.detail.selection.value
+                    autoCompleteJS.input.value = selection
+                }
+            }
+        }
+    })
+}
+
 const updateUI = () => {
     console.log(state)
 
@@ -432,6 +454,7 @@ const fetch = () => {
         const done = result => {
             data.ticker = result
 
+            initAutoComplete(binance.symbols())
             populatePositions(data.positions, data.ticker)
 
             UI.ready()
