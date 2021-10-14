@@ -38,7 +38,7 @@ block content
                         input(type="number" id="amountInput" name="amount" step="any" min="0" placeholder="amount" required).form-control
 
                     .col-4.col-md-4
-                        input(type="text" id="symbolInput" name="symbol" placeholder="symbol" pattern="[a-zA-Z'-'\s]*" required).form-control
+                        input(type="text" id="symbolInput" name="symbol" placeholder="symbol" pattern="^[a-zA-Z0-9]{1,6}" required).form-control
 
                     .col-5.col-md-4
                         .input-group
@@ -47,7 +47,7 @@ block content
 
                 .row.g-2.mt-2.justify-content-center
                     .col-auto
-                        button(id="formCloseButton").btn.btn-outline-secondary.text-nowrap Back
+                        button(id="formCloseButton").btn.btn-outline-secondary.text-nowrap Close
 
                     .col-auto
                         button(id="formSubmitButton").btn.btn-outline-success.text-nowrap Submit
