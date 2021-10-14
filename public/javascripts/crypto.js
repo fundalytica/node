@@ -13,8 +13,6 @@ const UI = new UIManager("#spinner", "#error")
 const crypto = new CryptoPortfolio(window.api_origin)
 const binance = new CryptoBinance()
 
-const symbolNames = { 'btc': 'Bitcoin', 'eth': 'Ethereum', 'dot': 'Polkadot', 'doge': 'Dogecoin' }
-
 const demoTextSelector = '#demoText'
 const messageSelector = "#message"
 
@@ -64,9 +62,13 @@ const initAutoComplete = () => {
     })
 }
 
-const updateUI = () => {
-    console.log(state)
+const symbolName = symbol => {
+    const symbolNames = { 'btc': 'Bitcoin', 'eth': 'Ethereum', 'dot': 'Polkadot', 'doge': 'Dogecoin' }
+    const name = symbolNames[symbol.toLowerCase()]
+    return name ? name : symbol.toUpperCase()
+}
 
+const updateUI = () => {
     UIUtils.hide(messageSelector)
 
     if(state.loading) {
@@ -201,55 +203,55 @@ const addPosition = (position, list, ticker) => {
     const amount = position['amount']
     const cost = position['cost']
 
-    // ticker
-    const price = getPrice(symbol, ticker)
-
-    // calculate
-    const basis = cost / amount
-
     // div
     const div = document.createElement('div')
     div.classList.add('position')
     div.classList.add('px-4', 'pb-4')
 
-    const header = document.createElement('div')
-
     // header - symbol
     const h4 = document.createElement('h4')
-    h4.appendChild(document.createTextNode(symbolNames[symbol]))
-    header.appendChild(h4)
-    div.appendChild(header)
+    h4.appendChild(document.createTextNode(symbolName(symbol)))
+    div.appendChild(h4)
 
     // img - logo
     const logoFile = (symbol, extension = 'svg') => `/images/logos/crypto/${symbol.toLowerCase()}.${extension}`
     const img = document.createElement('img')
     img.classList.add('logo')
-    img.classList.add('p-1')
-    img.setAttribute('onerror', `this.onerror=null;this.src="${logoFile(symbol, 'png')}";`)
+    img.classList.add('p-1', 'mb-2')
+    img.setAttribute('onerror', `this.onerror=null;this.src="${logoFile('blank', 'svg')}";`)
     img.setAttribute('src', logoFile(symbol))
     img.setAttribute('alt', `${symbol} logo`)
-    img.classList.add('mb-2')
     div.appendChild(img)
 
-    // p - percentage
-    const percentage = price / basis - 1
+    // ticker price
+    const price = getPrice(symbol, ticker)
 
+    // p - percentage
     const pPercentage = document.createElement('p')
     const smallPercentage = document.createElement('small')
-    pPercentage.appendChild(smallPercentage)
-    smallPercentage.classList.add((basis <= 0) ? 'text-primary' : (percentage > 0 ? 'text-success' : 'text-danger'))
 
-    if(basis > 0) {
-        const text = `${numeral(percentage).format('%,')}`
-        smallPercentage.appendChild(document.createTextNode(text))
+    // icon & text - percentage
+    const icon = document.createElement('i')
+    icon.classList.add('p-1', 'px-1')
+    if(cost <= 0) { // cost 0 or negative, show infinity
+        icon.classList.add('fa', 'fa-infinity', 'text-primary')
     }
+    else {
+        if(! price ) { // no ticker price, can not have a percentage, show ghost
+            icon.classList.add('fa', 'fa-ghost', 'text-secondary')
+        }
+        else { // ticker price available
+            const basis = cost / amount
+            const percentage = price / basis - 1
 
-    const iArrow = document.createElement('i')
-    iArrow.classList.add('px-1')
-    const icon = (basis <= 0) ? 'fa-infinity' : (percentage > 0 ? 'fa-arrow-up' : 'fa-arrow-down')
-    iArrow.classList.add('fas', icon, 'p-1')
-    smallPercentage.appendChild(iArrow)
+            smallPercentage.appendChild(document.createTextNode(`${numeral(percentage).format('%,')}`))
+            smallPercentage.classList.add((percentage > 0 ? 'text-success' : 'text-danger'))
 
+            icon.classList.add('fa', (percentage > 0 ? 'fa-arrow-up' : 'fa-arrow-down'))
+        }
+    }
+    smallPercentage.appendChild(icon)
+    pPercentage.appendChild(smallPercentage)
     div.appendChild(pPercentage)
 
     const createPElement = (from, to, classes) => {
@@ -277,15 +279,18 @@ const addPosition = (position, list, ticker) => {
         // spanTo
         const spanTo = document.createElement('span')
         spanTo.classList.add('p-1')
-        spanTo.appendChild(document.createTextNode(`${numeral(to).format(to > 1 ? '$0,0' : '$0,0.[0]')}`))
+        const text = to ? `${numeral(to).format(to > 1 ? '$0,0' : '$0,0.[0]')}` : '?'
+        spanTo.appendChild(document.createTextNode(text))
         smallUnit.appendChild(spanTo)
 
         p.appendChild(smallUnit)
+
         return p
     }
 
     // p - unit
-    const pUnit = createPElement(basis, price, ['text-muted'])
+    const basis = cost / amount
+    const pUnit = createPElement(basis, (price ? price : null), ['text-muted'])
     div.appendChild(pUnit)
 
     // p - amount
@@ -294,7 +299,7 @@ const addPosition = (position, list, ticker) => {
     div.appendChild(pAmount)
 
     // p - total
-    const pTotal = createPElement(basis * amount, price * amount, ['text-dark', 'fw-bolder'])
+    const pTotal = createPElement(cost, (price ? price * amount : null), ['text-dark', 'fw-bolder'])
     div.appendChild(pTotal)
 
     if(! state.demo) {
@@ -355,7 +360,7 @@ const addPositionsListeners = () => {
         state.trades = true
         updateUI()
 
-        UITextUtils.text(`${tradesSelector} > h3`, `${symbolNames[symbol]} Details`)
+        UITextUtils.text(`${tradesSelector} > h3`, `${symbolName(symbol)} Details`)
     })
 
     UIUtils.addListener('.position-delete', 'click', e => { // position delete

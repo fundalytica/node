@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="64px" height="64px" viewBox="0 0 64 64" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>btc</title>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="btc" transform="translate(-0.002901, 0.003694)" fill="#A5A5A5" fill-rule="nonzero">
+            <path d="M63.0354606,39.7415957 C58.7614606,56.8845957 41.3984606,67.3175957 24.2534606,63.0425957 C7.11546056,58.7685957 -3.31753944,41.4045957 0.958460562,24.2625957 C5.23046056,7.11759567 22.5934606,-3.31640433 39.7334606,0.957595675 C56.8774606,5.23159567 67.3094606,22.5975957 63.0354606,39.7415957 L63.0354606,39.7415957 Z" id="Path"></path>
+        </g>
+    </g>
+</svg>
