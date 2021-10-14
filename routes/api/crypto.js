@@ -88,9 +88,10 @@ router.post(`${process.env.API_PATH}/v1/crypto/portfolio/update`, authenticate, 
     const cost = parseFloat(req.body.cost)
 
     // error handling
-    const supportedSymbols = ['btc', 'eth', 'dot', 'doge']
+    // const supportedSymbols = ['btc', 'eth', 'dot', 'doge']
     const validActions = ['buy', 'sell']
-    if(! supportedSymbols.includes(symbol)) return res.json(error('invalid_symbol', `invalid symbol: ${symbol}, not supported`))
+    // if(! supportedSymbols.includes(symbol)) return res.json(error('invalid_symbol', `invalid symbol: ${symbol}, not supported`))
+    if(symbol.length > 6) return res.json(error('invalid_symbol', `invalid symbol: ${symbol}`))
     if(! validActions.includes(action))     return res.json(error('invalid_action', `invalid action: ${action}, must be buy or sell`))
     if(amount <= 0)                         return res.json(error('invalid_amount', `invalid amount: ${amount}, must be positive`))
     // if(cost <= 0)                           return res.json(error('invalid_cost', `invalid cost: ${cost}, must be positive`))
