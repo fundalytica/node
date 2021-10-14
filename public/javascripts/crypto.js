@@ -233,21 +233,22 @@ const addPosition = (position, list, ticker) => {
     // icon & text - percentage
     const icon = document.createElement('i')
     icon.classList.add('p-1', 'px-1')
-    if(cost <= 0) { // cost 0 or negative, show infinity
-        icon.classList.add('fa', 'fa-infinity', 'text-primary')
+
+    if(! price ) { // no ticker price, can not have a percentage, show ghost
+        icon.classList.add('fa', 'fa-ghost', 'text-secondary')
     }
     else {
-        if(! price ) { // no ticker price, can not have a percentage, show ghost
-            icon.classList.add('fa', 'fa-ghost', 'text-secondary')
+        if(cost <= 0) { // cost 0 or negative, show infinity
+            icon.classList.add('fa', 'fa-infinity', 'text-primary')
         }
         else { // ticker price available
-            const basis = cost / amount
-            const percentage = price / basis - 1
+                const basis = cost / amount
+                const percentage = price / basis - 1
 
-            smallPercentage.appendChild(document.createTextNode(`${numeral(percentage).format('%,')}`))
-            smallPercentage.classList.add((percentage > 0 ? 'text-success' : 'text-danger'))
+                smallPercentage.appendChild(document.createTextNode(`${numeral(percentage).format('%,')}`))
+                smallPercentage.classList.add((percentage > 0 ? 'text-success' : 'text-danger'))
 
-            icon.classList.add('fa', (percentage > 0 ? 'fa-arrow-up' : 'fa-arrow-down'))
+                icon.classList.add('fa', (percentage > 0 ? 'fa-arrow-up' : 'fa-arrow-down'))
         }
     }
     smallPercentage.appendChild(icon)
