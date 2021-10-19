@@ -46,10 +46,12 @@ const updateDate = generated => {
     const formattedDate = moment(date).format('D MMM YYYY')
 
     const days = moment().diff(moment(date), 'days')
-    const className = days >= 7 ? 'text-danger' : 'text-secondary'
 
-    UITextUtils.text(dateSelector, `Last Update: ${formattedDate} (${days}d ago)`)
-    UIUtils.addClass(dateSelector, className)
+    let text = `Imported Statement: Up to ${formattedDate} (${days}d ago)`
+    if(days >= 7) text = `⚠️ ${text} ⚠️`
+
+    UITextUtils.text(dateSelector, text)
+    UIUtils.addClass(dateSelector, days >= 7 ? 'text-danger' : 'text-secondary')
     UIUtils.show(dateSelector)
 }
 
