@@ -15,19 +15,28 @@ export default class UITableUtils {
 
     static addHeader(table, values, classes = null) {
         let ref = document.querySelector(`${table} > thead`)
-        if(! ref) ref = document.createElement('thead')
-        UITableUtils.addTableCells(ref, values, classes)
-        document.querySelector(table).appendChild(ref)
+
+        if(! ref) {
+            ref = document.createElement('thead')
+            document.querySelector(table).appendChild(ref)
+        }
+
+        UITableUtils.addHeaderCells(ref, values, classes)
     }
 
     static addRow(table, values, classes = null) {
         let ref = document.querySelector(`${table} > tbody`)
-        if(! ref) ref = document.createElement('tbody')
+
+        if(! ref) {
+            ref = document.createElement('tbody')
+            document.querySelector(table).appendChild(ref)
+        }
 
         const newRow = ref.insertRow()
 
         for (let i = 0; i < values.length; i++) {
             const newCell = newRow.insertCell()
+
             if(classes) newCell.classList.add(...classes)
 
             if(typeof(values[i]) != 'object') {
@@ -38,11 +47,9 @@ export default class UITableUtils {
                 newCell.appendChild(values[i])
             }
         }
-
-        document.querySelector(table).appendChild(ref)
     }
 
-    static addTableCells(ref, values, classes) {
+    static addHeaderCells(ref, values, classes) {
         const newRow = ref.insertRow()
 
         for (const value of values) {
@@ -58,9 +65,13 @@ export default class UITableUtils {
 
     static addFooter(table, values, classes = null) {
         let ref = document.querySelector(`${table} > tfoot`)
-        if(! ref) ref = document.createElement('tfoot')
-        UITableUtils.addTableCells(ref, values, classes)
-        document.querySelector(table).appendChild(ref)
+
+        if(! ref) {
+            ref = document.createElement('tfoot')
+            document.querySelector(table).appendChild(ref)
+        }
+
+        UITableUtils.addHeaderCells(ref, values, classes)
     }
 
     static hideColumns(table, header, hide) {
