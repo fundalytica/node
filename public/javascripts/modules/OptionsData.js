@@ -94,7 +94,10 @@ export default class OptionsData {
 
     static nearestExpiration(positions) {
         // update remaining, time has passed since initialization
-        const array = positions.map(p => OptionsData.remaining(p['expiration']))
+        let array = positions.map(p => OptionsData.remaining(p['expiration']))
+
+        // remove already expired entries
+        array = array.filter(n => n > 0)
 
         const remaining = Math.min(...array)
 
