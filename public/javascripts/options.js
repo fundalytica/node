@@ -124,18 +124,24 @@ const updateTables = data => {
                         value = moment(value, 'DDMMMYY').format(options.expirationDisplayFormat)
                     }
                     else if (key == 'remaining') {
-                        const localExpiration = moment().add(value, 's')
-                        const localNow = moment()
-                        const days = localExpiration.diff(localNow, 'days')
-
-                        // if zero days, show hours and minutes
-                        if(days > 0) {
-                            value = `${days}d`
+                        // option has expired
+                        if(option['remaining'] <= 0) {
+                            value = 'expired'
                         }
                         else {
-                            const format = "H[h] m[m]" // "H[h] m[m] s[s]"
-                            const time = moment(localExpiration.diff(localNow)).format(format)
-                            value = `${time}`
+                            const localExpiration = moment().add(value, 's')
+                            const localNow = moment()
+                            const days = localExpiration.diff(localNow, 'days')
+
+                            // if zero days, show hours and minutes
+                            if(days > 0) {
+                                value = `${days}d`
+                            }
+                            else {
+                                const format = "H[h] m[m]" // "H[h] m[m] s[s]"
+                                const time = moment(localExpiration.diff(localNow)).format(format)
+                                value = `${time}`
+                            }
                         }
                     }
 
@@ -147,7 +153,12 @@ const updateTables = data => {
                     row.push(value)
                 }
 
-                UITableUtils.addRow(table, row)
+                let classes = []
+                if(option['remaining'] < 0) {
+                    classes = classes.concat(['text-danger'])
+                }
+
+                UITableUtils.addRow(table, row, classes)
                 UITableUtils.addDataTitle(table, header)
             }
 
