@@ -9,7 +9,7 @@ import StringUtils from './modules/StringUtils.js'
 import OptionsData from './modules/OptionsData.js'
 
 const UI = new UIManager("#spinner", "#error")
-const options = new OptionsData(window.api_origin)
+const optionsData = new OptionsData(window.api_origin)
 
 const dateSelector = '#date'
 const tableOrdering = ['#dropdown-sort', '#btn-group-order']
@@ -17,7 +17,7 @@ const tables = ['#table-puts', '#table-calls']
 const tablesAccessories = ['#toggle-puts', '#toggle-calls', '#info-puts', '#info-calls']
 
 const currencyFormat = '$0,0'
-const formats = { strike: '0,0.0', basis: currencyFormat, value: currencyFormat, profit: currencyFormat }
+const formats = { strike: '0,0.0', quantity: '0,0', basis: currencyFormat, value: currencyFormat, profit: currencyFormat }
 
 const intervals = {}
 
@@ -28,9 +28,10 @@ const run = () => {
     UIUtils.hide(tables.concat(tablesAccessories, tableOrdering))
 
     const done = () => {
-        updateDate(options.generated)
+        updateStocks(optionsData.stocks)
+        updateDate(optionsData.generated)
         updateDropdown()
-        updateTables(options.positions)
+        updateTables(optionsData.options)
         registerClickEventOrder()
 
         UI.ready()
@@ -38,7 +39,7 @@ const run = () => {
 
     const fail = error => UI.error(error)
 
-    options.init(done, fail)
+    optionsData.init(done, fail)
 }
 
 const updateDate = generated => {
@@ -55,10 +56,79 @@ const updateDate = generated => {
     UIUtils.show(dateSelector)
 }
 
-const updateDropdown = () => {
-    UITextUtils.text('#dropdown-sort', `Sorted by ${options.sort}`)
+const imageElement = symbol => {
+    const logoFile = (symbol, extension = 'svg') => `/images/logos/stocks/${symbol.toLowerCase()}.${extension}`
 
-    UIUtils.populateDropdown('#dropdown-menu-sort', options.sortKeys)
+    const img = document.createElement('img')
+    img.setAttribute('onerror', `this.onerror=null;this.src="${logoFile(symbol, 'png')}";`)
+    img.setAttribute('src', logoFile(symbol))
+    img.setAttribute('alt', `${symbol} logo`)
+
+    return img
+}
+
+const symbolElement = symbol => {
+    const a = document.createElement('a')
+    a.setAttribute('href', `https://www.tradingview.com/symbols/${symbol}`)
+    a.setAttribute('target', '_blank')
+    a.setAttribute('rel', 'noopener')
+    a.innerText = `\$${symbol}`
+    return a
+}
+
+const updateStocks = stocks => {
+    if(! stocks.length) return
+
+    const header = Object.keys(stocks[0])
+
+    // add
+    header.unshift('logo')
+    header.push('average')
+    header.push('calls')
+    // header.push('puts')
+
+    const table = '#table-stocks'
+    UITableUtils.addHeader(table, header)
+
+    const totalOptions = (options, symbol) => {
+        options = options.filter(o => o.symbol == symbol)
+        options = options.map(o => o.quantity)
+        return options.reduce((acc, val) => acc + parseInt(val), 0)
+    }
+
+    const optionsString = count => {
+        if(count == 0) return '🙌'
+        if(count < 0) return `💣 ${-count}`
+        return count
+    }
+
+    for (const stock of stocks) {
+        const row = []
+        for (const key of header) {
+            let value = stock[key]
+
+            if(key == 'logo') value = imageElement(stock.symbol)
+            if(key == 'symbol') value = symbolElement(value)
+            if(key == 'average') value = numeral(stock.basis / stock.quantity).format('$0,0.0')
+            if(key == 'calls') value = optionsString(totalOptions(optionsData.calls, stock.symbol))
+            if(key == 'puts') value = optionsString(totalOptions(optionsData.puts, stock.symbol))
+
+            if (formats[key]) value = numeral(value).format(formats[key])
+
+            row.push(value)
+        }
+        UITableUtils.addRow(table, row)
+    }
+
+    UITableUtils.addDataTitle(table, header)
+
+    UIUtils.show('#stocks')
+}
+
+const updateDropdown = () => {
+    UITextUtils.text('#dropdown-sort', `Sorted by ${optionsData.sort}`)
+
+    UIUtils.populateDropdown('#dropdown-menu-sort', optionsData.sortKeys)
     UIUtils.addClass('.dropdown-menu > li > button', 'btn-sm')
 
     registerClickEventSort()
@@ -83,20 +153,21 @@ const updateTables = data => {
     header.unshift('logo')
 
     for (const right of ['puts', 'calls']) {
-        const positions = (right == 'puts') ? options.puts(data) : options.calls(data)
-        const count = positions.length
+        const options = (right == 'puts') ? optionsData.puts : optionsData.calls
+        const count = options.length
 
         const table = `#table-${right}`
 
         // summary
-        updateTableSummary(right, positions)
+        updateTableSummary(right, options)
 
-        // header
+        // header                UITableUtils.addRow(table, row, classes)
+
         UITableUtils.addHeader(table, header)
 
         if (count) {
             // rows
-            for (const option of positions) {
+            for (const option of options) {
                 const row = []
 
                 for (const key of header) {
@@ -104,26 +175,15 @@ const updateTables = data => {
 
                     // logo
                     if (key == 'logo') {
-                        const logoFile = (symbol, extension = 'svg') => `/images/logos/stocks/${symbol.toLowerCase()}.${extension}`
-
-                        const img = document.createElement('img')
-                        img.setAttribute('onerror', `this.onerror=null;this.src="${logoFile(option.symbol, 'png')}";`)
-                        img.setAttribute('src', logoFile(option.symbol))
-                        img.setAttribute('alt', `${option.symbol} logo`)
-                        value = img
+                        value = imageElement(option.symbol)
                     }
                     // symbol
                     else if (key == 'symbol') {
-                        const a = document.createElement('a')
-                        a.setAttribute('href', 'https://www.tradingview.com/symbols/${value}')
-                        a.setAttribute('target', '_blank')
-                        a.setAttribute('rel', 'noopener')
-                        a.innerText = `\$${value}`
-                        value = a
+                        value = symbolElement(value)
                     }
                     // expiration
                     else if (key == 'expiration') {
-                        value = moment(value, 'DDMMMYY').format(options.expirationDisplayFormat)
+                        value = moment(value, 'DDMMMYY').format(optionsData.expirationDisplayFormat)
                     }
                     else if (key == 'remaining') {
                         // option has expired
@@ -179,29 +239,29 @@ const updateTables = data => {
     }
 
     // visibility, common ordering
-    const hide = ! (options.puts(data).length || options.calls(data).length)
+    const hide = ! (optionsData.puts.length || optionsData.calls.length)
     UIUtils.hide(tableOrdering, hide)
 }
 
-const updateTableSummary = (right, positions) => {
-    UITextUtils.text(`#count-${right}`, `${positions.length} ${StringUtils.capitalize(right)}`)
-    UITextUtils.text(`#basis-${right}`, `Basis ${numeral(Utils.propertyTotal(positions, 'basis')).format(currencyFormat)}`)
-    UITextUtils.text(`#value-${right}`, `Value ${numeral(Utils.propertyTotal(positions, 'value')).format(currencyFormat)}`)
-    UITextUtils.text(`#profit-${right}`, `Profit ${numeral(Utils.propertyTotal(positions, 'profit')).format(currencyFormat)}`)
-    UITextUtils.text(`#assignment-${right}`, `Assignment ${numeral(OptionsData.assignmentTotal(positions)).format(currencyFormat)}`)
+const updateTableSummary = (right, options) => {
+    UITextUtils.text(`#count-${right}`, `${options.length} ${StringUtils.capitalize(right)}`)
+    UITextUtils.text(`#basis-${right}`, `Basis ${numeral(Utils.propertyTotal(options, 'basis')).format(currencyFormat)}`)
+    UITextUtils.text(`#value-${right}`, `Value ${numeral(Utils.propertyTotal(options, 'value')).format(currencyFormat)}`)
+    UITextUtils.text(`#profit-${right}`, `Profit ${numeral(Utils.propertyTotal(options, 'profit')).format(currencyFormat)}`)
+    UITextUtils.text(`#assignment-${right}`, `Assignment ${numeral(OptionsData.assignmentTotal(options)).format(currencyFormat)}`)
 
-    updateNearestExpiration(right, positions)
+    updateNearestExpiration(right, options)
 }
 
-const updateNearestExpiration = (right, positions) => {
+const updateNearestExpiration = (right, options) => {
     const selector = `#expiration-${right}`
-    UIUtils.hide(selector, (positions.length == 0))
+    UIUtils.hide(selector, (options.length == 0))
 
-    if(positions.length == 0) return
+    if(options.length == 0) return
 
     const elementUpdate = () => {
         // nearest expiration
-        const nearest = OptionsData.nearestExpiration(positions)
+        const nearest = OptionsData.nearestExpiration(options)
         // days
         const localExpiration = moment().add(nearest.remaining, 's')
         const localNow = moment()
@@ -224,9 +284,9 @@ const registerClickEventSort = () => {
     const selector = ".dropdown-menu button"
 
     const handler = e => {
-        options.sort = e.currentTarget.innerText
+        optionsData.sort = e.currentTarget.innerText
         updateDropdown()
-        updateTables(options.positions)
+        updateTables(optionsData.options)
     }
 
     UIUtils.removeListener(selector, 'click', handler)
@@ -237,8 +297,8 @@ const registerClickEventOrder = () => {
     const selector = "#btn-group-order .btn-check"
 
     const handler = e => {
-        options.order = e.currentTarget.id.includes('asc') ? 'asc' : 'desc'
-        updateTables(options.positions)
+        optionsData.order = e.currentTarget.id.includes('asc') ? 'asc' : 'desc'
+        updateTables(optionsData.options)
     }
 
     UIUtils.removeListener(selector, 'click', handler)

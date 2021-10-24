@@ -21,9 +21,11 @@ a[aria-expanded=false] .fa-angle-up {
 }
 
 table img {
+    margin: 14px 0;
+
     text-align: left;
 
-    max-height: 18px;
+    max-height: 16px;
     width: auto;
     max-width: 80px;
 
@@ -31,3 +33,7 @@ table img {
 }
 
 .info { padding: 0; margin: 0; }
+
+#stocks thead {
+    --bs-table-bg: #CCC;
+}

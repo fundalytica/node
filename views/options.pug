@@ -29,7 +29,7 @@ block content
                     input.btn-check(type="radio" name="btnradio" id="btn-radio-desc" autocomplete="off")
                     label.btn.btn-outline-secondary.btn-sm(for="btn-radio-desc") desc
 
-        - var ids = ['puts', 'calls', 'warrants']
+        - var ids = ['puts', 'calls']
         each id in ids
             a.btn(id="toggle-"+id data-bs-toggle='collapse' href='#no-more-tables-'+id aria-expanded='true' aria-controls="no-more-tables-"+id).d-none
                 i.fa.fa-table.px-2
@@ -47,6 +47,18 @@ block content
             .no-more-tables(id="no-more-tables-"+id).collapse.show
                 table.table.small(id="table-"+id).d-none
                     thead.table-dark
+                    tbody
+
+        .d-none(id="stocks")
+            a.btn(id="toggle-"+id data-bs-toggle='collapse' href='#no-more-tables-stocks' aria-expanded='true' aria-controls="no-more-tables-"+id)
+                i.fa.fa-table.px-2
+                span Stock Positions
+                i.fa.fa-angle-down.px-2
+                i.fa.fa-angle-up.px-2
+
+            .no-more-tables(id="no-more-tables-stocks").collapse.show
+                table.table.small(id="table-stocks")
+                    thead
                     tbody
 
         div.d-flex.flex-grow-1.justify-content-center

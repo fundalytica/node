@@ -7,13 +7,13 @@ export default class OptionsData {
         this.orderKeys = ['asc', 'desc']
         this.expirationDisplayFormat = "DD MMM 'YY"
 
-        this._sort = this.sortKeys[0]
+        this._sort = this.sortKeys[1]
         this._order = this.orderKeys[0]
     }
 
     set sort(value) {
         this._sort = value;
-        this.sortPositions()
+        this.sortOptions()
     }
     get sort() {
         return this._sort
@@ -21,10 +21,18 @@ export default class OptionsData {
 
     set order(value) {
         this._order = value;
-        this.sortPositions()
+        this.sortOptions()
     }
     get order() {
         return this._order
+    }
+
+    get puts() {
+        return this.options.filter(row => row.right == 'P')
+    }
+
+    get calls() {
+        return this.options.filter(row => row.right == 'C')
     }
 
     init(done, fail) {
@@ -34,10 +42,11 @@ export default class OptionsData {
             if (data.error) return fail(data.error)
 
             this.generated = data.generated
-            this.positions = data.positions
+            this.options = data.options
+            this.stocks = data.stocks
 
-            this.enrichPositions()
-            this.sortPositions()
+            this.enrichOptions()
+            this.sortOptions()
 
             done()
         }
@@ -45,8 +54,8 @@ export default class OptionsData {
         Utils.request(url, null, requestCallback, fail)
     }
 
-    enrichPositions() {
-        for (const option of this.positions) {
+    enrichOptions() {
+        for (const option of this.options) {
             // add value
             option.value = OptionsData.optionValue(option)
 
@@ -58,43 +67,35 @@ export default class OptionsData {
         }
     }
 
-    sortPositions(expirationFormat) {
+    sortOptions(expirationFormat) {
         const ascending = (this.order == 'asc') ? 1 : -1
         const sort = this.sort
 
         if (sort == 'symbol') {
-            this.positions.sort((a, b) => String(a[sort]).localeCompare(String(b[sort])) * ascending)
+            this.options.sort((a, b) => String(a[sort]).localeCompare(String(b[sort])) * ascending)
         }
         else if (sort == 'expiration') {
-            this.positions.sort((a, b) => (moment(a[sort], this.expirationDisplayFormat) - moment(b[sort], this.expirationDisplayFormat)) * ascending)
+            this.options.sort((a, b) => (moment(a[sort], this.expirationDisplayFormat) - moment(b[sort], this.expirationDisplayFormat)) * ascending)
         }
         else if (['basis', 'value'].includes(sort)) {
-            this.positions.sort((a, b) => (parseFloat(a[sort]) - parseFloat(b[sort])) * ascending)
+            this.options.sort((a, b) => (parseFloat(a[sort]) - parseFloat(b[sort])) * ascending)
         }
         else {
-            this.positions.sort((a, b) => (parseFloat(a[sort]) - parseFloat(b[sort])) * ascending)
+            this.options.sort((a, b) => (parseFloat(a[sort]) - parseFloat(b[sort])) * ascending)
         }
-    }
-
-    puts() {
-        return this.positions.filter(row => row.right == 'P')
-    }
-
-    calls() {
-        return this.positions.filter(row => row.right == 'C')
     }
 
     static optionValue(option) {
         return option.price * option.quantity * 100
     }
 
-    static assignmentTotal(positions) {
-        return positions.reduce((acc, val) => acc += parseFloat(val.strike * val.quantity * 100), 0)
+    static assignmentTotal(options) {
+        return options.reduce((acc, val) => acc += parseFloat(val.strike * val.quantity * 100), 0)
     }
 
-    static nearestExpiration(positions) {
+    static nearestExpiration(options) {
         // update remaining, time has passed since initialization
-        let array = positions.map(p => OptionsData.remaining(p['expiration']))
+        let array = options.map(p => OptionsData.remaining(p['expiration']))
 
         // remove already expired entries
         array = array.filter(n => n > 0)
@@ -109,7 +110,7 @@ export default class OptionsData {
             idx = array.indexOf(remaining, idx + 1)
         }
 
-        const symbols = positions.map(p => p['symbol']).filter((s, index) => indices.includes(index))
+        const symbols = options.map(p => p['symbol']).filter((s, index) => indices.includes(index))
 
         return { remaining, symbols }
     }
