@@ -116,15 +116,10 @@ export default class OptionsData {
     }
 
     static remaining(expiration) {
-        // set default time zone to NY
-        moment.tz.setDefault("America/New_York")
-
+        moment.tz.setDefault("America/New_York") // set default time zone to NYSE time
         const newYorkNow = moment()
-
         const newYorkExpiration = moment(expiration, 'DDMMMYY')
-
-        // restore time zone
-        moment.tz.setDefault()
+        moment.tz.setDefault() // restore time zone
 
         // trading hours, 9:30 a.m. to 4 p.m. ET
         newYorkExpiration.set('hour', 16)
@@ -132,7 +127,7 @@ export default class OptionsData {
         newYorkExpiration.set('second', 0)
 
         // remaining in seconds
-        const remaining = moment(newYorkExpiration).diff(newYorkNow, 'seconds')
+        const remaining = newYorkExpiration.diff(newYorkNow, 'seconds') + 1
 
         return remaining
     }
