@@ -262,13 +262,23 @@ const updateNearestExpiration = (right, options) => {
     const elementUpdate = () => {
         // nearest expiration
         const nearest = OptionsData.nearestExpiration(options)
-        // days
+
+        // difference from now
         const localExpiration = moment().add(nearest.remaining, 's')
         const localNow = moment()
-        const days = localExpiration.diff(localNow, 'days')
+        const diff = localExpiration.diff(localNow)
+        // duration
+        const duration = moment.duration(diff)
+
+        // units
+        const days = Math.floor(duration.asDays())
+        const h = Math.floor(duration.asHours()) % 24
+        const m = Math.floor(duration.asMinutes()) % 60
+        const s = Math.floor(duration.asSeconds()) % 60
+
         // time
-        const format = "H[h] m[m] s[s]"
-        const time = moment(localExpiration.diff(localNow)).format(format)
+        const time = `${h}h ${m}m ${s}s`
+
         // symbols
         const symbols = nearest.symbols.join('•')
 
