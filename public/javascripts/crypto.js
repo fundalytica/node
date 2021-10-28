@@ -41,6 +41,18 @@ const state = {
 
 let autoCompleteJS = null
 
+const initDateInput = () => {
+    const htmlFormat = date => date.toISOString().slice(0, 10)
+
+    const past = '2009-01-03' // Bitcoin
+    const today = htmlFormat(new Date())
+
+    const id = "dateInput"
+    document.getElementById(id).setAttribute("min", past)
+    document.getElementById(id).setAttribute("max", today)
+    document.getElementById(id).setAttribute("value", today)
+}
+
 const initAutoComplete = () => {
     autoCompleteJS = new autoComplete({
         selector: "#symbolInput",
@@ -119,8 +131,8 @@ const updateUI = () => {
         UIUtils.hide(`.positionDelete`)
 
         if(state.delete) { // position selected for deletion
-            UIUtils.hide(`#${state.delete}Controls`)
-            UIUtils.show(`#${state.delete}Delete`)
+            UIUtils.hide(`#S-${state.delete}Controls`)
+            UIUtils.show(`#S-${state.delete}Delete`)
         }
 
         if(state.message) {
@@ -165,15 +177,17 @@ UIUtils.addListener("#formSubmitButton", 'click', e => {
     if(! valid) return
 
     const action = UIUtils.selectedRadioButtonValue('action')
-    const symbol = document.querySelector("#symbolInput").value
+    const date = document.querySelector("#dateInput").value
     const amount = document.querySelector("#amountInput").value
+    const symbol = document.querySelector("#symbolInput").value
     const cost = document.querySelector("#costInput").value
+    const currency = document.querySelector("#currencyInput").value
 
     state.loading = true
     updateUI()
 
-    state.message = `✓ Portfolio Updated: ${StringUtils.capitalize(action)} ${numeral(amount).format('0,0.[0]')} ${symbol.toUpperCase()} @ ${numeral(cost).format('$0,0.[0]')}`
-    crypto.update(action, symbol, amount, cost, callback)
+    state.message = `✓ Portfolio Updated: ${StringUtils.capitalize(action)} ${numeral(amount).format('0,0.[0]')} ${symbol.toUpperCase()} Total: ${numeral(cost).format('$0,0.[0]')}`
+    crypto.update(action, date, symbol, amount, cost, currency, callback)
 })
 
 UIUtils.addListener("#formCloseButton", 'click', e => {
@@ -307,7 +321,7 @@ const addPosition = (position, list, ticker) => {
         // controls
         const divControls = document.createElement('div')
         divControls.classList.add('mt-2', 'positionControls')
-        divControls.setAttribute('id', `${symbol}Controls`)
+        divControls.setAttribute('id', `S-${symbol}Controls`) // prepend character, css id can not start with number
 
         // trades
         const btnTrades = document.createElement('button')
@@ -332,7 +346,7 @@ const addPosition = (position, list, ticker) => {
         // delete
         const divDelete = document.createElement('div')
         divDelete.classList.add('d-none', 'mt-2', 'positionDelete')
-        divDelete.setAttribute('id', `${symbol}Delete`)
+        divDelete.setAttribute('id', `S-${symbol}Delete`)
 
         // btn - delete submit
         const btnDeleteSubmit = document.createElement('button')
@@ -392,11 +406,17 @@ const populateTrades = (trades, symbol) => {
 
     UITableUtils.clearTable(tableTradesSelector)
 
-    UITableUtils.addHeader(tableTradesSelector, ['Action', `Amount`, 'USD Total'], ['col-4'])
+    UITableUtils.addHeader(tableTradesSelector, ['Date', 'Action', 'Amount', 'Total', 'Currency'])
 
     trades = trades.filter(t => t.symbol == symbol)
     for(const trade of trades) {
-        UITableUtils.addRow(tableTradesSelector, [StringUtils.capitalize(trade.action), `${numeral(trade.amount).format('0,0.[0]')} ${symbol.toUpperCase()}`, numeral(trade.cost).format('$0,0.[0]')], ['col-4'])
+        const actionString = StringUtils.capitalize(trade.action)
+        const dateString = moment(trade.date, 'YYYY-MM-DD').format("DD MMM YYYY")
+        const amountString = `${numeral(trade.amount).format('0,0.[0]')} ${symbol.toUpperCase()}`
+        const totalString = numeral(trade.cost).format('$0,0.[0]')
+        const currencyString = trade.currency.toUpperCase()
+
+        UITableUtils.addRow(tableTradesSelector, [dateString, actionString, amountString, totalString, currencyString])
     }
 
     const totalAmount = trades.reduce((acc, trade) => {
@@ -406,7 +426,7 @@ const populateTrades = (trades, symbol) => {
         return acc += trade.cost * ((trade.action == 'buy') ? 1 : -1)
     }, 0)
 
-    UITableUtils.addFooter(tableTradesSelector, ['', `${numeral(totalAmount).format('0,0.[0]')} ${symbol.toUpperCase()}`, numeral(totalCost).format('$0,0.[0]')])
+    UITableUtils.addFooter(tableTradesSelector, ['', '', `${numeral(totalAmount).format('0,0.[0]')} ${symbol.toUpperCase()}`, numeral(totalCost).format('$0,0.[0]'), ''])
 
     state.trades = true
     updateUI()
@@ -475,6 +495,7 @@ const fetch = () => {
 }
 
 UIUtils.ready(() => {
+    initDateInput()
     initAutoComplete()
     fetch()
 })
