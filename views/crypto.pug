@@ -34,21 +34,22 @@ block content
                             label.btn.btn-outline-primary(for="btn-radio-sell") Sell
 
                 .row.g-2.mt-2.justify-content-center
+                    .col-5.col-md-4
+                        input(type="date" id="dateInput" name="date" placeholder="date" pattern="\d{4}-\d{2}-\d{2}" required).form-control
                     .col-4.col-md-4
                         input(type="number" id="amountInput" name="amount" step="any" min="0" placeholder="amount" required).form-control
-
-                    .col-4.col-md-4
+                    .col-3.col-md-4
                         input(type="text" id="symbolInput" name="symbol" placeholder="symbol" pattern="^[a-zA-Z0-9]{1,6}" required).form-control
 
-                    .col-5.col-md-4
-                        .input-group
-                            span.input-group-text $
-                            input(type="number" id="costInput" name="cost" step="any" min="0" placeholder="total" required).form-control
+                .row.g-2.mt-1.justify-content-center
+                    .col-4.col-md-3
+                        input(type="number" id="costInput" name="cost" step="any" min="0" placeholder="total" required).form-control
+                    .col-3.col-md-3
+                        input(type="text" id="currencyInput" name="currency" placeholder="currency" value = "USD" pattern="^[a-zA-Z]{3}" required).form-control
 
                 .row.g-2.mt-2.justify-content-center
                     .col-auto
                         button(id="formCloseButton").btn.btn-outline-secondary.text-nowrap Close
-
                     .col-auto
                         button(id="formSubmitButton").btn.btn-outline-success.text-nowrap Submit
 
