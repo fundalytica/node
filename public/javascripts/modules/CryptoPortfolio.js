@@ -21,7 +21,7 @@ export default class CryptoData {
         Utils.request(url, null, requestCallback, fail)
     }
 
-    update(action, symbol, amount, cost, callback) {
+    update(action, date, symbol, amount, cost, currency, callback) {
         const url = `${this.api_origin}/v1/crypto/portfolio/update`
 
         const fail = error => { console.log(error) }
@@ -32,9 +32,11 @@ export default class CryptoData {
 
         const body = new URLSearchParams()
         body.append('action', action)
-        body.append('symbol', symbol)
+        body.append('date', date)
         body.append('amount', amount)
+        body.append('symbol', symbol)
         body.append('cost', cost)
+        body.append('currency', currency)
         options.body = body
 
         Utils.request(url, options, callback, fail)
