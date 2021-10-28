@@ -12,7 +12,7 @@ const topics = [
         title: 'The Crypto Fund',
         description: 'BTC, ETH, DOT, Altcoins. Check out our diversified digital assets portfolio and create your own.',
         button: 'To The Moon',
-        lottie: { src: 'https://assets6.lottiefiles.com/packages/lf20_ZUd5j6.json' },
+        lottie: { src: '/lottie/lf20_ZUd5j6.json' },
         action: 'route'
     },
 
@@ -24,7 +24,7 @@ const topics = [
         title: 'Crypto Futures',
         description: 'Contango or backwardation? Go long or go short? We track futures premiums on Kraken.',
         button: 'Show Premiums',
-        lottie: { src: 'https://assets8.lottiefiles.com/packages/lf20_1wnliqn0.json' },
+        lottie: { src: '/lottie/lf20_1wnliqn0.json' },
         action: 'route'
     },
 
@@ -36,7 +36,7 @@ const topics = [
         title: 'Option Writing',
         description: 'When volatility goes up, we will sell options to capture the higher premium. We share our open positions.',
         button: 'See Portfolio',
-        lottie: { src: 'https://assets5.lottiefiles.com/private_files/lf30_rn1i0mvd.json' },
+        lottie: { src: '/lottie/lf30_rn1i0mvd.json' },
         action: 'route'
     },
 
