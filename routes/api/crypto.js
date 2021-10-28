@@ -77,15 +77,21 @@ router.post(`${process.env.API_PATH}/v1/crypto/portfolio/update`, authenticate, 
     if(! email) return res.json(error('no_user'))
 
     // properties received check
-    if(! req.body.symbol)   return res.json(error('missing_symbol', `symbol is missing`))
     if(! req.body.action)   return res.json(error('missing_action', `action is missing`))
+
+    if(! req.body.date)     return res.json(error('missing_date', `date is missing`))
+    if(! req.body.symbol)   return res.json(error('missing_symbol', `symbol is missing`))
     if(! req.body.amount)   return res.json(error('missing_amount', `amount is missing`))
     if(! req.body.cost)     return res.json(error('missing_cost', `cost is missing`))
+    if(! req.body.currency) return res.json(error('missing_currency', `currency is missing`))
 
-    const symbol = (req.body.symbol).toLowerCase()
     const action = req.body.action.toLowerCase()
+
+    const date = req.body.date
+    const symbol = req.body.symbol.toLowerCase()
     const amount = parseFloat(req.body.amount)
     const cost = parseFloat(req.body.cost)
+    const currency = req.body.currency.toLowerCase()
 
     // error handling
     // const supportedSymbols = ['btc', 'eth', 'dot', 'doge']
@@ -101,11 +107,11 @@ router.post(`${process.env.API_PATH}/v1/crypto/portfolio/update`, authenticate, 
     if(! portfolio) { // portfolio does not exist, create
         portfolio = new CryptoPortfolioModel()
         portfolio.email = email
-        portfolio.trades = [{ symbol, action, amount, cost }]
+        portfolio.trades = [{ date, symbol, action, amount, cost, currency }]
     }
     else { // portfolio exists, create new trade
         const trades = portfolio.trades.find(trade => trade.symbol == symbol)
-        portfolio.trades.push({ symbol, action, amount, cost })
+        portfolio.trades.push({ date, symbol, action, amount, cost, currency })
     }
 
     const positionsFromTrades = trades => { // calculate positions from trades
@@ -131,7 +137,10 @@ router.post(`${process.env.API_PATH}/v1/crypto/portfolio/update`, authenticate, 
 
         for(const symbol in groupedTrades) { // add symbol totals to positions
             const amount = accumulate(groupedTrades[symbol], 'amount')
+
+            // TODO: THIS ONE NOW REQUIRES HISTORICAL CURRENCY CONVERSION ... YFINANCE, STORE...
             const cost = accumulate(groupedTrades[symbol], 'cost')
+
             positions.push({ symbol, amount, cost })
         }
 
