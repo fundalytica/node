@@ -13,7 +13,8 @@ const topics = [
         description: 'BTC, ETH, DOT, Altcoins. Check out our diversified digital assets portfolio and create your own.',
         button: 'To The Moon',
         lottie: { src: '/lottie/lf20_ZUd5j6.json' },
-        action: 'route'
+        action: 'route',
+        state: 'beta'
     },
 
     {
@@ -25,7 +26,8 @@ const topics = [
         description: 'Contango or backwardation? Go long or go short? We track futures premiums on Kraken.',
         button: 'Show Premiums',
         lottie: { src: '/lottie/lf20_1wnliqn0.json' },
-        action: 'route'
+        action: 'route',
+        state: 'live'
     },
 
     {
@@ -37,29 +39,21 @@ const topics = [
         description: 'When volatility goes up, we will sell options to capture the higher premium. We share our open positions.',
         button: 'See Portfolio',
         lottie: { src: '/lottie/lf30_rn1i0mvd.json' },
-        action: 'route'
+        action: 'route',
+        state: 'live'
     },
 
     {
-        id: 'ath',
-        hashtag: 'analytics',
-        color: 'bg-green-400',
-        image: 'ath.svg',
-        title: 'All Time Highs',
-        description: 'We analyze the historical data of any stock and show you the all time high prices throughout its history.',
-        button: 'Charts',
-        action: 'route'
-    },
-
-    {
-        id: 'dip',
-        hashtag: 'analytics',
-        color: 'bg-red-300',
-        image: 'dip.svg',
-        title: 'Buy The Dip',
-        description: 'We are looking out for the next stock price dips because we love investing at low prices. Do not miss the opportunity!',
-        button: 'Charts',
-        action: 'route'
+        id: 'alpha',
+        hashtag: 'tool',
+        color: 'bg-orange-300',
+        image: 'alpha.svg',
+        title: 'Beat The Market ',
+        description: 'Every investment should be compared to performance of the broader market. Do you know what your alpha is?',
+        lottie: { src: '/lottie/alpha.json' },
+        button: 'Find Out',
+        action: 'wip',
+        state: 'wip'
     },
 
     {
@@ -70,7 +64,32 @@ const topics = [
         title: 'IPO Datastore',
         description: 'We collected and enriched all the IPO data of the last 10 years so you can use it too.',
         button: 'Preview Data',
-        action: 'wip'
+        action: 'wip',
+        state: 'wip'
+    },
+
+    {
+        id: 'ath',
+        hashtag: 'analytics',
+        color: 'bg-green-400',
+        image: 'ath.svg',
+        title: 'All Time Highs',
+        description: 'We analyze the historical data of any stock and show you the all time high prices throughout its history.',
+        button: 'Charts',
+        action: 'route',
+        state: 'beta'
+    },
+
+    {
+        id: 'dip',
+        hashtag: 'analytics',
+        color: 'bg-red-300',
+        image: 'dip.svg',
+        title: 'Buy The Dip',
+        description: 'We are looking out for the next stock price dips because we love investing at low prices. Do not miss the opportunity!',
+        button: 'Charts',
+        action: 'route',
+        state: 'beta'
     },
 
     {
@@ -81,18 +100,8 @@ const topics = [
         title: 'Brokerage Reports',
         description: 'Brokerage reports are not always easy to read, try out a richer experience.',
         button: 'Upload Report',
-        action: 'wip'
-    },
-
-    {
-        id: 'benchmark',
-        hashtag: 'tool',
-        color: 'bg-orange-300',
-        image: 'benchmark.svg',
-        title: 'The Benchmark',
-        description: 'Every investment should be compared to the broader market. Do you know what your alpha is?',
-        button: 'Find Out',
-        action: 'wip'
+        action: 'wip',
+        state: 'wip'
     },
 
     // {

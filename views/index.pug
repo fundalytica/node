@@ -38,12 +38,18 @@ block content
                 - css = topic.color + ' ' + (topic.css ? topic.css : 'pe-4')
                 .topic.m-3.ps-4.py-4(class=css)
                     .d-flex.flex-column
+                        div.row.mb-2
+                            p.col-6.text-start
+                                span.hashtag.text-white.bg-dark.rounded.small.p-1= topic.hashtag
+                            p.col-6.text-end
+                                - var colors = { 'live': 'light', 'beta': 'warning', 'wip': 'secondary' }
+                                - var cl = 'text-' + colors[topic.state]
+                                - var text = '#' + topic.state.toLowerCase()
+                                span.hashtag.rounded.small.p-1.fw-bold(class=cl)= text
+
                         .d-flex.flex-row.justify-content-between
                             //- left segment
                             div
-                                p
-                                    span.hashtag.text-white.bg-dark.rounded.small.p-1= topic.hashtag
-
                                 h2.mt-4= topic.title
 
                             //- right segment
