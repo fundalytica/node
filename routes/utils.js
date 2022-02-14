@@ -1,7 +1,7 @@
 const { PythonShell } = require('python-shell')
 
 const shellHandler = (script, args, callback) => {
-    console.log(`script: ${script}`.cyan)
+    console.log(`script: ${script} ${args.toString().replaceAll(","," ")}`.cyan)
 
     const options = { args: args, mode: 'json', pythonPath: process.env.SCRIPTS_PYTHON_PATH }
 
