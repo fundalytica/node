@@ -11,7 +11,7 @@ block scripts
 block content
     main.d-flex.flex-column.p-4
         div.d-flex.flex-column.align-items-center
-            form.needs-validation.input-group.mb-3.w-50(id='symbol-form')
+            form.needs-validation.input-group.mb-3.w-50(id='symbol-form').d-none
                 .input-group
                     input.form-control(id='symbol-input' type='text' name='symbol' placeholder='Symbol' pattern="[a-zA-Z]{1,4}((\.){1}[aA|bB]{1}){0,1}$" minlength="1" maxlength="5" required oninvalid="this.setCustomValidity('Invalid stock symbol 📈')"
   oninput="this.setCustomValidity('')")
