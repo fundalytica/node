@@ -4,6 +4,13 @@ const colors = require('colors')
 
 const utils = require('../utils.js')
 
+router.get(`${process.env.API_PATH}/v1/crypto/futures/tickers/symbols/kraken`, async (req, res) => {
+    console.log(`path: ${req.path}`.cyan)
+
+    const callback = json => res.json(json)
+    utils.shellHandler(`${process.env.SCRIPTS_PATH}/crypto/futures.py`, ['-p', 'kraken', '--tickers', '--symbols'], callback)
+})
+
 const CryptoPortfolioModel = require('../../models/crypto_portfolio')
 
 const error = (code, message = '') => { return { 'error': { 'code': code, 'message': message } } }
@@ -154,13 +161,6 @@ router.post(`${process.env.API_PATH}/v1/crypto/portfolio/update`, authenticate, 
 
     await portfolio.save()
     return res.json({ 'status': 'ok', 'trades': portfolio.trades, 'positions': portfolio.positions })
-})
-
-router.get(`${process.env.API_PATH}/v1/crypto/futures/tickers/symbols/kraken`, async (req, res) => {
-    console.log(`path: ${req.path}`.cyan)
-
-    const callback = json => res.json(json)
-    utils.shellHandler(`${process.env.SCRIPTS_PATH}/crypto/futures.py`, ['-p', 'kraken', '--tickers', '--symbols'], callback)
 })
 
 module.exports = router
