@@ -5,29 +5,44 @@ const colors = require('colors')
 
 const topics = [
     {
-        id: 'crypto',
-        hashtag: 'portfolio',
-        image: 'crypto.svg',
-        color: 'bg-deep-purple-a100',
-        title: 'The Crypto Fund',
-        description: 'BTC, ETH, DOT, Altcoins. Check out our diversified digital assets portfolio and create your own.',
-        button: 'To The Moon',
-        lottie: { src: '/lottie/lf20_ZUd5j6.json' },
-        action: 'route',
-        state: 'beta'
-    },
-
-    {
         id: 'futures',
         hashtag: 'data',
         image: 'crypto.svg',
         color: 'bg-light-blue-400',
         title: 'Crypto Futures',
-        description: 'Contango or backwardation? Go long or go short? We track futures premiums on Kraken.',
-        button: 'Show Premiums',
-        lottie: { src: '/lottie/lf20_1wnliqn0.json' },
+        description: 'Contango or backwardation? Go long or go short? We track futures premiums on Kraken Futures.',
+        button: 'Show Yields',
+        lottie: { src: 'https://assets4.lottiefiles.com/packages/lf20_6q3x8d8e.json' },
+        // lottie: { src: 'https://assets1.lottiefiles.com/private_files/lf30_9ivugi0v.json' },
         action: 'route',
         state: 'live'
+    },
+
+    {
+        id: 'crypto_options',
+        hashtag: 'data',
+        image: 'crypto.svg',
+        color: 'bg-light-blue-400',
+        title: 'BTC/ETH Options',
+        description: 'Bitcoin & Ethereum options on Deribit. The higher the volatility the higher the option premium.',
+        button: 'Check Premiums',
+        lottie: { src: 'https://assets4.lottiefiles.com/temp/lf20_UsL4RE.json' },
+        // lottie: { src: '/lottie/lf20_1zi49pcz.json' },
+        action: 'wip',
+        state: 'wip'
+    },
+
+    {
+        id: 'crypto',
+        hashtag: 'portfolio',
+        image: 'crypto.svg',
+        color: 'bg-deep-purple-a100',
+        title: 'The Crypto Fund',
+        description: 'BTC, ETH & Altcoins. Check out our diversified digital assets portfolio and create your own.',
+        button: 'To The Moon',
+        lottie: { src: '/lottie/lf20_xx7spau2.json' },
+        action: 'route',
+        state: 'beta'
     },
 
     {
@@ -43,30 +58,17 @@ const topics = [
         state: 'live'
     },
 
-    {
-        id: 'alpha',
-        hashtag: 'tool',
-        color: 'bg-orange-300',
-        image: 'alpha.svg',
-        title: 'Beat The Market ',
-        description: 'Every investment should be compared to performance of the broader market. Do you know what your alpha is?',
-        lottie: { src: '/lottie/alpha.json' },
-        button: 'Find Out',
-        action: 'wip',
-        state: 'wip'
-    },
-
-    {
-        id: 'ipodata',
-        hashtag: 'data',
-        image: 'ipodata.svg',
-        color: 'bg-light-blue-400',
-        title: 'IPO Datastore',
-        description: 'We collected and enriched all the IPO data of the last 10 years so you can use it too.',
-        button: 'Preview Data',
-        action: 'wip',
-        state: 'wip'
-    },
+    // {
+    //     id: 'ipodata',
+    //     hashtag: 'data',
+    //     image: 'ipodata.svg',
+    //     color: 'bg-light-blue-400',
+    //     title: 'IPO Datastore',
+    //     description: 'We collected and enriched all the IPO data of the last 10 years so you can use it too.',
+    //     button: 'Preview Data',
+    //     action: 'wip',
+    //     state: 'wip'
+    // },
 
     {
         id: 'ath',
@@ -76,6 +78,8 @@ const topics = [
         title: 'All Time Highs',
         description: 'We analyze the historical data of any stock and show you the all time high prices throughout its history.',
         button: 'Charts',
+        lottie: { src: 'https://assets6.lottiefiles.com/packages/lf20_2p5ywtpt.json' },
+        // lottie: { src: 'https://assets10.lottiefiles.com/private_files/lf30_cPwdH6.json' },
         action: 'route',
         state: 'beta'
     },
@@ -88,8 +92,22 @@ const topics = [
         title: 'Buy The Dip',
         description: 'We are looking out for the next stock price dips because we love investing at low prices. Do not miss the opportunity!',
         button: 'Charts',
+        lottie: { src: 'https://assets4.lottiefiles.com/private_files/lf30_ubbJQt.json' },
         action: 'route',
         state: 'beta'
+    },
+
+    {
+        id: 'alpha',
+        hashtag: 'tool',
+        color: 'bg-orange-300',
+        image: 'alpha.svg',
+        title: 'Beat The Market ',
+        description: 'Every investment should be compared to performance of the broader market. Do you know what your alpha is?',
+        lottie: { src: '/lottie/alpha.json' },
+        button: 'Find Out',
+        action: 'wip',
+        state: 'wip'
     },
 
     {
