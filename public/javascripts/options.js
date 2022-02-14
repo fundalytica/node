@@ -97,7 +97,7 @@ const updateStocks = stocks => {
     }
 
     const optionsString = count => {
-        if(count == 0) return '🙌'
+        if(count == 0) return '-'
         if(count < 0) return `💣 ${-count}`
         return count
     }
