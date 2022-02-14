@@ -11,7 +11,13 @@ block scripts
 block content
     main.d-flex.flex-column.p-4
         div.d-flex.flex-column.align-items-center
-            p#title.red-600.p-1
+            form.needs-validation.input-group.mb-3.w-50(id='symbol-form')
+                .input-group
+                    input.form-control(id='symbol-input' type='text' name='symbol' placeholder='Symbol' pattern="[a-zA-Z]{1,4}((\.){1}[aA|bB]{1}){0,1}$" minlength="1" maxlength="5" required oninvalid="this.setCustomValidity('Invalid stock symbol 📈')"
+  oninput="this.setCustomValidity('')")
+                    button.btn.btn-outline-secondary(type='submit' name='submit') Select
+
+            p#title.lead.red-600.p-1
             input#slider.slider(type="range" min="5" max="90" step="5").d-none
             p#subtitle.red-600.p-1
             p#dates.small.p-1
