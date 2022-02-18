@@ -94,7 +94,8 @@ const topics = [
         button: 'Charts',
         lottie: { src: 'https://assets4.lottiefiles.com/private_files/lf30_ubbJQt.json' },
         action: 'route',
-        state: 'beta'
+        state: 'beta',
+        params: 2
     },
 
     {
@@ -194,15 +195,56 @@ const flashSubscriptionURL = (req, res) => {
 router.get('/subscription-pending', flashSubscriptionURL)
 router.get('/subscription-success', flashSubscriptionURL)
 
+const validateParameters = (topic, parameters) => {
+    if(topic['id'] == 'dip') {
+        if(parameters['p1']) {
+            let symbol = parameters['p1']
+            const regex = /^[a-zA-Z]{1,5}((\.){1}[aA|bB]{1}){0,1}$/
+            if(! symbol.match(regex)) symbol = 'SNAP'
+            parameters['p1'] = symbol
+        }
+
+        if(parameters['p2']) {
+            let dip = parameters['p2']
+            if(isNaN(dip)) dip = 10
+            dip = parseInt(dip)
+            if(dip % 5 != 0) dip = dip - (dip % 5)
+            if(dip < 10 ) dip = 10
+            if(dip > 90) dip = 90
+            parameters['p2'] = dip
+        }
+    }
+
+    return parameters
+}
+
 const topicRoute = topic => {
     const id = topic['id']
     const title = topic['title']
     const description = topic['description']
+    const params = topic['params']
 
-    router.get(`/${id}`, (req, res) => {
+    let path = `/${id}`
+    if(params) {
+        for(let i = 1; i <= params; i++) {
+            path += `/:p${i}?`
+        }
+        console.log(path)
+    }
+
+    router.get(path, (req, res) => {
         const user = req.user
         const just_logged = req.flash('logged')[0]
-        const parameters = { title, description, user, just_logged }
+        let parameters = { title, description, user, just_logged }
+
+        for(const p in req.params) {
+            if(req.params[p]) {
+                parameters[p] = req.params[p]
+            }
+        }
+
+        parameters = validateParameters(topic, parameters)
+
         res.render(id, parameters)
     })
 }

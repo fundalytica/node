@@ -8,12 +8,25 @@ block scripts
     script(src='https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js')
     script(src='/javascripts/dip.js' type='module')
 
+    script.
+        try {
+            const p1 = !{JSON.stringify(p1)}
+            window.p1 = p1
+        }
+        catch (error) { }
+
+        try {
+            const p2 = !{JSON.stringify(p2)}
+            window.p2 = p2
+        }
+        catch (error) { }
+
 block content
     main.d-flex.flex-column.p-4
         div.d-flex.flex-column.align-items-center
             form.needs-validation.input-group.mb-3.w-50(id='symbol-form').d-none
                 .input-group
-                    input.form-control(id='symbol-input' type='text' name='symbol' placeholder='Symbol' pattern="[a-zA-Z]{1,4}((\.){1}[aA|bB]{1}){0,1}$" minlength="1" maxlength="5" required oninvalid="this.setCustomValidity('Invalid stock symbol 📈')"
+                    input.form-control(id='symbol-input' type='text' name='symbol' placeholder='Symbol' pattern="^[a-zA-Z]{1,5}((\.){1}[aA|bB]{1}){0,1}$" minlength="1" maxlength="5" required oninvalid="this.setCustomValidity('Invalid stock symbol 📈')"
   oninput="this.setCustomValidity('')")
                     button.btn.btn-outline-secondary(type='submit' name='submit') Select
 
