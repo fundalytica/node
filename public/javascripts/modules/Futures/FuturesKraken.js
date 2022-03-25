@@ -256,28 +256,39 @@ export default class FuturesKraken {
 
         const dateString = split[2]
 
-        const date = moment.utc(dateString, "YYMMDD")
-        // https://support.kraken.com/hc/en-us/articles/360022632172
-        // Last Trading: 16.00 London Time (UTC+1), 15.00 UTC
-        date.add(15, 'hours')
+        const date = moment.tz(dateString, 'YYMMDD', 'Europe/London') // London time now using string format
+        date.set({ hour: 0, minute: 0, second: 0, millisecond: 0 }) // reset time
+        date.add(16, 'hours') // 16:00
 
         return date
     }
 
     static daysUntilSettlement(symbol) {
         const maturity = FuturesKraken.maturity(symbol)
+
         if (!maturity) return null
 
-        const now = moment().utc()
-        const days = maturity.diff(now, 'days')
-        return days
+        const now = moment.tz('Europe/London') // London time now
+
+        return maturity.diff(now, 'days')
     }
 
-    static timeUntilSettlement(format = "H[h] m[m] s[s]") {
-        const now = moment().utc()
-        // UTC, +1 day, Zero Time, 15.00
-        const tomorrow = moment().utc().add(1, 'days').set({ hour: 0, minute: 0, second: 0, millisecond: 0 }).add(15, 'hours')
-        const time = moment.utc(tomorrow.diff(now)).format(format)
-        return time
+    static timeUntilSettlement(format = (h,m,s) => `${h}h ${m}m ${s}s`) {
+        const now = moment.tz('Europe/London') // London time now
+
+        const settle = now.clone()
+        settle.add(1, 'days') // +1 to cover cases when now is past the settlement time
+        settle.set({ hour: 0, minute: 0, second: 0, millisecond: 0 }) // reset time
+        settle.add(16, 'hours') // 16:00
+
+        // duration
+        const diff = settle.diff(now)
+        const h = moment.duration(diff).hours()
+        const m = moment.duration(diff).minutes()
+        const s = moment.duration(diff).seconds()
+
+        const remaining = format(h, m, s)
+
+        return remaining
     }
 }
