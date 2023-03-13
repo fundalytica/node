@@ -23,13 +23,13 @@ const topics = [
         hashtag: 'data',
         image: 'crypto.svg',
         color: 'bg-light-blue-400',
-        title: 'BTC/ETH Options',
+        title: 'Crypto Options',
         description: 'Bitcoin & Ethereum options on Deribit. The higher the volatility the higher the option premium.',
         button: 'Check Premiums',
-        lottie: { src: 'https://assets4.lottiefiles.com/temp/lf20_UsL4RE.json' },
-        // lottie: { src: '/lottie/lf20_1zi49pcz.json' },
-        action: 'wip',
-        state: 'wip'
+        // lottie: { src: 'https://assets4.lottiefiles.com/temp/lf20_UsL4RE.json' },
+        lottie: { src: '/lottie/lf20_1zi49pcz.json' },
+        action: 'route',
+        state: 'live'
     },
 
     {
@@ -123,17 +123,18 @@ const topics = [
         state: 'wip'
     },
 
-    // {
-    //     id: 'qqq',
-    //     hashtag: 'data',
-    //     color: 'bg-light-blue-400',
-    //     image: 'invesco.svg',
-    //     title: 'QQQ ETF Holdings',
-    //     description: 'All the great companies included in the Invesco QQQ ETF (NASDAQ 100).',
-    //     button: 'View Stocks 🔍',
-    //     action: 'wip'
-    // },
-    //
+    {
+        id: 'qqq',
+        hashtag: 'data',
+        color: 'bg-light-blue-400',
+        image: 'invesco.svg',
+        title: 'QQQ ETF Holdings',
+        description: 'All the great companies included in the Invesco QQQ ETF (NASDAQ 100).',
+        button: 'View Stocks 🔍',
+        action: 'qqq',
+        state: 'wip'
+    },
+
     // {
     //     // id: 'norway',
     //     id: 'wip',
@@ -187,7 +188,7 @@ router.get('/', (req, res, next) => {
 
 const flashSubscriptionURL = (req, res) => {
     const key = req.app.locals.flash_subscription_key
-    const value = req.url.split('-').pop().replace('/','')
+    const value = req.url.split('-').pop().replace('/', '')
     req.flash(key, value)
     res.redirect('/')
 }
@@ -196,21 +197,21 @@ router.get('/subscription-pending', flashSubscriptionURL)
 router.get('/subscription-success', flashSubscriptionURL)
 
 const validateParameters = (topic, parameters) => {
-    if(topic['id'] == 'dip') {
-        if(parameters['p1']) {
+    if (topic['id'] == 'dip') {
+        if (parameters['p1']) {
             let symbol = parameters['p1']
             const regex = /^[a-zA-Z]{1,5}((\.){1}[aA|bB]{1}){0,1}$/
-            if(! symbol.match(regex)) symbol = 'SNAP'
+            if (!symbol.match(regex)) symbol = 'SNAP'
             parameters['p1'] = symbol
         }
 
-        if(parameters['p2']) {
+        if (parameters['p2']) {
             let dip = parameters['p2']
-            if(isNaN(dip)) dip = 10
+            if (isNaN(dip)) dip = 10
             dip = parseInt(dip)
-            if(dip % 5 != 0) dip = dip - (dip % 5)
-            if(dip < 10 ) dip = 10
-            if(dip > 90) dip = 90
+            if (dip % 5 != 0) dip = dip - (dip % 5)
+            if (dip < 10) dip = 10
+            if (dip > 90) dip = 90
             parameters['p2'] = dip
         }
     }
@@ -225,8 +226,8 @@ const topicRoute = topic => {
     const params = topic['params']
 
     let path = `/${id}`
-    if(params) {
-        for(let i = 1; i <= params; i++) {
+    if (params) {
+        for (let i = 1; i <= params; i++) {
             path += `/:p${i}?`
         }
         console.log(path)
@@ -237,8 +238,8 @@ const topicRoute = topic => {
         const just_logged = req.flash('logged')[0]
         let parameters = { title, description, user, just_logged }
 
-        for(const p in req.params) {
-            if(req.params[p]) {
+        for (const p in req.params) {
+            if (req.params[p]) {
                 parameters[p] = req.params[p]
             }
         }
@@ -250,15 +251,15 @@ const topicRoute = topic => {
 }
 topics.forEach(t => topicRoute(t))
 
-const authRoutes = ['login','signup']
+const authRoutes = ['login', 'signup']
 authRoutes.forEach(route => {
     router.get(`/${route}`, (req, res) => {
-        if(req.isAuthenticated()) res.redirect('/')
+        if (req.isAuthenticated()) res.redirect('/')
         res.render(route)
     })
 })
 
-router.get('/wip', (req, res) => res.render('wip', { user: req.user}))
+router.get('/wip', (req, res) => res.render('wip', { user: req.user }))
 
 router.get('/test', (req, res) => res.render('test'))
 
