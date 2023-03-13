@@ -27,11 +27,11 @@ header.sticky-top.bg-grey-800
                         i.me-2.fas.fa-door-closed
                         p Login
 
-    - var text = 'Join our community on Discord (100 spots left)'
-    - var url = 'https://discord.gg/7yHcTcPZgk'
-    p.p-1.text-center.bg-purple-300.text-white.small
-        a.text-white.text-decoration-underline(href=url target='blank')= text
-        i.fab.fa-discord.ps-2
+    //- - var text = 'Join our community on Discord (100 spots left)'
+    //- - var url = 'https://discord.gg/7yHcTcPZgk'
+    //- p.p-1.text-center.bg-purple-300.text-white.small
+    //-     a.text-white.text-decoration-underline(href=url target='blank')= text
+    //-     i.fab.fa-discord.ps-2
 
     if(just_logged)
         - var text = (just_logged == 'in') ? 'Welcome to Fundalytica' : (just_logged == 'out') ? 'See you soon' : '?'
