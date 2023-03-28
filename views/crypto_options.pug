@@ -1,0 +1,95 @@
+extends layout
+
+block style
+    link(href='/stylesheets/crypto_options.css' rel='stylesheet')
+    link(href='/stylesheets/no_more_tables.css' rel='stylesheet')
+
+block scripts
+    script(src='/javascripts/crypto_options.js' type='module')
+
+block content
+    main.d-flex.flex-column.justify-content-center.text-center.p-4
+        div.align-self-center.p-2
+            h3.text-dark= title
+
+            div.p-4
+                div.p-1
+                    p.fw-bold Capital
+                    p 32 ETH
+                    p $1,700 / ETH
+                    p Total $25,000
+
+                div.p-1
+                    p.fw-bold Strategy
+                    p Covered Call
+                    p Expiration 28 Dec '23
+                    p Strike $1,700
+                    p Premium 15 ETH
+
+                div.d-flex.flex-row
+                    div.p-1.px-4
+                        p.fw-bold.text-primary Outcome A
+                        p ETH < $1,700 (28 Dec '23)
+                        p Cost Basis Reduction
+                        p 50% Discount
+                        p $1,130 / ETH
+                    div.p-1.px-4
+                        p.fw-bold.text-success Outcome B
+                        p ETH > $1,700 (28 Dec '23)
+                        p Assignment 32 ETH x $1,700
+                        p Capital Returned $54,400
+                        p Profit $18,000
+                        p Yield 50%, Annualized 60%
+
+//-             p.small(id="date").m-2.mb-3.d-none
+
+//-             .d-flex.flex-row.align-items-start.justify-content-center
+//-                 .dropdown.mx-1
+//-                     button.btn.btn-sm.btn-secondary.dropdown-toggle(type="button" id="dropdown-sort" data-bs-toggle="dropdown" aria-expanded="false").d-none.mb-2
+//-                     ul.dropdown-menu(id="dropdown-menu-sort" aria-labelledby="dropdown-sort")
+
+//-                 .btn-group(id="btn-group-order" role="group" aria-label="toggle button group").mx-1.d-none
+//-                     input.btn-check(type="radio" name="btnradio" id="btn-radio-asc" autocomplete="off" checked)
+//-                     label.btn.btn-outline-secondary.btn-sm(for="btn-radio-asc") asc
+//-                     input.btn-check(type="radio" name="btnradio" id="btn-radio-desc" autocomplete="off")
+//-                     label.btn.btn-outline-secondary.btn-sm(for="btn-radio-desc") desc
+
+//-         - var ids = ['puts', 'calls']
+//-         each id in ids
+//-             a.btn(id="toggle-"+id data-bs-toggle='collapse' href='#no-more-tables-'+id aria-expanded='true' aria-controls="no-more-tables-"+id).d-none
+//-                 i.fa.fa-table.px-2
+//-                 span(id="count-"+id)
+//-                 i.fa.fa-angle-down.px-2
+//-                 i.fa.fa-angle-up.px-2
+
+//-                 div(id="info-"+id).d-flex.justify-content-center.align-items-center.flex-wrap.small.d-none.py-1
+//-                     p.info(id="basis-"+id).px-2.py-1
+//-                     p.info(id="value-"+id).px-2.py-1
+//-                     p.info(id="profit-"+id).px-2.py-1
+//-                     p.info(id="assignment-"+id).px-2.py-1
+//-                 p.small.text-success(id="expiration-"+id).pb-1
+
+//-             .no-more-tables(id="no-more-tables-"+id).collapse.show
+//-                 table.table.small(id="table-"+id).d-none
+//-                     thead.table-dark
+//-                     tbody
+
+//-         .d-none(id="stocks")
+//-             a.btn(id="toggle-"+id data-bs-toggle='collapse' href='#no-more-tables-stocks' aria-expanded='true' aria-controls="no-more-tables-"+id)
+//-                 i.fa.fa-table.px-2
+//-                 span Stock Positions
+//-                 i.fa.fa-angle-down.px-2
+//-                 i.fa.fa-angle-up.px-2
+
+//-             .no-more-tables(id="no-more-tables-stocks").collapse.show
+//-                 table.table.small(id="table-stocks")
+//-                     thead
+//-                     tbody
+
+//-         div.d-flex.flex-grow-1.justify-content-center
+//-             div.align-self-center
+//-                 .spinner-border.text-success(id="spinner" role="status")
+//-                     span.sr-only Loading...
+
+//-             div.align-self-center
+//-                 p.text-danger(id="error").d-none

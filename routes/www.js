@@ -5,6 +5,19 @@ const colors = require('colors')
 
 const topics = [
     {
+        id: 'option-yield',
+        hashtag: 'options',
+        image: 'options.svg',
+        color: 'bg-deep-purple-300',
+        title: 'Option Yield',
+        description: 'Cash secured puts or covered calls? See how much those strategies yield right now on any given stock.',
+        button: 'Yield Hunt',
+        lottie: { src: '/lottie/lf30_rn1i0mvd.json' },
+        action: 'route',
+        state: 'live'
+    },
+
+    {
         id: 'futures',
         hashtag: 'data',
         image: 'crypto.svg',
@@ -45,17 +58,18 @@ const topics = [
         state: 'beta'
     },
 
+
     {
-        id: 'options',
+        id: 'crypto',
         hashtag: 'portfolio',
-        image: 'options.svg',
+        image: 'crypto.svg',
         color: 'bg-deep-purple-a100',
-        title: 'Option Writing',
-        description: 'When volatility goes up, we will sell options to capture the higher premium. We share our open positions.',
-        button: 'See Portfolio',
-        lottie: { src: '/lottie/lf30_rn1i0mvd.json' },
+        title: 'The Crypto Fund',
+        description: 'BTC, ETH & Altcoins. Check out our diversified digital assets portfolio and create your own.',
+        button: 'To The Moon',
+        lottie: { src: '/lottie/lf20_xx7spau2.json' },
         action: 'route',
-        state: 'live'
+        state: 'beta'
     },
 
     // {
